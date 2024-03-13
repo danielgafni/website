@@ -84,17 +84,17 @@ resource "cloudflare_record" "website_nginx" {
   name    = "gafni.dev"
   value   = hcloud_server.website.ipv4_address
   type    = "A"
-  proxied = false # Direct DNS, no Cloudflare proxy
+  proxied = true
 }
 
 # Cloudflare DNS CNAME record for the website behind Cloudflare proxy
-resource "cloudflare_record" "website" {
-  zone_id = data.sops_file.secrets.data["CLOUDFLARE_ZONE_ID"]
-  name    = "@"
-  value   = "gafni.dev"
-  type    = "CNAME"
-  proxied = true # Enable Cloudflare proxy
-}
+# resource "cloudflare_record" "website" {
+#   zone_id = data.sops_file.secrets.data["CLOUDFLARE_ZONE_ID"]
+#   name    = "@"
+#   value   = "gafni.dev"
+#   type    = "CNAME"
+#   proxied = true # Enable Cloudflare proxy
+# }
 
 # Configure settings for the gafni.dev domain in Cloudflare
 resource "cloudflare_zone_settings_override" "gafni-dev-settings" {
