@@ -1,0 +1,36 @@
+base_url = "https://dgafni.dev"
+title = "Daniel Gafni's Website"
+minify_html = true
+generate_feed = true
+theme = "anemone"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = true
+
+taxonomies = [
+    {name = "tags", feed = true},
+]
+
+[markdown]
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+highlight_code = true
+highlight_theme = "catppuccin_mocha"
+extra_syntaxes_and_themes = ["highlight_themes/catppuccin"]
+render_emoji = true
+smart_punctuation = true
+
+[extra]
+author = "danielgafni"
+default_theme = "dark"
+list_pages = true
+display_author = true
+toc = true
+header_nav = [
+  { url = "/", name_en = "/home/" },
+  { url = "/about", name_en = "/about/" },
+  { url = "/blog", name_en = "/blog/" }
+]
