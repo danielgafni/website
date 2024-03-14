@@ -1,6 +1,0 @@
-[submodule "themes/anemone"]
-	path = themes/anemone
-	url = https://github.com/Speyll/anemone
-[submodule "www/themes/tabi"]
-	path = www/themes/tabi
-	url = https://github.com/welpo/tabi.git

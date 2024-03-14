@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+{%- set separator = config.extra.separator | default(value="•") -%}
+
+{%- set rel_attributes = macros_rel_attributes::rel_attributes() | trim -%}
+
+{%- if config.markdown.external_links_target_blank -%}
+    {%- set blank_target = "target=_blank" -%}
+{%- else -%}
+    {%- set blank_target = "" -%}
+{%- endif -%}
+
+{# Debugging #}
+{# {% set last_ancestor = page.ancestors | slice(start=-1) %}
+{% set current_section = get_section(path=last_ancestor.0) %}
+
+{% set settings_to_test = [
+    "footnote_backlinks",
+    "katex",
+    "quick_navigation_buttons",
+    "show_reading_time",
+    "show_remote_changes",
+    "toc",
+    "show_previous_next_article_links",
+    "invert_previous_next_article_links",
+    "previous_next_article_links_full_width",
+] %}
+
+<table>
+    <thead>
+        <tr>
+            <th>setting</th>
+            <th>page</th>
+            <th>section</th>
+            <th>config</th>
+            <th>macro output</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for setting in settings_to_test %}
+            <tr>
+                <td><code>{{ setting }}</code></td>
+                <td>{{ page.extra[setting] | default(value="⬛") }}</td>
+                <td>{{ current_section.extra[setting] | default(value="⬛") }}</td>
+                <td>{{ config.extra[setting] | default(value="⬛") }}</td>
+                <td>{{ macros_settings::evaluate_setting_priority(setting=setting, page=page) }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table> #}
+{# {{ __tera_context }} #}
+{# End debugging #}
+
+<main>
+    <article>
+        <h1 class="article-title">
+            {{ page.title }}
+        </h1>
+
+        <ul class="meta">
+            {% if page.draft %}
+                <li class="draft-label">{{ macros_translate::translate(key="draft", default="DRAFT", language_strings=language_strings) }}</li>
+            {% endif %}
+
+            {% if page.date %}
+                <li>{{ macros_format_date::format_date(date=page.date, short=true, language_strings=language_strings) }}</li>
+            {% endif %}
+
+            {# page settings override config settings #}
+            {% if macros_settings::evaluate_setting_priority(setting="show_reading_time", page=page, default_global_value=true) == "true" %}
+                {{ separator }} <li title="{{ macros_translate::translate(key="words", number=page.word_count, default="$NUMBER words", language_strings=language_strings) }}">{{ macros_translate::translate(key="min_read", number=page.reading_time, default="$NUMBER min read", language_strings=language_strings) }}</li>
+            {% endif %}
+
+            {%- if page.taxonomies and page.taxonomies.tags -%}
+                {{ separator }}&nbsp;<li>{{- macros_translate::translate(key="tags", default="tags", language_strings=language_strings) | capitalize -}}:&nbsp;</li>
+                {%- for tag in page.taxonomies.tags -%}
+                    <li><a href={{ get_taxonomy_url(kind='tags', name=tag, lang=lang) | safe }}>{{ tag }}</a>
+                    {%- if not loop.last -%}
+                        ,&nbsp;
+                    {%- endif -%}
+                    </li>
+                {%- endfor -%}
+            {%- endif -%}
+
+            {% if page.updated %}
+                </ul><ul class="meta last-updated"><li>{{ macros_translate::translate(key="last_updated_on", default="Last updated on", language_strings=language_strings) }} {{ macros_format_date::format_date(date=page.updated, short=true, language_strings=language_strings) }}</li>
+                {# Show link to remote changes if enabled #}
+                {% if config.extra.remote_repository_url and macros_settings::evaluate_setting_priority(setting="show_remote_changes", page=page, default_global_value=true) == "true" %}
+                    {{ separator }}
+                    <li><a href="{% include "partials/history_url.html" %}" {{ blank_target }} rel="{{ rel_attributes }}">{{ macros_translate::translate(key="see_changes", default="See changes", language_strings=language_strings) }}<small>&nbsp;<span class="arrow-corner">↗</span></small></a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+
+        {% if page.extra.tldr %}
+            <div class="tldr">
+                <h3>TL;DR:</h3>
+                <p>{{ page.extra.tldr }}</p>
+            </div>
+        {% endif %}
+
+        {# Optional table of contents below the header #}
+        {% if page.toc and macros_settings::evaluate_setting_priority(setting="toc", page=page, default_global_value=false) == "true" %}
+            {{ macros_toc::toc(page=page, header=true, language_strings=language_strings) }}
+        {% endif %}
+
+        <section class="body">
+            {# The replace pattern is used to enable arbitrary locations for the Table of Contents #}
+            {# This is Philipp Oppermann's workaround: https://github.com/getzola/zola/issues/584#issuecomment-474329637 #}
+            {{ page.content | replace(from="<!-- toc -->", to=macros_toc::toc(page=page, header=false, language_strings=language_strings)) | safe }}
+        </section>
+
+        {# Check if comments are enabled, checking that they are not disabled on the specific page #}
+        {% set systems = ["giscus", "utterances", "hyvortalk", "isso"] %}
+        {% set enabled_systems = 0 %}
+        {% set comment_system = "" %}
+
+        {% for system in systems %}
+            {% set global_enabled = config.extra[system].enabled_for_all_posts | default(value=false) %}
+            {% set page_enabled = page.extra[system] | default(value=global_enabled) %}
+            {% set is_enabled = global_enabled and page_enabled != false or page_enabled == true %}
+
+            {% if is_enabled %}
+                {% set_global comment_system = system %}
+                {% set_global enabled_systems = enabled_systems + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        {# Ensure only one comment system is enabled #}
+        {% if enabled_systems > 1 %}
+            {{ throw(message="ERROR: Multiple comment systems have been enabled for the same page. Check your config.toml and individual page settings to ensure only one comment system is activated at a time.") }}
+        {% endif %}
+
+        {% if macros_settings::evaluate_setting_priority(setting="show_previous_next_article_links", page=page, default_global_value=true) == "true" %}
+            {%- if page.lower or page.higher -%}
+                {% set next_label = macros_translate::translate(key="next", default="Next", language_strings=language_strings) %}
+                {% set prev_label = macros_translate::translate(key="prev", default="Prev", language_strings=language_strings) %}
+                {% if macros_settings::evaluate_setting_priority(setting="invert_previous_next_article_links", page=page, default_global_value=true) == "true" %}
+                    {% if page.higher %}
+                        {% set left_link = page.higher.permalink %}
+                        {% set left_label = prev_label %}
+                        {% set left_title = page.higher.title %}
+                    {% endif %}
+                    {% if page.lower %}
+                        {% set right_link = page.lower.permalink %}
+                        {% set right_label = next_label %}
+                        {% set right_title = page.lower.title %}
+                    {% endif %}
+                {% else %}
+                    {% if page.lower %}
+                        {% set left_link = page.lower.permalink %}
+                        {% set left_label = next_label %}
+                        {% set left_title = page.lower.title %}
+                    {% endif %}
+                    {% if page.higher %}
+                        {% set right_link = page.higher.permalink %}
+                        {% set right_label = prev_label %}
+                        {% set right_title = page.higher.title %}
+                    {% endif %}
+                {% endif %}
+                {% if macros_settings::evaluate_setting_priority(setting="previous_next_article_links_full_width", page=page, default_global_value=true) == "true" %}
+                    {%- set full_width_class = "full-width" -%}
+                {% endif %}
+            <nav class="{{ full_width_class | default(value="") }} article-navigation">
+                <div>
+                {%- if left_link and left_label and left_title -%}
+                <a href="{{ left_link | safe }}" aria-label="{{ left_label }}" aria-describedby="left_title"><span class="arrow">←</span>&nbsp;{{ left_label }}</a>
+                <p aria-hidden="true" id="left_title">{{ left_title | truncate(length=100, end="…") }}</p>
+                {%- endif -%}
+                </div>
+                <div>
+                {%- if right_link and right_label and right_title -%}
+                <a href="{{ right_link | safe }}" aria-label="{{ right_label }}" aria-describedby="right_title">{{ right_label }}&nbsp;<span class="arrow">→</span></a>
+                <p aria-hidden="true" id="right_title">{{ right_title | truncate(length=100, end="…") }}</p>
+                {%- endif -%}
+                </div>
+            </nav>
+            {%- endif -%}
+        {%- endif -%}
+
+        {# Comments #}
+        {% if comment_system %}
+            {% include "partials/comments.html" %}
+        {% endif %}
+
+    </article>
+</main>
+
+{%- include "partials/extra_features.html" -%}
+
+{% endblock main_content %}

@@ -1,0 +1,36 @@
+.archive {
+    margin-top: 4vmin;
+
+    .listing-title {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .listing-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+        padding: 0.2rem 1rem;
+
+        .post-time {
+            padding-left: 1vmin;
+            min-width: 5rem;
+            text-align: left;
+
+            .date {
+                color: var(--meta-color);
+                white-space: nowrap;
+            }
+        }
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        margin-bottom: 1.3rem;
+    }
+}

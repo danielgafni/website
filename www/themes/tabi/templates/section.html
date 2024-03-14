@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<main>
+{% if section.extra.section_path -%}
+    {% set extra_section = get_section(path=section.extra.section_path) %}
+{% endif -%}
+
+{%- if section.extra.header %}
+    {%- include "partials/home_banner.html" -%}
+{% endif -%}
+
+<div class="list">
+    <div>
+        {{ macros_page_header::page_header(title=section.title) }}
+    </div>
+
+    {%- if paginator %}
+        {%- set pages = paginator.pages -%}
+    {% else %}
+        {%- set pages = extra_section.pages -%}
+    {% endif -%}
+
+	{% set max = section.extra.max_posts | default(value=999999) %}
+    {{ macros_list_posts::list_posts(posts=pages, max=max, language_strings=language_strings) }}
+</div>
+</main>
+
+{% if paginator %}
+    {%- include "partials/paginate.html" -%}
+{% endif %}
+
+{% endblock main_content %}

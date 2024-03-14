@@ -1,0 +1,300 @@
+name = "tabi"
+description = "A fast, lightweight, and modern Zola theme with multi-language support, optional JavaScript, and a perfect Lighthouse score"
+license = "MIT"
+homepage = "https://github.com/welpo/tabi"
+
+# The minimum version of Zola required
+min_version = "0.17.0"
+
+# An optional live demo URL
+demo = "https://welpo.github.io/tabi"
+
+# The theme author info: you!
+[author]
+name = "Óscar Fernández"
+homepage = "https://osc.garden"
+
+# Any variable there can be overridden in the end user `config.toml`
+# You don't need to prefix variables by the theme name but as this will
+# be merged with user data, some kind of prefix or nesting is preferable
+# Use snake_casing to be consistent with the rest of Zola
+[extra]
+# Check out the documentation (or the comments below) to learn how to customise tabi:
+# https://welpo.github.io/tabi/blog/mastering-tabi-settings/
+
+# Search index format.
+# For Zola 0.17.X users only.
+# This MUST MATCH the setting in [search].index_format.
+# Example: If [search].index_format is "elasticlunr_javascript", set:
+# index_format = "elasticlunr_javascript" here.
+# index_format = ""
+
+# Enable JavaScript theme toggler to allow users to switch between dark/light mode.
+# If disabled, your site will only use the theme specified in the `default_theme` variable.
+theme_switcher = true
+
+# This setting determines the default theme on load ("light" or "dark").
+# To default to the user's OS-level theme, leave it empty or unset.
+default_theme = ""
+
+# Choose the colourscheme (skin) for the theme. Default is "teal".
+# Skin available: blue, lavender, mint, red, sakura, teal, monochrome, lowcontrast_orange, lowcontrast_peach, lowcontrast_pink, indigo_ingot, evangelion
+# See them live and learn how to create your own: https://welpo.github.io/tabi/blog/customise-tabi/#skins
+# WARNING! "lowcontrast" skins, while aesthetically pleasing, may not provide optimal
+# contrast (in light theme) for readability and might not be suitable for all users.
+# Furthermore, low contrasting elements will affect your Google Lighthouse rating.
+# All other skins have optimal contrast.
+skin = ""
+
+# Set browser theme colour. Can be a single colour or [light, dark].
+# Note: Bright colors may be ignored in dark mode.
+# More details: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
+# browser_theme_color = "#087e96"  # Example of single value.
+# browser_theme_color = ["#ffffff", "#000000"]  # Example of light/dark colours.
+
+# List additional stylesheets to load site-wide.
+# These stylesheets should be located in your site's `static` directory.
+# Example: stylesheets = ["extra1.css", "path/extra2.css"]
+# You can load a stylesheet for a single post by adding it to the [extra] section of the post's front matter, following this same format.
+stylesheets = []
+
+# Sets the default canonical URL for all pages.
+# Individual pages can override this in the [extra] section using canonical_url.
+# Example: "$base_url/blog/post1" will get the canonical URL "https://example.com/blog/post1".
+# Note: To ensure accuracy in terms of matching content, consider setting 'canonical_url' individually per page.
+# base_canonical_url = "https://example.com"
+
+# Remote repository for your Zola site.
+# Used for `show_remote_changes` and `show_remote_source` (see below).
+# Supports GitHub, GitLab, Gitea, and Codeberg.
+# remote_repository_url = "https://github.com/welpo/tabi"
+# Set this to "auto" to try and auto-detect the platform based on the repository URL.
+# Accepted values are "github", "gitlab", "gitea", and "codeberg".
+remote_repository_git_platform = "auto"  # Defaults to "auto".
+# Branch in the repo hosting the Zola site.
+remote_repository_branch = "main"  # Defaults to "main".
+# Show a link to the commit history of updated posts, right next to the last updated date.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_remote_changes = true  # Defaults to true.
+# Show a link to the repository of the site, right next to the "Powered by Zola & tabi" text.
+show_remote_source = true  # Defaults to true.
+
+# Add a "copy" button to codeblocks (loads ~700 bytes of JavaScript).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+copy_button = true
+
+# Show the reading time of a page.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_reading_time = true
+
+# Adds backlinks to footnotes (loads ~500 bytes of JavaScripts).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+footnote_backlinks = false
+
+# Enable KaTeX for all posts.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+katex = false
+
+# Show links to previous and next articles at the bottom of posts.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_previous_next_article_links = false
+
+# Invert order of the links to previous and next articles at the bottom of posts.
+# By default, next articles are on the left side of the page and previous articles are on the right side.
+# To reverse the order (next articles on the right and previous articles on the left), set it to true.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+invert_previous_next_article_links = false
+
+# Whether the navigation for previous/next article should match the full width of the site (same as the navigation bar at the top) or the article width.
+# To match the navigation bar at the top, set it to true.
+previous_next_article_links_full_width = true
+
+# Quick navigation buttons.
+# Adds "go up" and "go to comments" buttons on the bottom right (hidden for mobile).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+quick_navigation_buttons = false
+
+# Add a Table of Contents to all posts, right below the title and metadata.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+# toc = false
+
+# Date format used when listing posts (main page, /blog section, tag posts list…)
+# Default is "6th July 2049" in English and "%d %B %Y" in other languages.
+# long_date_format = "%d %B %Y"
+
+# Date format used for blog posts.
+# Default is "6th July 2049" in English and "%-d %B %Y" in other languages.
+short_date_format = ""
+
+# Custom separator used in title tag and posts metadata (between date, time to read, and tags).
+separator = "•"
+
+# Use a shorter layout for All tags listing.
+# Default: tag_name – n post[s]
+# Compact: tag_name^n (superscript number)
+compact_tags = false
+
+# Invert the order of the site title and page title in the browser tab.
+# Example: true => "Blog • ~/tabi", false => "~/tabi • Blog"
+invert_title_order = false
+
+# Full path after the base URL required. So if you were to place it in "static" it would be "/favicon.ico"
+# favicon = ""
+
+# Add an emoji here to use it as favicon.
+# Compatibility: https://caniuse.com/link-icon-svg
+# favicon_emoji = "🌱"
+
+# Path to the fallback image for social media cards (the preview image shown when sharing a link on WhatsApp, LinkedIn…).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+# Learn how to create these images in batch and automatically:
+# https://osc.garden/blog/automating-social-media-cards-zola/
+# social_media_card = "img/social_cards/index.jpg"
+
+menu = [
+    { name = "blog", url = "blog", trailing_slash = true },
+    { name = "archive", url = "archive", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+    { name = "projects", url = "projects", trailing_slash = true },
+]
+
+# The RSS icon will be shown if (1) it's enabled and (2) the following variable is set to true.
+feed_icon = true
+
+# Show the full post content in the Atom feed.
+# If it's set to false, only the description or summary will be shown.
+full_content_in_feed = false
+
+# Email address for footer's social section.
+# Protect against spambots:
+# 1. Use base64 for email (convert at https://www.base64encode.org/ or `printf 'your@email.com' | base64`).
+# 2. Or, set 'encode_plaintext_email' to true for auto-encoding (only protects on site, not in public repos).
+# email = "bWFpbEBleGFtcGxlLmNvbQ=="  # base64 encoded version of "mail@example.com"
+# Decoding requires ~400 bytes of JavaScript. If JS is disabled, the email won't be displayed.
+encode_plaintext_email = true  # Setting is ignored if email is already encoded.
+
+# The icons available can be found in "social_icons" in the "static" folder.
+# socials = [
+#     { name = "github", url = "https://github.com/welpo/", icon = "github" },
+#     { name = "soundcloud", url = "https://soundcloud.com/oskerwyld", icon = "soundcloud" },
+#     { name = "instagram", url = "https://instagram.com/oskerwyld", icon = "instagram" },
+#     { name = "youtube", url = "https://youtube.com/@oskerwyld", icon = "youtube" },
+#     { name = "spotify", url = "https://open.spotify.com/artist/5Hv2bYBhMp1lUHFri06xkE", icon = "spotify" },
+# ]
+
+# Extra menu to show on the footer, below socials section.
+# footer_menu = [
+#     {url = "about", name = "about", trailing_slash = true},
+#     {url = "privacy", name = "privacy", trailing_slash = true},
+#     {url = "sitemap.xml", name = "sitemap", trailing_slash = false},
+#     {url = "https://example.com", name = "external link", trailing_slash = true},
+# ]
+
+# Enable a copyright notice for the footer, shown between socials and the "Powered by" text.
+# $TITLE will be replaced by the website's title.
+# $CURRENT_YEAR will be replaced by the current year.
+# $AUTHOR will be replaced by the `author` variable.
+# $SEPARATOR will be replaced by the `separator` variable.
+# Markdown is supported (links, emphasis, etc).
+# copyright = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR Unless otherwise noted, the content in this website is available under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license."
+
+# For multi-language sites, you can set a different copyright for each language.
+# The old way of setting `translated_copyright = true` and using i18n files is deprecated.
+# If a translation is missing for language, the `copyright` value will be used.
+# copyright_translations.es = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR A menos que se indique lo contrario, el contenido de esta web está disponible bajo la licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
+
+# Custom security headers. What urls should your website be able to connect to?
+# You need to specify the CSP and the URLs associated with the directive.
+# Useful if you want to load remote content safely (embed YouTube videos, which needs frame-src, for example).
+# Default directive is self.
+# Default config, allows for https remote images and embedding YouTube and Vimeo content.
+# This configuration (along with the right webserver settings) gets an A+ in Mozilla's Observatory: https://observatory.mozilla.org
+allowed_domains = [
+    { directive = "font-src", domains = ["'self'", "data:"] },
+    { directive = "img-src", domains = ["'self'", "https://*", "data:"] },
+    { directive = "media-src", domains = ["'self'"] },
+    { directive = "script-src", domains = ["'self'"] },
+    { directive = "style-src", domains = ["'self'"] },
+    { directive = "frame-src", domains = ["player.vimeo.com", "https://www.youtube-nocookie.com"] },
+]
+
+# Custom subset of characters for the header.
+# If set to true, the `static/custom_subset.css` file will be loaded first.
+# This avoids a flashing text issue in Firefox.
+# Please see https://welpo.github.io/tabi/blog/custom-font-subset/ to learn how to create this file.
+# custom_subset = true
+
+[extra.analytics]
+# Specify which analytics service you want to use.
+# Supported options: ["goatcounter", "umami", "plausible"]
+# service = "umami"
+
+# Unique identifier for tracking.
+# For GoatCounter, this is the code you choose during signup.
+# For Umami, this is the website ID.
+# For Plausible, this is the domain name (e.g. "example.com").
+# Note: Leave this field empty if you're self-hosting.
+# id = "yourID"
+
+# Optional: Specify the URL for self-hosted analytics instances.
+# For GoatCounter: Base URL like "https://stats.example.com"
+# For Umami: Base URL like "https://umami.example.com"
+# For Plausible: Base URL like "https://plausible.example.com"
+# Leave this field empty if you're using the service's default hosting.
+# self_hosted_url = ""
+
+# giscus support for comments. https://giscus.app
+# Setup instructions: https://welpo.github.io/tabi/blog/comments/#setup
+[extra.giscus]
+# enabled_for_all_posts = false  # Enables giscus on all posts. It can be enabled on individual posts by setting `giscus = true` in the [extra] section of a post's front matter.
+# automatic_loading = true  # If set to false, a "Load comments" button will be shown.
+# repo = "welpo/tabi-comments"
+# repo_id = "R_kgDOJ59Urw"  # Find this value in https://giscus.app/
+# category = "Announcements"
+# category_id = "DIC_kwDOJ59Ur84CX0QG"  # Find this value in https://giscus.app/
+# mapping = "slug"  # Available: pathname; url; title; slug. "slug" will use the post's filename (slug); this is the only way to share comments between languages.
+# strict_title_matching = 1  # 1 to enable, 0 to disable. https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md#data-strict
+# enable_reactions = 1  # 1 to enable, 0 to disable.
+# comment_box_above_comments = false
+# light_theme = "noborder_light"
+# dark_theme = "noborder_dark"
+# lang = ""  # Leave blank to match the page's language.
+# lazy_loading = true
+
+# utterances support for comments. https://utteranc.es
+# Setup instructions: https://welpo.github.io/tabi/blog/comments/#setup
+[extra.utterances]
+# enabled_for_all_posts = false  # Enables utterances on all posts. It can be enabled on individual posts by setting `utterances = true` in the [extra] section of a post's front matter.
+# automatic_loading = true  # If set to false, a "Load comments" button will be shown.
+# repo = "yourGithubUsername/yourRepo"  # https://utteranc.es/#heading-repository
+# issue_term = "slug"  # Available: pathname; url; title; slug. "slug" will use the post's filename (slug); this is the only way to share comments between languages. https://utteranc.es/#heading-mapping
+# label = "💬"  # https://utteranc.es/#heading-issue-label
+# light_theme = "github-light"  # https://utteranc.es/#heading-theme
+# dark_theme = "photon-dark"  # https://utteranc.es/#heading-theme
+# lazy_loading = true
+
+# Hyvor Talk support for comments. https://talk.hyvor.com
+[extra.hyvortalk]
+# enabled_for_all_posts = false  # Enables hyvortalk on all posts. It can be enabled on individual posts by setting `hyvortalk = true` in the [extra] section of a post's front matter.
+# automatic_loading = true  # If set to false, a "Load comments" button will be shown.
+# website_id = "1234"
+# page_id_is_slug = true  # If true, it will use the post's filename (slug) as id; this is the only way to share comments between languages. If false, it will use the entire url as id.
+# lang = ""  # Leave blank to match the page's language.
+# page_author = ""  # Email (or base64 encoded email) of the author.
+# lazy_loading = true
+
+# Isso support for comments. https://isso-comments.de/
+# You need to self-host the backend first: https://blog.phusion.nl/2018/08/16/isso-simple-self-hosted-commenting-system/
+# More info on some settings: https://isso-comments.de/docs/reference/client-config/
+[extra.isso]
+# enabled_for_all_posts = false  # Enables Isso on all posts. It can be enabled on individual posts by setting `isso = true` in the [extra] section of a post's front matter.
+# automatic_loading = true  # If set to false, a "Load comments" button will be shown.
+# endpoint_url = ""  # Accepts relative paths like "/comments/" or "/isso/", as well as full urls like "https://example.com/comments/". Include the trailing slash.
+# page_id_is_slug = true  # If true, it will use the relative path for the default language as id; this is the only way to share comments between languages. If false, it will use the entire url as id.
+# lang = ""  # Leave blank to match the page's language.
+# max_comments_top = "inf"  # Number of top level comments to show by default. If some comments are not shown, an “X Hidden” link is shown.
+# max_comments_nested = "5"  # Number of nested comments to show by default. If some comments are not shown, an “X Hidden” link is shown.
+# avatar = true
+# voting = true
+# page_author_hashes = ""  # hash (or list of hashes) of the author.
+# lazy_loading = true  # Loads when the comments are in the viewport (using the Intersection Observer API).

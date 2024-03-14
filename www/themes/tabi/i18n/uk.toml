@@ -1,0 +1,101 @@
+# This has been machine translated.
+# If you would like to help correct errors or improve the translation,
+# please open an issue or submit a pull request.
+# https://github.com/welpo/tabi
+
+# Note on pluralization prefixes:
+# - few_: for numbers ending in 2-4, except 12-14, in genitive singular.
+# - many_: for all others, including 5-9, 0, and teens (11-14), in genitive plural.
+
+language_name = "Українська"  # Shown in language picker for multi-language sites.
+date_locale = "uk_UA"
+full-stop = "."  # Used at the end of a sentence.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "блог"
+archive = "архів"
+tags = "теги"
+projects = "проєкти"
+about = "про мене"
+contact = "контакт"
+privacy = "політика конфіденційності"
+site_statistics = "статистика сайту"
+sitemap = "карта сайту"
+
+# Search.
+search = "Пошук"
+search_icon_title = "Натисніть або використовуйте $SHORTCUT, щоб відкрити пошук"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "Очистити пошук"  # Title of the X icon next to search input.
+zero_results = "Немає результатів"
+one_results = "$NUMBER результат"
+few_results = "$NUMBER результати"
+many_results = "$NUMBER результатів"
+
+# Navigation.
+read_more = "Читати далі"
+one_posts = "$NUMBER пост"
+few_posts = "$NUMBER пости"  # 2, 3, 4 but not 12-14
+many_posts = "$NUMBER постів"  # 5-9, 0, 11-14, and others
+prev = "Попер."  # As in "Previous" page.
+next = "Наст."  # As in "Next" page.
+of = "з"  # E.g. Page 1 "of" 3
+all_posts = "Всі пости"
+all_tags = "Всі теги"
+language_selection = "Вибір мови"
+toggle_mode = "Перемкнути в режим $MODE"  # $MODE will be replaced by a value (or both) below.
+dark = "темний"
+light = "світлий"
+reset_mode = "Скинути режим до типових налаштувань сайту"
+
+# Quick navigation buttons.
+toggle_toc = "Показати/Сховати зміст"
+go_to_top = "Перейти на початок сторінки"
+go_to_comments = "Перейти до коментарів"
+
+# Post metadata.
+draft = "ЧЕРНЕТКА"
+zero_min_read = "<1 хв. читання"
+one_min_read = "$NUMBER хв. читання"
+few_min_read = "$NUMBER хв. читання"  # 2, 3, 4 but not 12-14
+many_min_read = "$NUMBER хв. читання"  # 5-9, 0, 11-14, and others
+zero_words = "Без слів"
+one_words = "$NUMBER слово"
+few_words = "$NUMBER слова"  # 2, 3, 4 but not 12-14
+many_words = "$NUMBER слів"  # 5-9, 0, 11-14, and others
+last_updated_on = "Останнє оновлення"
+see_changes = "Переглянути зміни"
+
+# Post body.
+table_of_contents = "Зміст"
+load_comments = "Завантажити коментарі"
+
+# Copy code block button.
+copied = "Скопійовано!"
+copy_code_to_clipboard = "Копіювати код у буфер обміну"
+
+# Footer: Powered by Zola and tabi.
+powered_by = "Під управлінням"
+and = "та"
+site_source = "Вихідний код сайту"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "Сторінка, яку ви запитуєте, відсутня"
+translation_missing = "або ще не перекладена на вашу мову"
+check_url = "Перевірте URL на помилки або"
+go_home = "поверніться на головну сторінку"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "Показати оригінальну цитату"
+show_translation = "Показати переклад"
+open_quotation_mark = "«"
+close_quotation_mark = "»"
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "Це веб-канал, також відомий як Atom-канал. Щоб підписатися, скопіюйте URL з адресного рядка у ваш RSS-читач. Відвідайте About Feeds для додаткової інформації та початку використання."
+visit_the_site = "Відвідати веб-сайт"
+recent_posts = "Останні пости"

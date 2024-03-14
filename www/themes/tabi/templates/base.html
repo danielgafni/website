@@ -1,0 +1,38 @@
+{% import "macros/format_date.html" as macros_format_date %}
+{% import "macros/list_posts.html" as macros_list_posts %}
+{% import "macros/page_header.html" as macros_page_header %}
+{% import "macros/rel_attributes.html" as macros_rel_attributes %}
+{% import "macros/settings.html" as macros_settings %}
+{% import "macros/table_of_contents.html" as macros_toc %}
+{% import "macros/translate.html" as macros_translate %}
+
+{# Load the internationalisation data for the current language from
+the .toml files in the user's '/i18n' folder, falling back to the theme's.
+This variable will hold all the text strings for the language #}
+{%- set language_strings = load_data(path="i18n/" ~ lang ~ '.toml', required=false) -%}
+{%- if not language_strings -%}
+    {%- set language_strings = load_data(path="themes/tabi/i18n/" ~ lang ~ ".toml", required=false) -%}
+{%- endif -%}
+{% set rtl_languages = ["ar", "arc", "az", "dv", "ff", "he", "ku", "nqo", "fa", "rhg", "syc", "ur"] %}
+
+
+<!DOCTYPE html>
+<html lang="{{ lang }}" {% if config.extra.default_theme -%}
+    data-theme="{{config.extra.default_theme}}"
+{%- endif -%}>
+
+{% include "partials/header.html" %}
+
+<body{% if lang in rtl_languages %} dir="rtl"{% endif %}>
+    {% include "partials/nav.html" %}
+    <div class="content">
+
+        {# Post page is the default #}
+        {% block main_content %}
+            Nothing here?!
+        {% endblock main_content %}
+    </div>
+    {% include "partials/footer.html" %}
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+# This has been machine translated.
+# If you would like to help correct errors or improve the translation,
+# please open an issue or submit a pull request.
+# https://github.com/welpo/tabi
+language_name = "한국어"  # Shown in language picker for multi-language sites.
+date_locale = "ko_KR"
+full_stop = "."  # Used at the end of a sentence.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "블로그"
+archive = "아카이브"
+tags = "태그"
+projects = "프로젝트"
+about = "소개"
+contact = "연락처"
+privacy = "개인정보 처리방침"
+site_statistics = "사이트 통계"
+sitemap = "사이트맵"
+
+# Search.
+search = "검색"
+search_icon_title = "클릭하거나 $SHORTCUT을 눌러 검색 열기"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "검색 지우기"  # Title of the X icon next to search input.
+zero_results = "결과 없음"
+one_results = "$NUMBER 결과"  # "1 result"
+many_results = "$NUMBER 결과"  # "3 results"
+
+# Navigation.
+read_more = "더 읽기"
+one_posts = "$NUMBER 게시물"
+many_posts = "$NUMBER 게시물"
+prev = "이전"  # As in "Previous" page.
+next = "다음"  # As in "Next" page.
+of = "중"  # E.g. Page 1 "of" 3
+all_posts = "모든 게시물"
+all_tags = "모든 태그"
+language_selection = "언어 선택"
+toggle_mode = "$MODE 모드로 전환"  # $MODE will be replaced by a value (or both) below.
+dark = "어두운"
+light = "밝은"
+reset_mode = "모드를 사이트 기본값으로 재설정"
+
+# Quick navigation buttons.
+toggle_toc = "목차 토글"
+go_to_top = "페이지 상단으로"
+go_to_comments = "댓글 섹션으로"
+
+# Post metadata.
+draft = "임시 저장"
+zero_min_read = "1분 미만 읽기"
+one_min_read = "$NUMBER 분 읽기"
+many_min_read = "$NUMBER 분 읽기"
+zero_words = "단어 없음"
+one_words = "$NUMBER 단어"
+many_words = "$NUMBER 단어"
+last_updated_on = "최근 업데이트"
+see_changes = "변경사항 보기"
+
+# Post body.
+table_of_contents = "목차"
+load_comments = "댓글 불러오기"
+
+# Copy code block button.
+copied = "복사됨!"
+copy_code_to_clipboard = "코드를 클립보드에 복사"
+
+# Footer: Powered by Zola and tabi.
+powered_by = "제공됨"
+and = "&"
+site_source = "사이트 소스"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "요청하신 페이지가 없습니다"
+translation_missing = "또는 아직 해당 언어로 번역되지 않았습니다"
+check_url = "URL을 확인하거나"
+go_home = "홈페이지로 돌아가기"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "원문 인용 보기"
+show_translation = "번역 보기"
+open_quotation_mark = "“"
+close_quotation_mark = "”"
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "이것은 웹 피드이며, Atom 피드로도 알려져 있습니다. 주소 표시 줄의 URL을 뉴스 리더로 복사하여 구독하세요. About Feeds를 방문하여 자세히 알아보고 시작하세요. 무료입니다."
+visit_the_site = "웹사이트 방문하기"
+recent_posts = "최근 게시물"

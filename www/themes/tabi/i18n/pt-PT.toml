@@ -1,0 +1,88 @@
+language_name = "Português"  # Shown in language picker for multi-language sites.
+date_locale = "pt_PT"
+full_stop = "."  # Used at the end of a sentence.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "blog"
+archive = "arquivo"
+tags = "etiquetas"
+projects = "projetos"
+about = "sobre"
+contact = "contacto"
+privacy = "política de privacidade"
+site_statistics = "estatísticas do site"
+sitemap = "mapa do site"
+
+# Search.
+search = "Pesquisar"
+search_icon_title = "Clique ou pressione $SHORTCUT para abrir a pesquisa"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "Limpar pesquisa"  # Title of the X icon next to search input.
+zero_results = "Nenhum resultado encontrado"
+one_results = "$NUMBER resultado"  # "1 result"
+many_results = "$NUMBER resultados"  # "3 results"
+
+# Navigation.
+read_more = "Ler mais"
+one_posts = "$NUMBER publicação"
+many_posts = "$NUMBER publicações"
+prev = "Anterior"  # As in "Previous" page.
+next = "Seguinte"  # As in "Next" page.
+of = "de"  # E.g. Page 1 "of" 3
+all_posts = "Todas as publicações"
+all_tags = "Todas as etiquetas"
+language_selection = "Seleção de idioma"
+toggle_mode = "Alternar para o modo $MODE"  # $MODE will be replaced by a value (or both) below.
+dark = "escuro"
+light = "claro"
+reset_mode = "Repor o modo para o padrão"
+
+# Quick navigation buttons.
+toggle_toc = "Alternar Índice"
+go_to_top = "Ir para o topo da página"
+go_to_comments = "Ir para a seção de comentários"
+
+# Post metadata.
+draft = "RASCUNHO"
+zero_min_read = "<1 min de leitura"
+one_min_read = "$NUMBER min de leitura"
+many_min_read = "$NUMBER mins de leitura"
+zero_words = "Nenhuma palavra"
+one_words = "$NUMBER palavra"
+many_words = "$NUMBER palavras"
+last_updated_on = "Última atualização em"
+see_changes = "Ver alterações"
+
+# Post body.
+table_of_contents = "Índice de conteúdo"
+load_comments = "Carregar comentários"
+
+# Copy code block button.
+copied = "Copiado!"
+copy_code_to_clipboard = "Copiar código para a área de transferência"
+
+# Footer: Powered by Zola and tabi.
+powered_by = "Impulsionado por"
+and = "e"
+site_source = "Código do site"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "A página que solicitou não existe"
+translation_missing = "ou ainda não foi traduzida para o seu idioma"
+check_url = "Verifique se o URL está correto ou"
+go_home = "volte à página inicial"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "Mostrar citação original"
+show_translation = "Mostrar tradução"
+open_quotation_mark = "«"
+close_quotation_mark = "»"
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "Isto é um feed web, também conhecido como feed Atom. Subscreva copiando o URL da barra de endereços para o seu leitor de notícias. Visite About Feeds para aprender mais e começar. É grátis."
+visit_the_site = "Visite o website"
+recent_posts = "Publicações recentes"

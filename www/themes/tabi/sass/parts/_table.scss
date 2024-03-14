@@ -1,0 +1,37 @@
+table {
+    margin: 1rem auto;
+    border-style: hidden !important;
+    border-radius: 5px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow: hidden;
+    font: inherit;
+    text-align: center;
+
+    th,
+    td {
+        border: 1px solid var(--bg-1);
+        padding: 6px 13px;
+        font-size: large;
+    }
+
+    thead tr {
+        background-color: var(--primary-color);
+        color: var(--hover-color);
+
+        code {
+            background-color: transparent;
+        }
+    }
+
+    tbody {
+        tr:nth-child(even) {
+            background-color: var(--bg-0);
+        }
+    }
+
+    details,
+    summary {
+        font-family: inherit !important;
+    }
+}

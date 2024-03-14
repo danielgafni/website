@@ -1,0 +1,88 @@
+language_name = "繁體中文"  # Shown in language picker for multi-language sites.
+date_locale = "zh_TW"
+full_stop = "。"  # Used at the end of a sentence.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "網誌"
+archive = "歸檔"
+tags = "標籤"
+projects = "專案"
+about = "關於"
+contact = "聯絡方式"  # Machine translated.
+privacy = "隱私政策"  # Machine translated.
+site_statistics = "網站統計"  # Machine translated.
+sitemap = "網站地圖"  # Machine translated.
+
+# Search.
+search = "搜尋"
+search_icon_title = "點擊或按 $SHORTCUT 來開啟搜尋"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "清除搜尋"  # Title of the X icon next to search input.
+zero_results = "沒有找到結果"
+one_results = "$NUMBER 個結果"
+many_results = "$NUMBER 個結果"
+
+# Navigation.
+read_more = "閱讀全文"
+one_posts = "$NUMBER 篇文章"
+many_posts = "$NUMBER 篇文章"
+prev = "上一頁"  # As in "Previous" page.
+next = "下一頁"  # As in "Next" page.
+of = "/"  # E.g. Page 1 "of" 3
+all_posts = "所有文章"
+all_tags = "所有標籤"
+language_selection = "語言選擇"  # Machine translated.
+toggle_mode = "切換到$MODE模式"  # $MODE will be replaced by a value (or both) below. Machine translated.
+dark = "暗"  # Machine translated.
+light = "亮"  # Machine translated.
+reset_mode = "將模式重置為網站默認值"  # Machine translated.
+
+# Quick navigation buttons.
+toggle_toc = "切換目錄"  # Machine translated.
+go_to_top = "返回頁面頂部"  # Machine translated.
+go_to_comments = "轉到評論區"  # Machine translated.
+
+# Post metadata.
+draft = "草稿"
+zero_min_read = "少於1分鐘閱讀"
+one_min_read = "$NUMBER 分鐘閱讀"
+many_min_read = "$NUMBER 分鐘閱讀"
+zero_words = "沒有字"
+one_words = "$NUMBER 字"
+many_words = "$NUMBER 字"
+last_updated_on = "最後更新於"
+see_changes = "修改紀錄"
+
+# Post body.
+table_of_contents = "目錄"
+load_comments = "載入留言"
+
+# Copy code block button.
+copied = "已复制!"  # Machine translated.
+copy_code_to_clipboard = "复制代码到剪贴板"  # Machine translated.
+
+# Footer: Powered by Zola and tabi.
+powered_by = "網站基於"
+and = "和"
+site_source = "查看原始碼"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "您請求的頁面不存在"
+translation_missing = "或尚未被翻譯成繁體中文"
+check_url = "請檢查網址是否有誤或"
+go_home = "返回首頁"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "顯示原文"
+show_translation = "顯示翻譯"
+open_quotation_mark = "「"
+close_quotation_mark = "」"
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "這是Web Feed，又稱為Atom Feed，把現在的網址複製到新聞閱讀器即可訂閱本站文章。造訪「About Feeds」來了解更多資訊。"
+visit_the_site = "造訪網站"
+recent_posts = "近期文章"

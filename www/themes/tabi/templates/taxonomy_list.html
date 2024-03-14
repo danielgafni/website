@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+
+{% block main_content %}
+
+{%- set title = macros_translate::translate(key=taxonomy.name, default=taxonomy.name, language_strings=language_strings) -%}
+
+{{ macros_page_header::page_header(title=title)}}
+
+{% set tag_count = terms | length %}
+<div id="tag-cloud" class="{% if tag_count > 16 %}three-columns{% elif tag_count > 8 %}two-columns{% endif %}">
+    <ul class="tags">
+        {%- for term in terms -%}
+            <li class="tags-item">
+                {%- set number_of_posts = term.pages | length -%}
+                {% if config.extra.compact_tags %}
+                    {# Shows the number of posts per tag as a superscript #}
+                    <a href="{{ term.permalink | safe }}"
+                       aria-label="{{ term.name }} –
+                        {{ term.pages | length }}
+                        {{- macros_translate::translate(key="posts", number=number_of_posts, default="$NUMBER posts", language_strings=language_strings) -}}
+                    ">
+                        {{ term.name }}
+                    </a> <sup>{{ number_of_posts }}</sup>
+                {% else %}
+                    <a href="{{ term.permalink | safe }}">
+                        {{ term.name }} </a>
+                    <span> – </span>
+                    {{- macros_translate::translate(key="posts", number=number_of_posts, default="$NUMBER posts", language_strings=language_strings) -}}
+                {% endif %}
+            </li>
+        {%- endfor -%}
+    </ul>
+</div>
+
+{% endblock main_content %}

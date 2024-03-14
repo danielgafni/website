@@ -1,0 +1,56 @@
+{% macro list_posts(posts, max, language_strings="") %}
+
+<div class="bloglist-container">
+    {% for post in posts %}
+        {% if loop.index <= max %}
+            {% if loop.index == max %}
+                <section class="bloglist-row">
+            {% elif loop.last %}
+                <section class="bloglist-row">
+            {% else %}
+                <section class="bloglist-row bottom-divider">
+            {% endif %}
+
+            <ul class="bloglist-meta">
+                {% if post.date %}
+                <li class="date">{{ macros_format_date::format_date(date=post.date, short=false, language_strings=language_strings) }}</li>
+                {% endif %}
+                {% if post.draft %}
+                <li class="draft-label">{{ macros_translate::translate(key="draft", default="DRAFT", language_strings=language_strings) }}</li>
+                {% endif %}
+            </ul>
+            <div class="bloglist-content">
+                <h2 class="bloglist-title">
+                    <a href="{{ post.permalink }}">{{ post.title }}</a>
+                </h2>
+
+                {% if post.taxonomies.tags %}
+                    <div class="bloglist-tags">
+                        {% for tag in post.taxonomies.tags %}
+                            <a class="tag" href="{{ get_taxonomy_url(kind='tags', name=tag, lang=lang) | safe }}">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="description">
+                    {% if post.description %}
+                        <p>{{ post.description }}</p>
+                    {% elif post.summary %}
+                        <p>{{ post.summary | striptags | safe | trim_end_matches(pat=".") }}…</p>
+                    {% endif %}
+                </div>
+                <a class="readmore" href={{ post.permalink }}>{{ macros_translate::translate(key="read_more", default="Read more", language_strings=language_strings) }}&nbsp;<span class="arrow">→</span></a>
+            </div>
+        </section>
+    {% endif %}
+        {% if not loop.last %}
+            {% if loop.index == max %}
+                <div class="all-posts">
+                    <a href="{{ get_url(path="blog", lang=lang) }}/">{{ macros_translate::translate(key="all_posts", default="All posts", language_strings=language_strings) }}&nbsp;<span class="arrow">⟶</span></a>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endmacro %}

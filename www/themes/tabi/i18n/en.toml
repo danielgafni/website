@@ -1,0 +1,88 @@
+language_name = "English"  # Shown in language picker for multi-language sites.
+date_locale = "en_GB"
+full_stop = "."  # Used at the end of a sentence.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "blog"
+archive = "archive"
+tags = "tags"
+projects = "projects"
+about = "about"
+contact = "contact"
+privacy = "privacy policy"
+site_statistics = "site statistics"
+sitemap = "sitemap"
+
+# Search.
+search = "Search"
+search_icon_title = "Click or press $SHORTCUT to open search"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "Clear search"  # Title of the X icon next to search input.
+zero_results = "No results"
+one_results = "$NUMBER result"  # "1 result"
+many_results = "$NUMBER results"  # "3 results"
+
+# Navigation.
+read_more = "Read more"
+one_posts = "$NUMBER post"
+many_posts = "$NUMBER posts"  # "3 posts"
+prev = "Prev"  # As in "Previous" page.
+next = "Next"  # As in "Next" page.
+of = "of"  # E.g. Page 1 "of" 3
+all_posts = "All posts"
+all_tags = "All tags"
+language_selection = "Language selection"
+toggle_mode = "Toggle $MODE mode"  # $MODE will be replaced by a value (or both) below.
+dark = "dark"
+light = "light"
+reset_mode = "Reset mode to default"
+
+# Quick navigation buttons.
+toggle_toc = "Toggle Table of Contents"
+go_to_top = "Go to the top of the page"
+go_to_comments = "Go to the comments section"
+
+# Post metadata.
+draft = "DRAFT"
+zero_min_read = "<1 min read"
+one_min_read = "$NUMBER min read"
+many_min_read = "$NUMBER min read"
+zero_words = "No words"
+one_words = "$NUMBER word"
+many_words = "$NUMBER words"
+last_updated_on = "Last updated on"
+see_changes = "See changes"
+
+# Post body.
+table_of_contents = "Table of Contents"
+load_comments = "Load comments"
+
+# Copy code block button.
+copied = "Copied!"
+copy_code_to_clipboard = "Copy code to clipboard"
+
+# Footer: Powered by Zola and tabi.
+powered_by = "Powered by"
+and = "&"
+site_source = "Site source"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "The page you've requested seems to be missing"
+translation_missing = "or hasn't been translated into your language yet"
+check_url = "Check the URL for errors or"
+go_home = "go back to the homepage"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "Show original quote"
+show_translation = "Show translation"
+open_quotation_mark = "“"
+close_quotation_mark = "”"
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "This is a web feed, also known as an Atom feed. Subscribe by copying the URL from the address bar into your newsreader. Visit About Feeds to learn more and get started. It's free."
+visit_the_site = "Visit website"
+recent_posts = "Recent posts"

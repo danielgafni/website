@@ -1,0 +1,97 @@
+language_name = "Русский"  # Shown in language picker for multi-language sites.
+date_locale = "ru_RU"
+full-stop = "."  # Used at the end of a sentence.
+
+# Note on pluralization prefixes:
+# - few_: for numbers ending in 2-4, except 12-14, in genitive singular.
+# - many_: for all others, including 5-9, 0, and teens (11-14), in genitive plural.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "блог"
+archive = "архив"
+tags = "теги"
+projects = "проекты"
+about = "обо мне"
+contact = "контакт"
+privacy = "политика конфиденциальности"
+site_statistics = "статистика сайта"
+sitemap = "карта сайта"
+
+# Search.
+search = "Поиск"
+search_icon_title = "Нажмите или используйте $SHORTCUT для открытия поиска"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "Очистить поиск"  # Title of the X icon next to search input.
+zero_results = "Нет результатов"
+one_results = "$NUMBER результат"
+few_results = "$NUMBER результата"  # 2, 3, 4 but not 12-14
+many_results = "$NUMBER результатов"  # 5-9, 0, 11-14, and others
+
+# Navigation.
+read_more = "Читать далее"
+post = "пост"
+one_posts = "$NUMBER пост"
+few_posts = "$NUMBER поста"  # 2, 3, 4 but not 12-14
+many_posts = "$NUMBER постов"  # 5-9, 0, 11-14, and others
+prev = "Пред."  # As in "Previous" page.
+next = "След."  # As in "Next" page.
+of = "из"  # E.g. Page 1 "of" 3
+all_posts = "Все посты"
+all_tags = "Все теги"
+language_selection = "Выбор языка"
+toggle_mode = "Переключить на режим $MODE"  # $MODE will be replaced by a value (or both) below.
+dark = "тёмный"
+light = "светлый"
+reset_mode = "Сбросить режим к стандартным настройкам сайта"
+
+# Quick navigation buttons.
+toggle_toc = "Показать/Скрыть оглавление"
+go_to_top = "Перейти в начало страницы"
+go_to_comments = "Перейти к комментариям"
+
+# Post metadata.
+draft = "ЧЕРНОВИК"
+zero_min_read = "<1 мин чтения"
+one_min_read = "$NUMBER мин чтения"
+few_min_read = "$NUMBER мин чтения"  # 2, 3, 4 but not 12-14
+many_min_read = "$NUMBER мин чтения"  # 5-9, 0, 11-14, and others
+zero_words = "Нет слов"
+one_words = "$NUMBER слово"
+few_words = "$NUMBER слова"  # 2, 3, 4 but not 12-14
+many_words = "$NUMBER слов"  # 5-9, 0, 11-14, and others
+last_updated_on = "Последнее обновление"
+see_changes = "Смотреть изменения"
+
+# Post body.
+table_of_contents = "Содержание"
+load_comments = "Загрузить комментарии"
+
+# Copy code block button.
+copied = "Скопировано!"
+copy_code_to_clipboard = "Скопировать код в буфер обмена"
+
+# Footer: Powered by Zola and tabi.
+powered_by = "Под управлением"
+and = "&"
+site_source = "Исходный код сайта"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "Запрашиваемая вами страница отсутствует"
+translation_missing = "или еще не переведена на ваш язык"
+check_url = "Проверьте URL на ошибки или"
+go_home = "вернитесь на главную страницу"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "Показать оригинальную цитату"
+show_translation = "Показать перевод"
+open_quotation_mark = "«"
+close_quotation_mark = "»"
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "Это веб-фид, известный также как Atom-фид. Чтобы подписаться, скопируйте URL из адресной строки в ваш RSS-ридер. Посетите About Feeds для дополнительной информации и начала использования."
+visit_the_site = "Посетить веб-сайт"
+recent_posts = "Последние посты"

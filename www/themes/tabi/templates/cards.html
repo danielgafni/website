@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    {% if section.extra.section_path -%}
+        {% set section = get_section(path=section.extra.section_path) %}
+    {% endif -%}
+
+    {{ macros_page_header::page_header(title=section.title) }}
+
+    <main>
+        {% if section.content -%}
+            <div id="page-content">{{ section.content | safe }}</div>
+        {% endif %}
+
+        {%- if paginator %}
+            {%- set show_pages = paginator.pages -%}
+        {% else %}
+            {%- set show_pages = section.pages -%}
+        {% endif -%}
+
+    {%- include "partials/cards_pages.html" -%}
+    </main>
+
+    {% if paginator %}
+        {%- include "partials/paginate.html" -%}
+    {% endif %}
+{% endblock main_content %}

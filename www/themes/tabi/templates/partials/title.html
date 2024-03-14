@@ -1,0 +1,37 @@
+{#- Setup -#}
+{%- set prefix = config.title | safe -%}
+{%- set custom_separator = config.extra.separator | default(value="•") -%}
+{%- set separator = " " ~ custom_separator ~ " " -%}
+
+{#- Get the base path for the current language -#}
+{%- if lang != config.default_language %}
+    {%- set base_path = "/" ~ lang ~ "/" %}
+{%- else -%}
+    {%- set base_path = "/" %}
+{%- endif %}
+
+{%- if current_path and current_path == base_path -%}
+    {%- set suffix = "" -%}
+    {%- set separator = "" -%}
+{% elif title %}
+    {%- set suffix =  title -%}
+{% elif section.title -%}
+    {%- set suffix = section.title -%}
+{% elif page.title %}
+    {%- set suffix = page.title -%}
+{% elif term.name %}
+    {#- Individual tags -#}
+    {%- set suffix = term.name -%}
+{% elif taxonomy.name %}
+    {#- List of tags -#}
+    {%- set suffix = macros_translate::translate(key=taxonomy.name, language_strings=language_strings) | capitalize -%}
+{% else %}
+    {%- set suffix = "404" %}
+{%- endif -%}
+
+{#- Return the final concatenated string -#}
+{%- if config.extra.invert_title_order -%}
+    {{- suffix ~ separator ~ prefix -}}
+{%- else -%}
+    {{- prefix ~ separator ~ suffix -}}
+{%- endif -%}

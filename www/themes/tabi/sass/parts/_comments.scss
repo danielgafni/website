@@ -1,0 +1,32 @@
+.utterances-frame {
+    width: 100%;
+}
+
+.comments {
+    margin-top: 2rem;
+    border-top: var(--divider-color) solid 0.5px;
+    border-bottom: var(--divider-color) solid 0.5px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    iframe {
+        margin: 0;
+        border: none;
+        aspect-ratio: inherit;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .load-comments-button {
+        display: block;
+        cursor: pointer;
+        margin: 0.5em auto;
+        border: none;
+        background: none;
+        padding: 0.5em 1em;
+        color: inherit;
+        font-size: 0.95rem;
+        font-family: var(--sans-serif-font);
+        text-decoration: none;
+    }
+}

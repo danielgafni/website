@@ -1,0 +1,78 @@
+{%- import "macros/translate.html" as macros_translate -%}
+{%- import "macros/settings.html" as macros_settings -%}
+{#- Load the internationalisation data -#}
+{%- set language_strings = load_data(path="i18n/" ~ lang ~ '.toml', required=false) -%}
+{%- if not language_strings -%}
+    {%- set language_strings = load_data(path="themes/tabi/i18n/" ~ lang ~ ".toml", required=false) -%}
+{%- endif -%}
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="{{ get_url(path='/feed_style.xsl', trailing_slash=false) | safe }}" type="text/xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:base="http://purl.org/atompub/base/1.0/" xml:lang="{{ lang }}" xml:base="{{ config.base_url }}">
+    <str:translations xmlns:str="https://github.com/welpo/tabi">
+        <str:about_feeds>
+            {{- macros_translate::translate(key="about_feeds", default="This is a web feed, also known as an Atom feed. Subscribe by copying the URL from the address bar into your newsreader", language_strings=language_strings) -}}
+        </str:about_feeds>
+        <str:visit_the_site>
+            {{- macros_translate::translate(key="visit_the_site", default="Visit website", language_strings=language_strings) -}}
+        </str:visit_the_site>
+        <str:recent_posts>
+            {{- macros_translate::translate(key="recent_posts", default="Recent posts", language_strings=language_strings) -}}
+        </str:recent_posts>
+    </str:translations>
+
+    {#- Load extra CSS (skin) if set in config.toml -#}
+    {%- if config.extra.skin -%}
+        <link rel="extra-stylesheet" href="{{ get_url(path='skins/' ~ config.extra.skin ~ '.css', cachebust=true) | safe }}" />
+    {%- endif -%}
+
+    <title>{{ config.title | striptags | safe }}
+    {%- if term %} - {{ term.name }}
+    {%- elif section.title %} - {{ section.title }}
+    {%- endif -%}
+    </title>
+    {%- if config.description %}
+        <subtitle>{{ config.description }}</subtitle>
+    {%- endif %}
+    <link href="{{ feed_url | safe }}" rel="self" type="application/atom+xml"/>
+    <link href="
+        {%- if section -%}
+            {{ section.permalink | escape_xml | safe }}
+        {%- else -%}
+            {{ get_url(path="/", lang=lang) | escape_xml | safe }}
+        {%- endif -%}
+    "/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>{{ last_updated | date(format="%+") }}</updated>
+    <id>{{ feed_url | safe }}</id>
+    {%- for page in pages %}
+    {%- if macros_settings::evaluate_setting_priority(setting="hide_from_feed", page=page, default_global_value=false) == "true" -%}
+        {%- continue -%}
+    {%- endif -%}
+    <entry xml:lang="{{ page.lang }}">
+        <title>{{ page.title }}</title>
+        <published>{{ page.date | date(format="%+") }}</published>
+        <updated>{{ page.updated | default(value=page.date) | date(format="%+") }}</updated>
+        <author>
+            <name>
+            {%- if page.authors -%}
+                {{ page.authors[0] }}
+            {%- elif config.author -%}
+                {{ config.author }}
+            {%- else -%}
+                Unknown
+            {%- endif -%}
+            </name>
+        </author>
+        <link rel="alternate" href="{{ page.permalink | safe }}" type="text/html"/>
+        <id>{{ page.permalink | safe }}</id>
+        {% if config.extra.full_content_in_feed %}
+            <content type="html">{{ page.content }}</content>
+        {% endif -%}
+        {% if page.summary -%}
+            <summary type="html">{{ page.summary | striptags | safe | trim_end_matches(pat=".") }}…</summary>
+        {% elif page.description -%}
+            <summary type="html">{{ page.description }}</summary>
+        {% endif -%}
+    </entry>
+    {%- endfor %}
+</feed>

@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# Bash script to prepare a release using git-cliff.
+# Inspired by https://github.com/orhun/git-cliff/blob/main/release.sh
+set -eu
+
+VERSION_FORMAT="^v[0-9]+\.[0-9]+\.[0-9]+$"
+
+# Check for a clean working directory.
+if [ -n "$(git status --porcelain)" ]; then
+    echo "Your working directory is dirty. Commit or stash your changes before running this script."
+    exit 1
+fi
+
+# Check if a version tag is provided.
+if [ "$#" -eq 1 ]; then
+    VERSION_TAG=$1
+else
+    suggested_version=$(git cliff --bumped-version)
+    echo -n "No version tag provided. git-cliff suggests $suggested_version. Proceed? [Y/n] "
+    read user_input
+
+    # Check if input is empty or a variation of "yes".
+    if [[ -z "$user_input" || "$user_input" =~ ^[Yy](es)?$ ]]; then
+        echo "Proceeding with version $suggested_version."
+        VERSION_TAG=$suggested_version
+    else
+        echo "Release preparation cancelled."
+        exit 1
+    fi
+fi
+
+# Verify that the version tag matches the expected format.
+if ! [[ $VERSION_TAG =~ $VERSION_FORMAT ]]; then
+    echo "Version tag $VERSION_TAG does not match the expected format ${VERSION_FORMAT}."
+    exit 1
+fi
+
+echo "Preparing release ${VERSION_TAG}…"
+echo
+
+# Update CHANGELOG.
+git cliff --tag "$VERSION_TAG" -o CHANGELOG.md
+sed -E 's/@([a-zA-Z0-9_-]+)/[@\1](https:\/\/github.com\/\1)/g' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
+
+# Add all changes and commit.
+git add -A
+git commit -m "🔖 chore(release): prepare for $VERSION_TAG"
+
+
+# Generate the tag description.
+changelog=$(git cliff --tag "$VERSION_TAG" --unreleased --strip all)
+
+# Clean up tag's changelog; tag descriptions don't support markdown.
+# Remove PR links.
+changelog=$(echo "$changelog" | sed -E 's/\[\#([0-9]+)\]\(https:\/\/github\.com\/welpo\/[^\/]+\/(issues|pull)\/([0-9]+)\)/#\1/g')
+# Remove commit links.
+changelog=$(echo "$changelog" | sed -E 's/\[([0-9a-f]+)\]\(https:\/\/github\.com\/welpo\/[^\/]+\/commit\/([0-9a-f]+)\)/\1/g')
+# Remove scopes.
+changelog=$(echo "$changelog" | sed -E 's/\*\(([^)]+)\)\* //g')
+# Remove markdown headers.
+changelog=$(echo "$changelog" | sed -E 's/^#+ //g')
+# Remove version comparison lines.
+changelog=$(echo "$changelog" | sed '/https:\/\/github\.com\/.*\/compare\/.*/d')
+
+# Create a signed and annotated tag.
+git tag -s -a "$VERSION_TAG" -m "Release $VERSION_TAG" -m "$changelog"
+
+echo "Most recent commit:"
+git log -1
+echo
+echo "Information for tag $VERSION_TAG:"
+git show $VERSION_TAG
+echo
+
+echo "Release $VERSION_TAG is ready. Don't forget to push the changes and the tag:"
+
+remote_url=$(git remote get-url origin)
+# Check if the URL is in SSH format (git@).
+if [[ "$remote_url" == git@github.com:* ]]; then
+    https_url="https://github.com/${remote_url#git@github.com:}"
+    https_url="${https_url%.git}"
+else
+    https_url="${remote_url%.git}"
+fi
+
+echo "git push && git push --tags && open ${https_url}/tags"

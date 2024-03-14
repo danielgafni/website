@@ -1,0 +1,103 @@
+# Hello, the Arabic language has many pronouns and words, and each word indicates a different meaning,
+# unlike the English language, in which, on the other hand, the word can refer to a person and a group.
+# This translation is for individual use, if you are a company or organization, I have put a comment in
+# front of each translation that refers to the person and the other word that refers to the organization
+
+language_name = "العربية"  # Shown in language picker for multi-language sites.
+date_locale = "ar_SA"  # The locale code for time and date formatting.
+full_stop = "."  # Used at the end of a sentence.
+
+# Menu items.
+# Should match the names in config.extra.menu and config.extra.footer_menu.
+blog = "التدوينات"
+archive = "الأرشيف"
+tags = "الوسوم"
+projects = "مشاريعي"  #Change this to "المشاريع" if the site is for an organization.
+about = "عني"  #Change this to "عنا" or "من نحن" if the site is for an organization.
+contact = "تواصل معي"  #Change this to "تواصل معنا" if the site is for an organization.
+privacy = "الخصوصية"
+site_statistics = "إحصائيات المدونة"
+sitemap = "خريطة المدونة"
+
+# Search.
+search = "بحث"
+search_icon_title = "أنقر هنا أو اضغط $SHORTCUT لفتح البحث"  # $SHORTCUT will be replaced with the actual keyboard shortcut.
+clear_search = "مسح البحث"
+zero_results = "لم يتم العثور على نتائج"  #No search results.
+one_results = "تم العثور على نتيجة واحدة"  # One search result.
+two_results = "تم العثور على نتيجتين"  # Two search results.
+few_results = "تم العثور على $NUMBER نتائج"  # for 3 to 10 search results.
+many_results = "تم العثور على $NUMBER نتيجة"  # 11 or more search results.
+
+# Navigation.
+read_more = "إقرأ المزيد"
+one_posts = "تدوينة واحدة"  #One blog post.
+two_posts = "تدوينتين"  #Two blog posts.
+few_posts = "$NUMBER تدوينات"  #3 to 10 blog posts.
+many_posts = "$NUMBER تدوينة"  #11 or more blog posts.
+prev = "السابق"  # As in "Previous" page.
+next = "التالي"  # As in "Next" page.
+of = "من"  # E.g. Page 1 "of" 3
+all_posts = "جميع التدوينات"
+all_tags = "جميع الوسوم"
+language_selection = "تحديد اللغة"
+toggle_mode = "تبديل الاوضاع $MODE"  # $MODE will be replaced by a value (or both) below.
+dark = "داكن"
+light = "فاتح"
+reset_mode = "إعادة تعيين الوضع"
+
+# Quick navigation buttons.
+toggle_toc = "إظهار / إخفاء جدول المحتويات"
+go_to_top = "انتقل إلى أعلى الصفحة"
+go_to_comments = "انتقل إلى التعليقات"
+
+# Post metadata.
+draft = "مسودة"
+zero_min_read = "الوقت المتوقع للقراءة: أقل من دقيقة"  #Less than one minute read.
+one_min_read = "الوقت المتوقع للقراءة: دقيقة واحدة"  #One minute read.
+two_min_read = "الوقت المتوقع للقراءة: دقيقتان"  #Two minutes read.
+few_min_read = "الوقت المتوقع للقراءة: $NUMBER دقائق"  #3 to 10 minutes read.
+many_min_read = "الوقت المتوقع للقراءة: $NUMBER دقيقة"  #11 or more minutes read.
+
+zero_words = "لا توجد كلمات"  # No words.
+one_words = "كلمة واحدة"  # One word.
+two_words = "كلمتين"  # Two words.
+few_words = "$NUMBER كلمات"  # 3 to 10 words.
+many_words = "$NUMBER كلمة"  # 11 or more words.
+
+last_updated_on = "آخر تحديث كان في"
+see_changes = "الإطلاع على التغييرات"
+
+# Post body.
+table_of_contents = "جدول المحتويات"
+load_comments = "إظهار التعليقات"
+
+# Copy code block button.
+copied = "تم النسخ!"
+copy_code_to_clipboard = "نسخ الشِفرة إلى الحافظة"
+
+# Footer: Powered by Zola and tabi.
+powered_by = "مُشَغل بواسطة"
+and = "و"
+site_source = "شِفرة الموقع"
+
+# 404 error.
+# https://welpo.github.io/tabi/404.html
+page_missing = "الصفحة غير موجودة"
+translation_missing = "أو لم يتم ترجمتها إلى اللغة التي تطلبها"
+check_url = "تحقق من أن الرابط صحيح أو"
+go_home = "انتقل إلى الصفحة الرئيسية"
+
+# For multilingual quote shortcode.
+# https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
+show_original_quote = "إظهار الإقتباس الأصلي"
+show_translation = "إظهار الترجمة"
+open_quotation_mark = '"'
+close_quotation_mark = '"'
+
+# Translations for stylised Atom feed.
+# https://welpo.github.io/tabi/atom.xml
+# Must contain "About Feeds"; it will become a link.
+about_feeds = "الخلاصة تجدها هنا، تُسمى أيضًا Atom. اشترك عبر نسخ الرابط إلى برنامج قارئ الخُلاصات الذي تستخدمه. قم بزيارة About Feeds لمعرفة المزيد والبدء. انه مجانا."
+visit_the_site = "زيارة الموقع"
+recent_posts = "المنشورات الأخيرة"
