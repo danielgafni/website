@@ -19,8 +19,8 @@ taxonomies = [
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
-highlight_theme = "catppuccin_mocha"
-extra_syntaxes_and_themes = ["highlight_themes/catppuccin"]
+extra_syntaxes_and_themes = ["highlight_themes"]
+highlight_theme = "css"
 render_emoji = true
 smart_punctuation = true
 
@@ -28,8 +28,8 @@ smart_punctuation = true
 author = "danielgafni"
 theme_switcher = true
 default_theme = "dark"
-skin = "catppuccin_mocha"
-browser_theme_color = ["#eff1f5", "#1e1e2e"]
+skin = "catppuccin_frappe"
+browser_theme_color = ["#eebebe", "#81c8be"]
 
 # git integration
 remote_repository_url = "https://github.com/danielgafni/website"
@@ -61,5 +61,5 @@ socials = [
 
 email = "ZGFuaWVsZ2FmbmkxNkBnbWFpbC5jb20K"
 
-copyright = "UNLICENCED $CURRENT_YEAR $AUTHOR $SEPARATOR You are free to do whatever you want with the contents of this website"
+copyright = "UNLICENSED $CURRENT_YEAR $AUTHOR $SEPARATOR You are free to do whatever you want with the contents of this website"
 
