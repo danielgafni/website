@@ -33,8 +33,7 @@
               zola check  
             '';
             installPhase = ''
-              ls themes > $out
-              #zola build --base-url https://gafni.dev -o "$out"
+              zola build --base-url https://gafni.dev -o "$out"
             '';
           };
         }
