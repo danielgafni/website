@@ -5,7 +5,7 @@ lock-www:
     nix flake lock --update-input website
 
 test-nixos-rebuild: lock-www
-    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake .#website dry-build
+    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake ".#website" dry-build
 
 nixos-rebuild: lock-www
-    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake .#website switch
+    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake ".#website" switch

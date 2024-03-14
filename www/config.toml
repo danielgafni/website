@@ -1,8 +1,9 @@
 base_url = "https://gafni.dev"
-title = "Daniel Gafni's Personal Website"
+title = "~/danielgafni"
+author = "Daniel Gafni"
 minify_html = true
 generate_feed = true
-theme = "anemone"
+theme = "tabi"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -25,12 +26,40 @@ smart_punctuation = true
 
 [extra]
 author = "danielgafni"
+theme_switcher = true
 default_theme = "dark"
-list_pages = true
-display_author = true
-toc = true
-header_nav = [
-  { url = "/", name_en = "/home/" },
-  { url = "/about", name_en = "/about/" },
-  { url = "/blog", name_en = "/blog/" }
+skin = "catppuccin_mocha"
+browser_theme_color = ["#eff1f5", "#1e1e2e"]
+
+# git integration
+remote_repository_url = "https://github.com/danielgafni/website"
+remote_repository_git_platform = "auto"
+remote_repository_branch = "master"
+show_remote_changes = true
+show_remote_source = true
+
+menu = [
+    { name = "/blog", url = "blog", trailing_slash = true },
+    { name = "/archive", url = "archive", trailing_slash = true },
+    { name = "/tags", url = "tags", trailing_slash = true },
+    { name = "/projects", url = "projects", trailing_slash = true },
+    { name = "/about", url = "about", trailing_slash = true },
 ]
+quick_navigation_buttons = true
+toc = true
+show_previous_next_article_links = true
+footnote_backlinks = true
+show_reading_time = true
+
+copy_button = true
+
+socials = [
+    { name = "github", url = "https://github.com/danielgafni", icon = "github" },
+    { name = "gitlab", url = "https://gitlab.com/danielgafni", icon = "gitlab" },
+    { name = "linkedin", url = "https://www.linkedin.com/in/danielgafni/", icon = "linkedin" },
+]
+
+email = "ZGFuaWVsZ2FmbmkxNkBnbWFpbC5jb20K"
+
+copyright = "UNLICENCED $CURRENT_YEAR $AUTHOR $SEPARATOR You are free to do whatever you want with the contents of this website"
+
