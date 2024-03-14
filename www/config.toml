@@ -1,5 +1,5 @@
 base_url = "https://gafni.dev"
-title = "Daniel Gafni's Website"
+title = "Daniel Gafni's Personal Website"
 minify_html = true
 generate_feed = true
 theme = "anemone"

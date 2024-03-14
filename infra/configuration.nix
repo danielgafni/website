@@ -38,7 +38,7 @@
     defaults.email = "admin+acme@gafni.dev";
 
     # for testing
-    defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
   };
 
   services.nginx = {
@@ -48,12 +48,12 @@
     recommendedTlsSettings = true;
     virtualHosts."gafni.dev" = {
       enableACME = true;
-      forceSSL = false;
+      forceSSL = true;
       root = "${website.packages.x86_64-linux.default}";
       locations."/".root = "${website.packages.x86_64-linux.default}";
       listen = [
         { addr = "0.0.0.0"; port = 80; }
-        { addr = "0.0.0.0"; port = 443; }
+        { addr = "0.0.0.0"; port = 443; ssl = true; }
       ];
       extraConfig = "error_page 404 /404.html;";
     };

@@ -54,6 +54,7 @@
         buildInputs = with pkgs; [
           opentofu # provisioning tool for the OpenTofu project
           sops
+          bind
           just
           nixos-rebuild
         ];
