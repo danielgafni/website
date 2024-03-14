@@ -1,4 +1,4 @@
-base_url = "https://dgafni.dev"
+base_url = "https://gafni.dev"
 title = "Daniel Gafni's Website"
 minify_html = true
 generate_feed = true

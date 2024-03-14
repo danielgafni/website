@@ -8,9 +8,10 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem
-      (system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
+      (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
         {
           devShell = pkgs.mkShell {
             buildInputs = with pkgs; [
@@ -21,6 +22,8 @@
             '';
           };
 
+          formatter = pkgs.nixpkgs-fmt;
+
           packages.default = pkgs.stdenv.mkDerivation {
             name = "website";
             src = ./.;
@@ -30,9 +33,9 @@
               zola check  
             '';
             installPhase = ''
-              zola build -o "$out"
+              zola build --base-url https://gafni.dev -o "$out"
             '';
-          };    
+          };
         }
       );
 }

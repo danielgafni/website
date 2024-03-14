@@ -2,4 +2,5 @@
 infra/.terraform
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
-
+www/result
+infra/result

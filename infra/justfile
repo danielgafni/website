@@ -1,0 +1,5 @@
+test-deploy:
+    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake .#website dry-build
+
+deploy:
+    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake .#website switch
