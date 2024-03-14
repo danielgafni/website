@@ -1,4 +1,6 @@
-# Development setup
+# Website
+
+## Development
 
 Nix has to be installed and flakes support enabled.
 
@@ -8,21 +10,9 @@ Entering the development shell (`direnv` and `lorri` can be used to do it automa
 nix develop
 ```
 
-# Infrastructure deployment
+Running the website locally:
 
 ```shell
-tofu apply
+zola serve
 ```
 
-## Editing secrets
-
-```shell
-sops secrets.enc.json
-```
-
-# Website deployment
-
-```
-just nixos-rebuild
-```
- 
