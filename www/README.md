@@ -16,3 +16,18 @@ Running the website locally:
 zola serve
 ```
 
+# File Structure
+
+```
+ .
+├──  config.toml  # zola config
+├──  content  # actual website content as markdown files
+├──  flake.lock
+├──  flake.nix  # nix derivation for website build
+├──  highlight_themes  # custom syntax highlighting themes
+├──  sass
+├──  shell.nix  # nix dev shell for lorri 
+├──  static  # static files
+└──  themes  # zola themes
+```
+

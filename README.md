@@ -20,3 +20,7 @@ The only required tool is [Nix](https://nixos.org/download/) (flakes have to be 
 └──  www  # website code
 ```
 
+# Acknowledgements
+
+`Nix` & `OpenTofu` usage is inspired by an excellent [series](https://flakm.com/series/simple-personal-blog/) of posts by @flakm
+

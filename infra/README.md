@@ -25,4 +25,17 @@ sops secrets.enc.json
 ```
 just nixos-rebuild
 ```
- 
+
+# File Structure
+
+```
+ .
+├──  configuration.nix  # NixOS config (packages + services + website)
+├──  disk-config.nix  # disk config
+├──  flake.lock
+├──  flake.nix  # main NixOS host config entrypoint (combines all other .nix configs)
+├──  justfile  # common CLI commands
+├── 󱁢 main.tf  # hetzner & cloudflare setup
+├──  README.md
+├──  secrets.enc.json  # secrets like API keys encoded by sops
+```
