@@ -8,7 +8,5 @@ section_path = "blog/_index.md"
 max_posts = 4
 +++
 
-This is my personal website.
-
-You may or may not find something useful here. 
+This is my personal website. It's WIP.
 
