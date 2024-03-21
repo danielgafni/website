@@ -6,6 +6,9 @@ on:
 jobs:
   test-www:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./www
     steps:
     - uses: actions/checkout@v4
     - uses: DeterminateSystems/nix-installer-action@main
@@ -13,12 +16,14 @@ jobs:
       with:
         name: danielgafni
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: cd www
     - run: nix build .
     - run: nix flake check
 
   test-server:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
     steps:
     - uses: actions/checkout@v4
     - uses: DeterminateSystems/nix-installer-action@main
@@ -26,7 +31,6 @@ jobs:
       with:
         name: danielgafni
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: cd infra
     - run: nix build .#nixosConfigurations.website.config.system.build.toplevel
     - run: nix flake check
 
