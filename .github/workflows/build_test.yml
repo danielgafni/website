@@ -14,15 +14,11 @@ jobs:
         name: danielgafni
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - run: nix build .
-      with:
-        working-directory: ./www
+      working-directory: ./www
     - run: nix flake check
-      with:
-        working-directory: ./www
+      working-directory: ./www
     - run: nix build --accept-flake-config .#nixosConfigurations.website.config.system.build.toplevel
-      with:
-        working-directory: ./infra
+      working-directory: ./infra
     - run: nix flake check
-      with:
-        working-directory: ./infra
+      working-directory: ./infra
 
