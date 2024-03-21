@@ -17,7 +17,7 @@ jobs:
       working-directory: ./www
     - run: nix flake check
       working-directory: ./www
-    - run: nix build --accept-flake-config .#nixosConfigurations.website.config.system.build.toplevel
+    - run: nix-shell -p nixos-rebuild --run 'nixos-rebuild --flake .#website build'
       working-directory: ./infra
     - run: nix flake check
       working-directory: ./infra
