@@ -17,6 +17,8 @@ jobs:
       working-directory: ./www
     - run: nix flake check
       working-directory: ./www
+    - run: nix-shell -p just --run 'just lock-www'
+      working-directory: ./infra
     - run: nix-shell -p nixos-rebuild --run 'nixos-rebuild --flake .#website build'
       working-directory: ./infra
     - run: nix flake check
