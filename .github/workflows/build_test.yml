@@ -1,0 +1,26 @@
+name: "Build & Test"
+  
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@main
+    - uses: cachix/cachix-action@v14
+      with:
+        name: danielgafni
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - run: nix build .
+      working-directory: ./www
+    - run: nix flake check
+      working-directory: ./www
+    - run: nix-shell -p just --run 'just lock-www'
+      working-directory: ./infra
+    - run: nix-shell -p nixos-rebuild --run 'nixos-rebuild --accept-flake-config --flake .#website build'
+      working-directory: ./infra
+    - run: nix flake check
+      working-directory: ./infra
+
