@@ -6,37 +6,39 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils,
+  }:
     flake-utils.lib.eachDefaultSystem
-      (system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          devShell = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              zola
-            ];
-            shellHook = ''
-              $SHELL
-            '';
-          };
+    (
+      system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        devShell = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            zola
+          ];
+          shellHook = ''
+            $SHELL
+          '';
+        };
 
-          formatter = pkgs.nixpkgs-fmt;
+        formatter = pkgs.nixpkgs-fmt;
 
-          packages.default = pkgs.stdenv.mkDerivation {
-            name = "website";
-            src = ./.;
-            dontBuild = true;
-            nativeBuildInputs = with pkgs; [ zola ];
-            checkPhase = ''
-              zola check  
-            '';
-            installPhase = ''
-              zola build --base-url https://gafni.dev -o "$out"
-            '';
-          };
-        }
-      );
+        packages.default = pkgs.stdenv.mkDerivation {
+          name = "website";
+          src = ./.;
+          dontBuild = true;
+          nativeBuildInputs = with pkgs; [zola];
+          checkPhase = ''
+            zola check
+          '';
+          installPhase = ''
+            zola build --base-url https://gafni.dev -o "$out"
+          '';
+        };
+      }
+    );
 }
-

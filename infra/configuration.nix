@@ -1,5 +1,10 @@
 # configuration.nix
-{ pkgs, modulesPath, website, ... }: {
+{
+  pkgs,
+  modulesPath,
+  website,
+  ...
+}: {
   imports = [
     # Adds availableKernelModules, kernelModules for instances running under QEMU (Ie Hetzner Cloud)
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -29,10 +34,10 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 80 443 ];
+    allowedTCPPorts = [80 443];
   };
 
-  users.groups.acme.members = [ "nginx" ];
+  users.groups.acme.members = ["nginx"];
   security.acme = {
     acceptTerms = true;
     defaults.email = "admin+acme@gafni.dev";
@@ -52,8 +57,15 @@
       root = "${website.packages.x86_64-linux.default}";
       locations."/".root = "${website.packages.x86_64-linux.default}";
       listen = [
-        { addr = "0.0.0.0"; port = 80; }
-        { addr = "0.0.0.0"; port = 443; ssl = true; }
+        {
+          addr = "0.0.0.0";
+          port = 80;
+        }
+        {
+          addr = "0.0.0.0";
+          port = 443;
+          ssl = true;
+        }
       ];
       extraConfig = "error_page 404 /404.html;";
     };

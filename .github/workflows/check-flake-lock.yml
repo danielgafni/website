@@ -1,0 +1,20 @@
+name: Check flake.lock
+
+on: [push, workflow_dispatch]
+
+jobs:
+  checks:
+    name: Check ${{ matrix.flake }} flake.lock
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        flake: [www, infra]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Nix flake inputs
+        uses: DeterminateSystems/flake-checker-action@v5
+        with:
+          flake-lock-path: ./${{ matrix.flake }}/flake.lock
+

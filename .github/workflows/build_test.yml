@@ -1,0 +1,32 @@
+name: "Build & Test"
+  
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  test-www:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@main
+    - uses: cachix/cachix-action@v14
+      with:
+        name: danielgafni
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - run: cd www
+    - run: nix build .
+    - run: nix flake check
+
+  test-server:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@main
+    - uses: cachix/cachix-action@v14
+      with:
+        name: danielgafni
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - run: cd infra
+    - run: nix build .#nixosConfigurations.website.config.system.build.toplevel
+    - run: nix flake check
+
