@@ -4,11 +4,8 @@ on:
   push:
   workflow_dispatch:
 jobs:
-  test-www:
+  build-and-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./www
     steps:
     - uses: actions/checkout@v4
     - uses: DeterminateSystems/nix-installer-action@main
@@ -17,20 +14,15 @@ jobs:
         name: danielgafni
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - run: nix build .
-    - run: nix flake check
-
-  test-server:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./infra
-    steps:
-    - uses: actions/checkout@v4
-    - uses: DeterminateSystems/nix-installer-action@main
-    - uses: cachix/cachix-action@v14
       with:
-        name: danielgafni
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix build .#nixosConfigurations.website.config.system.build.toplevel
+        working-directory: ./www
     - run: nix flake check
+      with:
+        working-directory: ./www
+    - run: nix build --accept-flake-config .#nixosConfigurations.website.config.system.build.toplevel
+      with:
+        working-directory: ./infra
+    - run: nix flake check
+      with:
+        working-directory: ./infra
 
