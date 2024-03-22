@@ -39,7 +39,7 @@
                 enable = true;
                 package = pkgs.nix;
                 name = "lock-www";
-                entry = "''${pkgs.nix}/bin/nix flake lock ./infra --update-input website";
+                entry = "''${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' flake lock ./infra --update-input website";
                 pass_filenames = false;
                 language = "system";
               };
