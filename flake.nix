@@ -30,7 +30,7 @@
                 enable = true;
                 package = pkgs.blacken-docs;
                 name = "blacken-docs";
-                entry = "blacken-docs";
+                entry = "''${pkgs.blacken-docs}/bin/blacken-docs";
                 files = "\\.(md)$";
                 language = "system";
               };
@@ -40,7 +40,7 @@
 
         devShell = nixpkgs.legacyPackages.${system}.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
-          buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+          buildInputs = self.checks.${system}.pre-commit-check.enabledPackages ++ [pkgs.blacken-docs];
         };
 
         packages.default = pkgs.stdenv.mkDerivation {
