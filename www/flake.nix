@@ -16,16 +16,11 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
       in {
-        devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            zola
-          ];
-          shellHook = ''
-            $SHELL
-          '';
-        };
+        formatter = pkgs.alejandra;
 
-        formatter = pkgs.nixpkgs-fmt;
+        devShell = nixpkgs.legacyPackages.${system}.mkShell {
+          buildInputs = with pkgs; [zola];
+        };
 
         packages.default = pkgs.stdenv.mkDerivation {
           name = "website";
