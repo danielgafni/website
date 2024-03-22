@@ -3,6 +3,8 @@ infra/.terraform
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
 www/result
+www/public
+www/static/processed_images
 infra/result
 .pre-commit-config.yaml
 

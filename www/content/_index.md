@@ -8,5 +8,9 @@ section_path = "blog/_index.md"
 max_posts = 4
 +++
 
+{{ resize_image(path="me.png", height=250, op="fit_height") }}
+
+---
+
 This is my personal website. It's WIP.
 
