@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="https://gafni.dev/sitemap_style.xsl" type="text/xsl"?>
+<?xml-stylesheet href="https://danielgafni.github.io/website/pr-preview/pr-6/sitemap_style.xsl" type="text/xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://gafni.dev/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/about/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/about/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/archive/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/archive/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/blog/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/blog/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/blog/custom-dagster-asset-decorator/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/blog/custom-dagster-asset-decorator/</loc>
         <lastmod>2024-03-15</lastmod>
     </url>
     <url>
-        <loc>https://gafni.dev/blog/page/1/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/blog/page/1/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/projects/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/projects/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/projects/dagster-polars/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/projects/dagster-polars/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/projects/freak/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/projects/freak/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/tags/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/tags/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/tags/dagster/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/tags/dagster/</loc>
     </url>
     <url>
-        <loc>https://gafni.dev/tags/python/</loc>
+        <loc>https://danielgafni.github.io/website/pr-preview/pr-6/tags/python/</loc>
     </url>
 </urlset>

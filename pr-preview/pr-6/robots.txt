@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 Allow: /
-Sitemap: https://gafni.dev/sitemap.xml
+Sitemap: https://danielgafni.github.io/website/pr-preview/pr-6/sitemap.xml
