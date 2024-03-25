@@ -13,6 +13,9 @@ concurrency: preview-${{ github.ref }}
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: checkout
         uses: actions/checkout@v4
