@@ -29,7 +29,7 @@ At first it's easy to add them by copy-pasting existing code. But what if there 
 
 The Asset Factory is a design pattern which can be used to generate multiple similar assets definitions. The idea is to define a function which produces assets based on some (varying) input parameters. This factory encapsulates the common logic for creating the assets, while allowing the specific details to be customized for each asset. Asset factories offer a systematic approach to generate these assets dynamically, reducing redundancy and enhancing code maintainability.
 
-Let's say, we have a machine learning model which predicts client churn probability for the next month. We would like to maintain tables for groups of users which are likely to churn with different thresholds. 
+let's say, we have a machine learning model which predicts client churn probability for the next month. we would like to maintain tables for groups of users which belong to different behavioral groups, such as reliable users or users with high churning risk.  
 
 Here is a simple example of an Asset Factory which achieves this goal:
 
@@ -53,7 +53,7 @@ def build_churning_users_asset(
 
 # create multiple assets
 churning_users_assets = [
-    build_churning_users_asset(l, h) for l, h in [(0.7, 0.8), (0.8, 0.9), (0.9, 1.0)]
+    build_churning_users_asset(l, h) for l, h in [(0.0, 0.3), (0.3, 0.5), (0.5, 1.0)]
 ]
 ```
 
@@ -104,7 +104,7 @@ def build_churning_users_asset(
     return _asset
 
 
-churn_thresholds = [(0.7, 0.8), (0.8, 0.9), (0.9, 1.0)]
+churn_thresholds = [(0.0, 0.3), (0.3, 0.5), (0.5, 1.0)]
 assets_for_churn_filtering = [users, special_users]
 
 churning_users_assets = [
