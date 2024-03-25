@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://gafni.dev/sitemap_style.xsl" type="text/xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://gafni.dev/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/about/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/archive/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/blog/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/blog/custom-dagster-asset-decorator/</loc>
+        <lastmod>2024-03-15</lastmod>
+    </url>
+    <url>
+        <loc>https://gafni.dev/blog/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/projects/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/projects/dagster-polars/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/projects/freak/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/tags/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/tags/dagster/</loc>
+    </url>
+    <url>
+        <loc>https://gafni.dev/tags/python/</loc>
+    </url>
+</urlset>
