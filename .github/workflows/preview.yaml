@@ -1,0 +1,30 @@
+name: Deploy GitHub Pages Preview
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Zola Build
+        if: github.event.action != 'closed'
+        uses: shalzz/zola-deploy-action@v0.18.0
+        env:
+          BUILD_DIR: ./www
+          BUILD_ONLY: true
+          BUILD_FLAGS: --drafts
+      - name: Deploy Preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./www/public
+
