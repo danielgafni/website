@@ -5,11 +5,12 @@ date = 2024-03-15
 tags = ["dagster", "python"]
 +++
 
-This blog post assumes some knowledge of [Dagster](https://dagster.io) - a modern data orchestration framework.
+
+This blog post explores strategies for customizing [Dagster](https://dagster.io)'s asset decorator to enhance code maintainability and reusability in data orchestration tasks. It requires prior knowledge of Dagster for understanding. 
 
 ## Introduction
 
-When building data pipelines, it's common to work with multiple similar data assets. 
+Data engineers often encounter scenarios where they need to work with multiple similar data assets.
 
 These assets might differ in small details, like: 
  - how is the input table being filtered
@@ -22,13 +23,13 @@ But share similarities such as:
  - producing text and metadata logs
  - having the same columns
 
-At first it's easy to add them by copy-pasting existing code. But what if there are dozens of such assets? How do we keep our code maintainable and DRY? Asset Factories to the resque! 
+At first it's easy to add them by copy-pasting existing code. But what if there are dozens of such assets? How do we keep our code maintainable and DRY? Asset Factories to the rescue! 
 
 ## Asset Factories
 
 The Asset Factory is a design pattern which can be used to generate multiple similar assets definitions. The idea is to define a function which produces assets based on some (varying) input parameters. This factory encapsulates the common logic for creating the assets, while allowing the specific details to be customized for each asset.
 
-Let's say, we have a machine learning model which predicts client churn probability for the next month. We would like to maintain tables for groups of users which are likely to churn with different tresholds. 
+Let's say, we have a machine learning model which predicts client churn probability for the next month. We would like to maintain tables for groups of users which are likely to churn with different thresholds. 
 
 Here is a simple example of an Asset Factory which achieves this goal:
 
@@ -56,7 +57,7 @@ churning_users_assets = [
 ]
 ```
 
-We now have 3 different assets which only differ in filtering tresholds. 
+We now have 3 different assets which only differ in filtering thresholds. 
 
 The codebase can quickly turn in chains of such generated assets. Multiple factories will pass assets to from one to another. Thus, it becomes convenient to take the upstream `AssetsDefinitions` as a factory argument, because it contains a lot of useful information, such as asset key, group, partitioning, etc.
 
@@ -82,7 +83,7 @@ A generalized churn-filtering factory may look something like this:
 from dagster import AssetIn, SourceAsset
 
 
-def build_bar_filtered_asset(
+def build_churning_users_asset(
     upstream_asset: SourceAsset, min_churn_proba: float, max_churn_proba: float
 ) -> AssetsDefinitions:
     @asset(
@@ -129,7 +130,7 @@ Luckily for us, a better solution exists, and it's called `functools.wraps`.
 
 By using it, we can not only dynamically pass the upstream features dependencies to Dagster, but also use the same neat API by specifying them as function arguments.
 
-`functools.wraps` is a handly utility made especially for writing decorators. It carries function metadata from the decorated function to the decorator body. Let's take a look at how it works: 
+`functools.wraps` is a handy utility made especially for writing decorators. It carries function metadata from the decorated function to the decorator body. Let's take a look at how it works: 
 
 ```python
 import functools
@@ -212,7 +213,7 @@ class MyConfig(Config):
 
 
 @my_asset_decorator(group_name="my_group", io_manager_key="my_io_manager")
-def my_asset(context: AssetExecutionContext, config: MyConfig, usptream_1, upstream_2):
+def my_asset(context: AssetExecutionContext, config: MyConfig, upstream_1, upstream_2):
     return ...
 ```
 
