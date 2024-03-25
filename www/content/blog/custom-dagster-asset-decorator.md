@@ -23,11 +23,11 @@ But share similarities such as:
  - producing text and metadata logs
  - having the same columns
 
-At first it's easy to add them by copy-pasting existing code. But what if there are dozens of such assets? How do we keep our code maintainable and DRY? Asset Factories to the rescue! 
+At first it's easy to add them by copy-pasting existing code. But what if there are dozens of such assets? How do we keep our code maintainable and DRY (Don't Repeat Yourself)? Asset Factories to the rescue! 
 
 ## Asset Factories
 
-The Asset Factory is a design pattern which can be used to generate multiple similar assets definitions. The idea is to define a function which produces assets based on some (varying) input parameters. This factory encapsulates the common logic for creating the assets, while allowing the specific details to be customized for each asset.
+The Asset Factory is a design pattern which can be used to generate multiple similar assets definitions. The idea is to define a function which produces assets based on some (varying) input parameters. This factory encapsulates the common logic for creating the assets, while allowing the specific details to be customized for each asset. Asset factories offer a systematic approach to generate these assets dynamically, reducing redundancy and enhancing code maintainability.
 
 Let's say, we have a machine learning model which predicts client churn probability for the next month. We would like to maintain tables for groups of users which are likely to churn with different thresholds. 
 
@@ -130,7 +130,7 @@ Luckily for us, a better solution exists, and it's called `functools.wraps`.
 
 By using it, we can not only dynamically pass the upstream features dependencies to Dagster, but also use the same neat API by specifying them as function arguments.
 
-`functools.wraps` is a handy utility made especially for writing decorators. It carries function metadata from the decorated function to the decorator body. Let's take a look at how it works: 
+In Python, decorators provide a powerful mechanism for modifying or extending the behavior of functions or methods. By leveraging `functools.wraps`, decorators can preserve the metadata and signature of the original function. Let's take a look at how it works: 
 
 ```python
 import functools
@@ -160,7 +160,7 @@ My docstring
 Hello, World!
 ```
 
-The inner `wrapper` function now has the same `.__doc__`, `.__name__`, and in fact, the same signature, as our `say_hello` function! 
+The inner `wrapper` function now has the same `.__doc__`, `.__name__`, and in fact, the same signature, as our `say_hello` function! You can find more documentation [here](https://docs.python.org/3/library/functools.html#functools.wraps). 
 
 Now, let's use it to build a customized `@asset` decorator. 
 
@@ -221,5 +221,4 @@ This pattern is very general and powerful. You get the idea, it's possible to in
 
 ## Conclusion
 
-The pattern of extending the `dagster.asset` decorator by using `functools.wraps` is a powerful tool for creating reusable and flexible data pipelines. It allows for dynamic definition of dependencies between assets, which is crucial for complex data processing tasks. It is a testament to the flexibility and power of Dagster's asset-based programming model.
-
+The pattern of extending the `dagster.asset` decorator by using `functools.wraps` is a powerful tool for creating reusable and flexible data pipelines. It allows for dynamic definition of dependencies between assets, which is crucial for complex data processing tasks, and empowers data engineers to craft flexible, maintainable data pipelines tailored to their specific needs. By embracing these techniques, teams can navigate complex data processing challenges with confidence, unlocking the full potential of Dagster's asset-based programming model.
