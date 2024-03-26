@@ -10,3 +10,5 @@ I'm an ML/MLOps engineer, professional big data wrangler, Linux enthusiast, OSS 
 
 My CV can be found [here](https://app.enhancv.com/share/ccd95a52/?utm_medium=growth&utm_campaign=share-resume&utm_source=dynamic).
 
+I have a Telegram [channel](https://t.me/nadya_nafig) about random tech stuff. 
+

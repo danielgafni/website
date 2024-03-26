@@ -1,7 +1,7 @@
 +++
 title = "dagster-polars"
 description = "Polars integration library for Dagster"
-weight = 10
+weight = 1
 +++
 
 `dagster-polars` allows loading and saving `polars` DataFrames from Dagster's `@asset`s and `@op`s. It supports multiple serialization formats and storage systems. 
