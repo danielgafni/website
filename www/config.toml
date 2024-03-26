@@ -30,6 +30,7 @@ theme_switcher = true
 default_theme = "dark"
 skin = "catppuccin_frappe"
 browser_theme_color = ["#eebebe", "#81c8be"]
+favicon = "static/favicon-32x32.png"
 
 # git integration
 remote_repository_url = "https://github.com/danielgafni/website"
