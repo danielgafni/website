@@ -6,7 +6,7 @@ weight = 8
 tags = ["python", "ml", "dl", "competitions"]
 +++
 
-This is a very interesting solution for the [RaifHack](https://raifhack.ru/) competition. The goal of the competition was to implement a machine learning model for accurate commercial real estate price prediction. The given training dataset included both residential and commercial property, but only commercial property prices had to be predicted. 
+[The repository](https://github.com/danielgafni/RAIFHACK) showcases a very interesting solution for the [RaifHack](https://raifhack.ru/) competition. The goal of the competition was to implement a machine learning model for accurate commercial real estate price prediction. The given training dataset included both residential and commercial property, but only commercial property prices had to be predicted. 
 
 The breakdown of the solution is:
  1. For a given commercial property object, find similar residential property based on a hand-crafted set of tabular features including geographical location, area, etc. [FAISS](https://github.com/facebookresearch/faiss) was used for efficient vector search.
@@ -17,5 +17,5 @@ The breakdown of the solution is:
 
 ![raifnet](https://github.com/danielgafni/RAIFHACK/blob/master/siamese_tabnet.png?raw=true)
 
-The solution was not used in our final submission {{ spoiler(text="took too long to tune hparams 🤪") }} --- which did win the competition --- but received the "most loved solution" award. 
+This method was not used in our final submission {{ spoiler(text="took too long to tune hparams 🤪") }} --- which did win the competition --- but received the "most loved solution" award. 
 
