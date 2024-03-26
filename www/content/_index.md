@@ -12,5 +12,7 @@ max_posts = 4
 
 ---
 
-This is my personal website. It's WIP.
+This is my personal website.
+
+Take a look at my [blog posts](@/blog/_index.md) or [projects](@/projects/_index.md). 
 

@@ -5,6 +5,8 @@ date = 2024-03-25
 tags = ["cli", "linux", "development"]
 +++
 
+## Introduction
+
 This is an export of my old 2022 Medium [article](https://danielgafni.medium.com/the-modern-linux-cli-stack-46253688b53d). I've slightly modified it with new examples and changed some wording here and there. The tools mentioned in the article have stood the test of time in 2024!
 
 ---
@@ -125,7 +127,7 @@ Again, you don’t need to configure anything at all to achieve this! In contrar
 
 `btop`is a resources monitoring tool like `htop` , but with a richer and more intuitive UI and controls. Sadly, it’s not written in rust, but I decided to included it here anyway. For a Rust alternative, you can check out [bottom](https://github.com/ClementTsang/bottom), however, it's less mature. 
 
----
+## Closing Notes
 
 {{ admonition(type="tip", text="You can find more awesome Rust CLI tools in [this](https://www.reddit.com/r/rust/comments/xgwe4u/your_favourite_rust_cli_utilities_this_year/) Reddit post.") }}
 
