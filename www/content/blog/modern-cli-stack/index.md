@@ -127,7 +127,8 @@ Again, you don’t need to configure anything at all to achieve this! In contrar
 
 ---
 
-You can find more awesome Rust CLI tools in [this](https://www.reddit.com/r/rust/comments/xgwe4u/your_favourite_rust_cli_utilities_this_year/) Reddit post.
+{{ admonition(type="tip", text="You can find more awesome Rust CLI tools in [this](https://www.reddit.com/r/rust/comments/xgwe4u/your_favourite_rust_cli_utilities_this_year/) Reddit post.") }}
+
 
 My [old](https://github.com/danielgafni/dotfiles) and [new](https://github.com/danielgafni/nixos) (warning: nix!) dotfiles repos include some config files which can be used for inspiration. 
 
