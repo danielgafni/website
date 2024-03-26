@@ -135,6 +135,6 @@ Finally, subscribe to my Telegram [channel](https://t.me/nadya_nafig) for more d
 
 ---
 
-[^1] [2024] An excellent modern plugin manager would be [sheldon](https://github.com/rossmacarthur/sheldon)
+[^1]: [2024] An excellent modern plugin manager would be [sheldon](https://github.com/rossmacarthur/sheldon)
 
-[^2] [2024] At the time of writing there were no `nushell` plugins. Currently `nushell` has a plugin system, some plugins can be found [here](https://github.com/nushell/awesome-nu?tab=readme-ov-file#plugins). 
+[^2]: [2024] At the time of writing there were no `nushell` plugins. Currently `nushell` has a plugin system, some plugins can be found [here](https://github.com/nushell/awesome-nu?tab=readme-ov-file#plugins). 
