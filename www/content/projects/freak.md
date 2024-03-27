@@ -4,6 +4,8 @@ description = "Remote application state control for Python"
 weight = 7
 [taxonomies]
 tags = ["python", "dl", "OSS"]
+
+[extra]
 +++
 
 [Freak](https://github.com/danielgafni/freak) is a Python package which allows interacting with the program's state remotely. You can define the state object as a `pydantic` model and use Freak to expose it over HTTP. It supports nested models, partial updates, data validation, and uses FastAPI to run the web server. 
