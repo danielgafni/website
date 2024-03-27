@@ -45,6 +45,7 @@
                 excludes = [
                   "www/content/_index.md"
                   "www/content/pages/_index.md"
+                  "www/content/pages/about.md"
                 ];
                 package = pkgs.bash;
                 packageOverrides = {

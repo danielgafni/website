@@ -6,6 +6,7 @@ weight = 10
 tags = ["nix", "nixos"]
 
 [extra]
+social_media_card = "./static/img/social_cards/projects_nixos.jpg"
 +++
 
 I am using [NixOS](https://nixos.org/) to make my development machines rock solid, stable, reliable and recoverable. 
