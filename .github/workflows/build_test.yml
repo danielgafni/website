@@ -13,7 +13,7 @@ jobs:
       with:
         name: danielgafni
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: SKIP=social-media-cards nix flake check
+    - run: nix flake check --override-input enable-social-media-cards-check github:boolean-option/false --raw '.#message'
     - run: nix build .
       working-directory: ./www
     - run: nix flake check

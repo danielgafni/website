@@ -5,6 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+
+    enable-social-media-cards-check.url = "github:boolean-option/true"; # LMAO
   };
 
   outputs = {
@@ -12,6 +14,7 @@
     nixpkgs,
     flake-utils,
     pre-commit-hooks,
+    enable-social-media-cards-check,
   }:
     flake-utils.lib.eachDefaultSystem
     (
@@ -36,7 +39,7 @@
               };
 
               "2-social-media-cards" = {
-                enable = true;
+                enable = enable-social-media-cards-check.value;
                 name = "social-media-cards";
                 entry = "env PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers} PATH=${pkgs.gnused}/bin:${pkgs.coreutils}/bin:${pkgs.mktemp}/bin:${pkgs.curl}/bin:${pkgs.bash}/bin:${pkgs.python3}/bin:${pkgs.gawk}/bin:${pkgs.shot-scraper}/bin:$PATH python3 ./www/scripts/run_in_subdirectory.py www bash ./scripts/social-cards-zola -u -o ./static/img/social_cards -b 127.0.0.1:1111";
                 pass_filenames = true;
