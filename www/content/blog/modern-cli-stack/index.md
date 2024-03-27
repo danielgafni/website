@@ -3,6 +3,8 @@ title = "The Modern CLI Stack"
 date = 2024-03-25
 [taxonomies]
 tags = ["cli", "linux", "development"]
+
+[extra]
 +++
 
 ## Introduction

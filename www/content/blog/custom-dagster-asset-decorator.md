@@ -4,6 +4,8 @@ date = 2024-03-15
 draft = true
 [taxonomies]
 tags = ["dagster", "python"]
+
+[extra]
 +++
 
 Just some code to check syntax highlighting works

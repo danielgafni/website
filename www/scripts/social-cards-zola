@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# This script takes a markdown post, crafts the corresponding URL, checks if it's accessible,
+# takes a screenshot, and saves it to a specified location.
+# It can update the front matter of the post with the path to the generated image (-u | --update-front-matter option).
+# It's meant to be used as a pre-commit hook to generate social media cards for Zola sites using the tabi theme.
+# More details: https://osc.garden/blog/automating-social-media-cards-zola/
+
+function help_function(){
+    echo "This script automates the creation of social media cards for Zola websites."
+    echo "It takes a Markdown post and saves its live screenshot to a specified location."
+    echo ""
+    echo "IMPORTANT! It needs to be run from the root of the Zola site."
+    echo ""
+    echo "Usage: social-cards-zola [OPTIONS]"
+    echo ""
+    echo "Arguments:"
+    echo "  INPUT_PATH      The relative path to the markdown file of the post/section you want to capture. Should be in the format 'content/blog/post_name.language.md'."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                  Show this help message and exit."
+    echo "  -b, --base_url URL          The base URL where the Zola site is hosted. Default is http://127.0.0.1:1111."
+    echo "  -k, --key KEY               The front matter key to update. Default is 'social_media_card'."
+    echo "  -o, --output_path PATH      The directory where the generated image will be saved."
+    echo "  -p, --print_output          Print the path to the resulting screenshot at the end."
+    echo "  -u, --update-front-matter   Update or add the 'social_media_card' key in the front matter of the Markdown file."
+    echo
+    echo "Examples:"
+    echo "  social-cards-zola --base_url https://example.com --output_path static/img/social_cards content/blog/my_post.md" 
+    echo "  social-cards-zola -u -b http://127.0.0.1:1025 -i content/archive/_index.es.md -o static/img content/archive/_index.es.md" 
+    exit 0
+}
+
+function convert_filename_to_url() {
+    # Remove .md extension.
+    local post_name="${1%.md}"
+
+    # Remove "content/" prefix.
+    local url="${post_name#content/}"
+
+    # Extract language code.
+    local lang_code="${url##*.}"
+    if [[ "$lang_code" == "$url" ]]; then
+        lang_code=""  # No language code.
+    else
+        lang_code="${lang_code}/"  # Add trailing slash.
+        url="${url%.*}"  # Remove the language code from the URL.
+    fi
+
+    # Handle co-located index.md by stripping it and using the directory as the URL.
+    if [[ "$url" == */index ]]; then
+        url="${url%/*}"  # Remove the /index suffix.
+    fi
+
+    # Remove "_index" suffix.
+    if [[ "$url" == *"_index"* ]]; then
+        url="${url%%_index*}"
+    fi
+
+    # Return the final URL with a single trailing slash.
+    full_url="${lang_code}${url}"
+    echo "${full_url%/}/"
+}
+
+function error_exit() {
+    echo "ERROR: $1" >&2
+    exit "${2:-1}"
+}
+
+function validate_input_params() {
+    missing_params=()
+    if [[ -z "$base_url" ]]; then
+        missing_params+=("base_url")
+    fi
+    if [[ -z "$output_path" ]]; then
+        missing_params+=("output_path")
+    fi
+
+    if [ ${#missing_params[@]} -ne 0 ]; then
+        error_exit "The following required settings are missing: ${missing_params[*]}. Use -h or --help for usage."
+    fi
+}
+
+function check_dependencies() {
+    for cmd in "curl" "shot-scraper"; do
+        if ! command -v $cmd &> /dev/null; then
+            error_exit "$cmd could not be found. Please install it."
+        fi
+    done
+}
+
+function fetch_status() {
+    local retry_count=0
+    local max_retries=5
+    local status
+    while [[ $retry_count -lt $max_retries ]]; do
+        status=$(curl -s -o /dev/null -I -w "%{http_code}" "${base_url}${post_url}")
+        if [[ "$status" -eq "200" ]]; then
+            return
+        fi
+        retry_count=$((retry_count + 1))
+        sleep 2
+    done
+    error_exit "Post $input is not accessible. Max retries ($max_retries) reached."
+}
+
+function capture_screenshot() {
+    temp_file=$(mktemp /tmp/social-zola.XXXXXX)
+    trap 'rm -f "$templinux update path variable_file"' EXIT
+    shot-scraper --silent "${base_url}/${post_url}" -w 700 -h 500 --retina --quality 60 -o "$temp_file"
+}
+
+function move_file() {
+    local safe_filename=$(echo "${post_url%/}" | sed 's/[^a-zA-Z0-9]/_/g')
+
+    # Create the output directory if it doesn't exist.
+    mkdir -p "$output_path"
+
+    image_filename="${output_path}/${safe_filename:-index}.jpg"  # If the filename is empty, use "index".
+    mv "$temp_file" "$image_filename" || error_exit "Failed to move the file to $image_filename"
+}
+
+function update_front_matter {
+    local md_file_path="$1"
+    local image_output="${2#static/}"
+    # Temporary file for awk processing
+    temp_awk=$(mktemp /tmp/frontmatter.XXXXXX)
+
+    awk -v card_path="$image_output" '
+    # Initialize flags for tracking state.
+    BEGIN { in_extra=done=front_matter=extra_exists=0; }
+
+    # Function to insert the social_media_card path.
+    function insert_card() { print "social_media_card = \"" card_path "\""; done=1; }
+
+    {
+        # If card has been inserted, simply output remaining lines.
+        if (done) { print; next; }
+
+        # Toggle front_matter flag at its start, denoted by +++
+        if (/^\+\+\+/ && front_matter == 0) {
+            front_matter = 1;
+            print "+++";
+            next;
+        }
+
+        # Detect [extra] section and set extra_exists flag.
+        if (/^\[extra\]/) { in_extra=1; extra_exists=1; print; next; }
+
+        # Update existing social_media_card.
+        if (in_extra && /^social_media_card =/) { insert_card(); in_extra=0; next; }
+
+        # End of front matter or start of new section.
+        if (in_extra && (/^\[[a-zA-Z_-]+\]/ || (/^\+\+\+/ && front_matter == 1))) {
+            insert_card();  # Add the missing social_media_card.
+            in_extra=0;
+        }
+
+        # Insert missing [extra] section.
+        if (/^\+\+\+/ && front_matter == 1 && in_extra == 0 && extra_exists == 0) {
+            print "\n[extra]";
+            insert_card();
+            in_extra=0;
+            front_matter = 0;linux update path variable
+            print "+++";
+            next;
+        }
+
+        # Print all other lines as-is.
+        print;
+    }' "$md_file_path" > "$temp_awk"
+
+    # Move the temporary file back to the original markdown file.
+    mv "$temp_awk" "$md_file_path"
+}
+
+function main() {
+    while [[ "$#" -gt 0 ]]; do
+        case "$1" in
+            -h|--help)
+                help_function;;
+            -b|--base_url)
+                base_url="$2"
+                shift 2;;
+            -o|--output_path)
+                output_path="$2"
+                shift 2;;
+            -k|--key)
+                front_matter_key="$2"
+                shift 2;;
+            -u|--update-front-matter)
+                update="true"
+                shift 1;;
+            -p|--print_output)
+                print_output="true"
+                shift 1;;
+            *)
+                input="$1"
+                break;;
+        esac
+    done
+
+    validate_input_params
+    check_dependencies
+
+    : "${base_url:="http://127.0.0.1:1111"}"
+    : "${front_matter_key:="social_media_card"}"
+    base_url="${base_url%/}/"  # Ensure one trailing slash.
+    post_url="$(convert_filename_to_url "$input")"
+    
+    fetch_status
+    capture_screenshot
+    move_file
+
+    if [[ "$update" == "true" ]]; then
+        update_front_matter "$input" "$image_filename"
+    fi
+
+    if [[ "$print_output" == "true" ]]; then
+        echo "$image_filename"
+    fi
+}
+
+main "$@"
+
