@@ -3,7 +3,7 @@ title = "Talk: building a Feature Store with Dagster and Ray"
 description = "My talk at Dagster Community Meetup about large-scale model inference orchestration"
 weight = 3
 [taxonomies]
-tags = ["talks", "dagster", "ray"]
+tags = ["Talks", "Dagster", "Ray"]
 +++
 
 While working as an MLOps Engineer at [Sanas](https://sanas.ai) I designed and developed the Feature Store used for model training and other workloads. The Feature Store had around 10 deep learning and statistical features (with cross-features dependencies), every feature having 10-40M files. 

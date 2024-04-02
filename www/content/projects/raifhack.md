@@ -3,7 +3,7 @@ title = "RaifHack: most loved solution"
 description = "Siamese TabNet for real estate price prediction"
 weight = 8
 [taxonomies]
-tags = ["python", "ml", "dl", "competitions"]
+tags = ["Python", "ML", "DL", "Competitions"]
 +++
 
 [The repository](https://github.com/danielgafni/RAIFHACK) showcases a very interesting solution for the [RaifHack](https://raifhack.ru/) competition. The goal of the competition was to implement a machine learning model for accurate commercial real estate price prediction. The given training dataset included both residential and commercial property, but only commercial property prices had to be predicted. 

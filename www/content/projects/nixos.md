@@ -3,7 +3,7 @@ title = "NixOS Config"
 description = "My mutli-host NixOs configuration"
 weight = 10
 [taxonomies]
-tags = ["nix", "nixos"]
+tags = ["Nix", "NixOS"]
 +++
 
 I am using [NixOS](https://nixos.org/) to make my development machines rock solid, stable, reliable and recoverable. 
