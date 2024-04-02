@@ -18,7 +18,7 @@ While I haven't completed the second step of GAN fine-tuning (my new real job ki
 
 Note that this occured before the diffusion models boom. 
 
-Click to reveak recolored version
+Click to reveal recolored version
 
 {{ image_toggler(default_src="https://github.com/danielgafni/repalette/blob/master/screenshots/flowers.jpg?raw=true", toggled_src="https://github.com/danielgafni/repalette/blob/master/screenshots/flowers_recolored.png?raw=true", default_alt="Original", toggled_alt="Recolored") }}
 
