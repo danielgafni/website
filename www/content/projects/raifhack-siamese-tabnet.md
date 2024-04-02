@@ -17,5 +17,5 @@ The breakdown of the solution is:
 
 ![raifnet](https://github.com/danielgafni/RAIFHACK/blob/master/siamese_tabnet.png?raw=true)
 
-This method was not used in our final submission {{ spoiler(text="took too long to tune hparams 🤪") }} --- which did win the competition --- but received the "most loved solution" award. 
+This method was not used in our [final submission](https://github.com/gleberof/Raifhack-DS-2021) {{ spoiler(text="it took too long to tune hparams for an ideal score 🤪") }} --- which did win the competition --- but received the "most loved solution" award. 
 
