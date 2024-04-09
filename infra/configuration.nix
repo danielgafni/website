@@ -3,6 +3,7 @@
   pkgs,
   modulesPath,
   website,
+  config,
   ...
 }: {
   imports = [
@@ -48,6 +49,7 @@
 
   services.nginx = {
     enable = true;
+    statusPage = true;
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
@@ -69,6 +71,62 @@
       ];
       extraConfig = "error_page 404 /404.html;";
     };
+    virtualHosts.${config.services.grafana.settings.server.domain} = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
+        proxyWebsockets = true;
+        recommendedProxySettings = true;
+      };
+    };
+  };
+
+  services.grafana = {
+    enable = true;
+    settings = {
+      server = {
+        # Listening Address
+        http_addr = "127.0.0.1";
+        # and Port
+        http_port = 3000;
+        # Grafana needs to know on which domain and URL it's running
+        domain = "grafana.gafni.dev";
+        serve_from_sub_path = false;
+      };
+    };
+  };
+
+  services.prometheus = {
+    enable = true;
+    exporters = {
+      node = {
+        enable = true;
+        enabledCollectors = ["systemd"];
+      };
+      nginx = {
+        enable = true;
+      };
+    };
+
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        static_configs = [
+          {
+            targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+          }
+        ];
+      }
+      {
+        job_name = "nginx";
+        static_configs = [
+          {
+            targets = ["localhost:${toString config.services.prometheus.exporters.nginx.port}"];
+          }
+        ];
+      }
+    ];
   };
 
   system.stateVersion = "23.11";

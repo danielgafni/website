@@ -8,8 +8,14 @@ Technologies used:
  - `OpenTofu` - IaC for Hetzner & Cloudflare
  - `Hetzner Cloud` - VM hosting
  - `Cloudflare` - caching & proxy
+ - `Prometheus` - metrics collection
+ - `Grafana` - metrics visualistaion
 
-The only required tool is [Nix](https://nixos.org/download/) (flakes have to be enabled) 
+The only tool required to build and deploy everything is [Nix](https://nixos.org/download/) (flakes have to be enabled). 
+
+`nix` installs all the other tools (`terraform`, `zola`, etc.). 
+
+`NixOS` is used to define the server contents. The website is served via `nginx`, which is running as a `NixOS` service, as well as `Prometheus` and `Grafana`. `Grafana` can be accessed at [grafana.gafni.dev](https://grafana.gafni.dev).
 
 # File Structure
 
