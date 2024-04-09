@@ -49,6 +49,7 @@
 
   services.nginx = {
     enable = true;
+    statusPage = true;
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
@@ -57,10 +58,6 @@
       forceSSL = true;
       root = "${website.packages.x86_64-linux.default}";
       locations."/".root = "${website.packages.x86_64-linux.default}";
-      locations."/basic_status".extraConfig = ''
-        stub_status on;
-        allow 127.0.0.1;
-        deny all;'';
       listen = [
         {
           addr = "0.0.0.0";
@@ -74,7 +71,7 @@
       ];
       extraConfig = "error_page 404 /404.html;";
     };
-    virtualHosts.${config.services.grafana.domain} = {
+    virtualHosts.${config.services.grafana.settings.server.domain} = {
       enableACME = true;
       forceSSL = true;
       locations."/" = {
