@@ -56,6 +56,7 @@
       forceSSL = true;
       root = "${website.packages.x86_64-linux.default}";
       locations."/".root = "${website.packages.x86_64-linux.default}";
+      locations."/basic_status" = "{stub_status;}";
       listen = [
         {
           addr = "0.0.0.0";
@@ -69,6 +70,61 @@
       ];
       extraConfig = "error_page 404 /404.html;";
     };
+    virtualHosts."grafana.gafni.dev" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/".root = {
+        proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
+        proxyWebsockets = true;
+        recommendedProxySettings = true;
+      };
+    };
+  };
+
+  services.grafana = {
+    enable = true;
+    settings = {
+      server = {
+        # Listening Address
+        http_addr = "127.0.0.1";
+        # and Port
+        http_port = 3000;
+        # Grafana needs to know on which domain and URL it's running
+        domain = "grafana.gafni.dev";
+        serve_from_sub_path = false;
+      };
+    };
+  };
+
+  services.prometheus = {
+    exporters = {
+      node = {
+        enable = true;
+        enabledCollectors = ["systemd"];
+      };
+      nginx = {
+        enable = true;
+      };
+    };
+
+    crapeConfigs = [
+      {
+        job_name = "node";
+        static_configs = [
+          {
+            targets = ["127.0.0.1:${toString config.services.prometheus.exporters.node.port}"];
+          }
+        ];
+      }
+      {
+        job_name = "nginx";
+        static_configs = [
+          {
+            targets = ["127.0.0.1:${toString config.services.prometheus.exporters.nginx.port}/metrics"];
+          }
+        ];
+      }
+    ];
   };
 
   system.stateVersion = "23.11";

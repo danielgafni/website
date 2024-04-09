@@ -110,6 +110,15 @@ resource "cloudflare_record" "website_nginx" {
   proxied = true
 }
 
+resource "cloudflare_record" "website_grafana" {
+  zone_id = data.sops_file.secrets.data["CLOUDFLARE_ZONE_ID"]
+  name    = "grafana.gafni.dev"
+  value   = hcloud_server.website.ipv4_address
+  type    = "A"
+  proxied = true
+}
+
+
 # Cloudflare DNS CNAME record for the website behind Cloudflare proxy
 # resource "cloudflare_record" "website" {
 #   zone_id = data.sops_file.secrets.data["CLOUDFLARE_ZONE_ID"]
