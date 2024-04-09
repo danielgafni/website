@@ -3,6 +3,7 @@
   pkgs,
   modulesPath,
   website,
+  config,
   ...
 }: {
   imports = [
@@ -56,7 +57,10 @@
       forceSSL = true;
       root = "${website.packages.x86_64-linux.default}";
       locations."/".root = "${website.packages.x86_64-linux.default}";
-      locations."/basic_status" = "{stub_status;}";
+      locations."/basic_status".extraConfig = ''
+        stub_status on;
+        allow 127.0.0.1;
+        deny all;'';
       listen = [
         {
           addr = "0.0.0.0";
@@ -70,10 +74,10 @@
       ];
       extraConfig = "error_page 404 /404.html;";
     };
-    virtualHosts."grafana.gafni.dev" = {
+    virtualHosts.${config.services.grafana.domain} = {
       enableACME = true;
       forceSSL = true;
-      locations."/".root = {
+      locations."/" = {
         proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
         proxyWebsockets = true;
         recommendedProxySettings = true;
@@ -107,7 +111,7 @@
       };
     };
 
-    crapeConfigs = [
+    scrapeConfigs = [
       {
         job_name = "node";
         static_configs = [
