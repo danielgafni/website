@@ -13,17 +13,16 @@ Essentially, it enables writing very simple Python code, similar to:
 
 ```python
 from dagster import asset, Definitions
-from dagster_ray import RayResource
 from dagster_ray.kuberay import KubeRayCluster
 import ray
 
 
 @asset
 def my_asset(
-    ray_cluster: RayResource,  # RayResource is only used as a type annotation
-):  # this type annotation only defines the interface
+    ray_cluster: KubeRayCluster,
+):
     return ray.get(ray.put(42))
 ```
 
-Behind the scenes, `dagster-ray` will manage the `KubeRay`'s `RayCluster` lifecycle, and provide the `ray_cluster` resource to the `my_asset` function.
+Behind the scenes, `dagster-ray` will manage the `KubeRay`'s `RayCluster` lifecycle, spinning it up when the pipeline starts, and tearing it down after the pipeline finishes.
 The function body can then execute `ray` code in a distributed cluster without any additional setup.
