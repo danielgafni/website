@@ -20,13 +20,12 @@ The only tool required to build and deploy everything is [Nix](https://nixos.org
 # File Structure
 
 ```
- .
-├──  infra  # deployment code
-├──  LICENSE
-└──  www  # website code
+.
+├── infra  # deployment code
+├── LICENSE
+└── www  # website code
 ```
 
 # Acknowledgements
 
-`Nix` & `OpenTofu` usage is inspired by an excellent [series](https://flakm.com/series/simple-personal-blog/) of posts by @flakm
-
+`Nix` & `OpenTofu` usage is inspired by the excellent [series](https://flakm.com/series/simple-personal-blog/) of posts by @flakm
