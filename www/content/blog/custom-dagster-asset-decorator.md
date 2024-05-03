@@ -5,5 +5,5 @@ date = 2024-04-30
 tags = ["dagster", "python"]
 +++
 
-This article is showcasing a surprising way of utilizing `functools.wraps` for building highly customizable and versatile Asset Factories in Dagster. Read it in Dagster's [blog](https://dagster.io/blog/unlocking-flexible-pipelines-customizing-asset-decorator).
+This article is showcasing a surprising way of utilizing `functools.wraps` for building highly customizable and versatile Asset Factories in Dagster. Read it on Dagster's [blog](https://dagster.io/blog/unlocking-flexible-pipelines-customizing-asset-decorator).
 
