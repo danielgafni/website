@@ -1,20 +1,9 @@
 +++
-title = "Customizing Dagster's asset decorator"
-date = 2024-03-15
-draft = true
+title = "Unlocking Flexible Pipelines: Customizing the Asset Decorator"
+date = 2024-04-30
 [taxonomies]
 tags = ["dagster", "python"]
 +++
 
-Just some code to check syntax highlighting works
-
-```python
-from dagster import asset
-import polars as pl
-
-
-@asset
-def my_asset() -> pl.DataFrame:
-    return pl.DataFrame({"a": [0, 1, 2, 3]})
-```
+This article is showcasing a surprising way of utilizing `functools.wraps` for building highly customizable and versatile Asset Factories in Dagster. Read it on Dagster's [blog](https://dagster.io/blog/unlocking-flexible-pipelines-customizing-asset-decorator).
 
