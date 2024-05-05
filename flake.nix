@@ -23,6 +23,7 @@
         checks = {
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
+            excludes = ["www/themes/tabi"];
             hooks = {
               alejandra.enable = true;
 
