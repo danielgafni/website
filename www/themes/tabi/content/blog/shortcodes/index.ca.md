@@ -1,7 +1,7 @@
 +++
 title = "Shortcodes personalitzats"
 date = 2023-02-19
-updated = 2024-03-20
+updated = 2024-05-03
 description = "Aquest tema inclou alguns shortcodes personalitzats útils que pots utilitzar per millorar les teves publicacions. Ja sigui per mostrar imatges que s'adapten als temes clar i fosc, o per donar format a una secció de referències amb un aspecte professional, aquests shortcodes personalitzats t'ajudaran."
 
 [taxonomies]
@@ -11,6 +11,7 @@ tags = ["funcionalitat", "shortcodes"]
 toc = true
 toc_levels = 2
 quick_navigation_buttons = true
+add_src_to_code_block = true
 social_media_card = "social_cards/ca_blog_shortcodes.jpg"
 +++
 
@@ -95,7 +96,60 @@ Tots els altres shortcodes d'imatges poden utilizar l'amplada completa assignant
 {{/* full_width_image(src="img/amsterdam_by_oskerwyld.webp", alt="Fotografia d'un canal a Àmsterdam") */}}
 ```
 
+## Shortcodes de codi
+
+### Mostrar ruta o URL
+
+Mostra una ruta o URL al següent bloc de codi trobat. Si comença amb "http", es convertirà en un enllaç. Particularment útil quan s'utilitza en conjunció amb el [shortcode de text remot](#text-remot).
+
+{{ admonition(type="warning", title="IMPORTANT", text="Aquesta funcionalitat requereix JavaScript. Per activar-la, configura `add_src_to_code_block = true` a la secció `[extra]` de la teva pàgina, secció, o `config.toml`.") }}
+
+{{ add_src_to_code_block(src="https://github.com/welpo/doteki/blob/main/.gitignore") }}
+
+```.gitignore
+{{ remote_text(src="https://raw.githubusercontent.com/welpo/doteki/main/.gitignore") }}
+```
+
+#### Ús
+
+````
+{{/* add_src_to_code_block(src="https://github.com/welpo/doteki/blob/main/.gitignore") */}}
+
+```.gitignore
+__pycache__/
+*coverage*
+.vscode/
+dist/
+```
+````
+
 ## Shortcodes de text
+
+### Text remot
+
+Afegeix text des d'una URL remota o un arxiu local.
+
+**Important**:
+
+- **Arxius remots VS arxius locals**: Si `src` comença amb "http", es tractarà com un arxiu remot. D'altra banda, s'assumeix que és una ruta d'arxiu local.
+- **Accés a arxius**: Atès que utilitza la funció [`load_data`](https://www.getzola.org/documentation/templates/overview/#load-data) de Zola, els arxius locals han d'estar dins del directori de Zola —vegeu la [lògica de cerca d'arxius](https://www.getzola.org/documentation/templates/overview/#file-searching-logic).
+- **Formateig de blocs de codi**: Per mostrar el text com un bloc de codi, has d'afegir manualment les tanques de codi Markdown (cometes inverses) i, opcionalment, especificar el llenguatge de programació per al ressaltat sintàctic.
+
+#### Ús
+
+Afegeix un script de Python remot dins d'un bloc de codi amb ressaltat sintàctic:
+
+````
+```python
+{{/* remote_text(src="https://example.com/script.py") */}}
+```
+````
+
+Mostra el text d'un arxiu local:
+
+```
+{{/* remote_text(src="ruta/a/arxiu.txt") */}}
+```
 
 ### Advertències
 

@@ -1,7 +1,7 @@
 +++
 title = "Mastering tabi Settings: A Comprehensive Guide"
 date = 2023-09-18
-updated = 2024-03-15
+updated = 2024-05-03
 description = "Discover the many ways you can customise your tabi site."
 
 [taxonomies]
@@ -99,6 +99,8 @@ The [main page](/) of this demo has a header with an image, a title and descript
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/header_light.webp", dark_src="blog/mastering-tabi-settings/img/header_dark.webp", alt="Main page header") }}
 
+#### Heading
+
 To set the image and title, you can use the `header` variable in the front matter of the section's `_index.md` file. For example:
 
 ```toml
@@ -107,6 +109,8 @@ header = {title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Óscar F
 ```
 
 The description is regular Markdown content, set outside the front matter.
+
+#### Listing Recent Posts
 
 If you'd like to show posts on the main page, you first need to decide whether their path will be `/` or something like `/blog`.
 
@@ -137,6 +141,21 @@ max_posts = 4
 Notice how if you set `section_path`, you don't need to set `paginate_by`. You can set `max_posts` to the determine the number of posts you want to show on the main page.
 
 The `title` is the header that appears above the posts.
+
+#### Listing Projects
+
+You can showcase a selection of projects on your main page. To do this, you'll need to set up the `projects` directory first.
+
+Once that's done, you configure the path to the projects in the `[extra]` section of your `_index.md` file:
+
+```toml
+[extra]
+projects_path = "projects/_index.md"
+```
+
+By default, this will show the 3 projects with the highest priority (smallest weight; same sorting as Projects page). To show more or fewer projects, you can set `max_projects` in the `[extra]` section.
+
+By default, the featured projects will be shown after the posts. If you want to show the projects before the posts, set `show_projects_first = true`.
 
 ### Light and Dark Mode Switcher
 
@@ -511,6 +530,14 @@ Setting `copy_button = true` will add a small copy button to the top right of co
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_light.webp", dark_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_dark.webp" alt="Copy button on code blocks", full_width=true) }}
 
+### Source/Path on Code Blocks
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ✅  |   ✅    |      ✅       |         ✅        |         ✅          |
+
+Setting `add_src_to_code_block = true` enables the use of the [`add_src_to_code_block` shortcode](@/blog/shortcodes/index.md#show-source-or-path).
+
 ### KaTeX Support
 
 | Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
@@ -685,6 +712,14 @@ You can enable or hide the reading time of a post with `show_reading_time`. If y
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/see_changes_light.webp", dark_src="blog/mastering-tabi-settings/img/see_changes_dark.webp" alt="Post title and metadata, showing a 'See changes' link") }}
 
 Since it follows [the hierarchy](#settings-hierarchy), you can enable it or hide it for specific pages or sections. For example, this demo sets `show_reading_time = false` in the [projects](https://welpo.github.io/tabi/projects/) section's [`_index.md`](https://github.com/welpo/tabi/blob/main/content/projects/_index.md?plain=1), so their individual posts don't show the reading time.
+
+### Show Date
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ✅  |   ✅    |      ✅       |         ✅        |         ❌          |
+
+By default, the date is shown below the post title. You can hide it with `show_date = false`. This setting follows [the hierarchy](#settings-hierarchy).
 
 ### Date Format
 

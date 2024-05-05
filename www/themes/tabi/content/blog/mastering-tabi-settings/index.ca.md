@@ -1,7 +1,7 @@
 +++
 title = "Domina la configuració de tabi: guia completa"
 date = 2023-09-18
-updated = 2024-03-15
+updated = 2024-05-03
 description = "Descobreix les múltiples maneres en què pots personalitzar tabi."
 
 [taxonomies]
@@ -99,6 +99,8 @@ La [pàgina principal](/) d'aquesta demo té una capçalera amb una imatge, un t
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/header_light.webp", dark_src="blog/mastering-tabi-settings/img/header_dark.webp", alt="Capçalera de la pàgina principal") }}
 
+#### Capçalera
+
 Per configurar la imatge i el títol, pots utilitzar la variable `header` al front matter de l'arxiu `_index.md` de la secció. Per exemple:
 
 ```toml
@@ -107,6 +109,8 @@ header = {title = "Hola! Soc tabi~", img = "img/main.webp", img_alt = "Óscar Fe
 ```
 
 La descripció és contingut Markdown normal, escrit fora del front matter.
+
+#### Mostrant publicacions recents
 
 Si vols mostrar publicacions a la pàgina principal, primer necessites decidir si la seva ruta serà `/` o quelcom diferent, com ara `/blog/`.
 
@@ -137,6 +141,21 @@ max_posts = 4
 Fixa't que si configures `section_path`, no cal que configuris `paginate_by`. Pots establir `max_posts` per determinar el nombre de publicacions que vols mostrar a la pàgina principal.
 
 El `title` és el títol que apareix a sobre de les publicacions.
+
+#### Llistat de Projectes
+
+Pots mostrar una selecció de projectes a la teva pàgina principal. Per fer això, primer necessitaràs configurar el directori `projects`.
+
+Un cop fet això, configura la ruta als projectes a la secció `[extra]` del teu fitxer `_index.md`:
+
+```toml
+[extra]
+projects_path = "projects/_index.md"
+```
+
+Això mostrarà els 3 projectes de major prioritat (amb menor pes; el mateix ordre que a Projectes). Per mostrar més o menys projectes, configura `max_projects` a `[extra]`.
+
+Per defecte, la secció de projectes es mostrarà a la part inferior de la pàgina principal, sota les publicacions. Si prefereixes mostrar-la a la part superior, configura `show_projects_first = true`.
 
 ### Commutador de mode clar i fosc
 
@@ -508,6 +527,14 @@ Establir `copy_button = true` afegirà un petit botó de copiar a la part superi
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_light.webp", dark_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_dark.webp", alt="Botó de copiar en blocs de codi", full_width=true) }}
 
+### Mostrar ruta/URL en blocs de codi
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:-------:|:-------------:|:---------------:|:-------------------:|
+|   ✅   |   ✅    |      ✅       |        ✅       |         ✅          |
+
+Estableix `add_src_to_code_block = true` per habilitar l'ús del [shortcode `add_src_to_code_block`](@/blog/shortcodes/index.ca.md#mostrar-ruta-o-url).
+
 ### Suport per a KaTeX
 
 | Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
@@ -678,6 +705,14 @@ Pots activar o desactivar el temps estimat de lectura d'un article amb `show_rea
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/see_changes_light.webp", dark_src="blog/mastering-tabi-settings/img/see_changes_dark.webp" alt="Títol de l'article i metadades, mostrant un enllaç «Veure canvis»") }}
 
 Com que segueix [la jerarquia](#jerarquia-de-configuracio), pots activar-lo o desactivar-lo per a pàgines o seccions específiques. Per exemple, aquesta demo desactiva `show_reading_time = false` a la secció [projectes](https://welpo.github.io/tabi/ca/projects/) a l'arxiu [`_index.md`](https://github.com/welpo/tabi/blob/main/content/projects/_index.es.md?plain=1), de manera que les seves publicacions individuals no mostren el temps de lectura.
+
+### Mostrar la data
+
+| Pàgina | Secció  | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:--------------------:|:-------------------:|
+|   ✅   |   ✅   |      ✅       |         ✅           |         ❌          |
+
+Per defecte, la data es mostra sota el títol de la publicació. Pots amagar-la amb `show_date = false`. Aquest ajust segueix [la jerarquia](#jerarquia-de-configuracio).
 
 ### Format de data
 
