@@ -10,4 +10,3 @@ quick_navigation_buttons = true
 +++
 
 Projects I've built professionally
-

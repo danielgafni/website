@@ -1,7 +1,7 @@
 +++
 title = "Shortcodes personalizados"
 date = 2023-02-19
-updated = 2024-03-20
+updated = 2024-05-03
 description = "Este tema incluye algunos shortcodes personalizados útiles que puedes utilizar para mejorar tus publicaciones. Puedes mostrar imágenes que se adapten a los temas claro y oscuro, dar formato a una sección de referencias con un aspecto profesional, y más."
 
 [taxonomies]
@@ -11,6 +11,7 @@ tags = ["funcionalidad", "shortcodes"]
 toc = true
 toc_levels = 2
 quick_navigation_buttons = true
+add_src_to_code_block = true
 social_media_card = "social_cards/es_blog_shortcodes.jpg"
 +++
 
@@ -96,7 +97,60 @@ Todos los otros shortcodes de imágenes pueden usar el ancho completo asignando 
 {{/* full_width_image(src="img/amsterdam_by_oskerwyld.webp", alt="Fotografía de un canal en Ámsterdam") */}}
 ```
 
+## Shortcodes de código
+
+### Mostrar ruta o URL
+
+Muestra una ruta o URL en el siguiente bloque de código encontrado. Si comienza con "http", se convertirá en un enlace. Particularmente útil cuando se usa junto con el [shortcode de texto remot](#texto-remoto).
+
+{{ add_src_to_code_block(src="https://github.com/welpo/doteki/blob/main/.gitignore") }}
+
+```.gitignore
+{{ remote_text(src="https://raw.githubusercontent.com/welpo/doteki/main/.gitignore") }}
+```
+
+{{ admonition(type="warning", title="IMPORTANT", text="Esta característica requiere JavaScript. Para habilitarla, configura `add_src_to_code_block = true` en la sección `[extra]` de tu página, sección, o `config.toml`.") }}
+
+#### Uso
+
+````
+{{/* add_src_to_code_block(src="https://github.com/welpo/doteki/blob/main/.gitignore") */}}
+
+```.gitignore
+__pycache__/
+*coverage*
+.vscode/
+dist/
+```
+````
+
 ## Shortcodes de texto
+
+### Texto remoto
+
+Añade texto desde una URL remota o un archivo local.
+
+**Importante**:
+
+- **Archivos remotos VS archivos locales**: Si `src` empieza con "http", se tratará como un archivo remoto. De lo contrario, se asume que es una ruta de archivo local.
+- **Acceso a archivos**: Dado que utiliza la función [`load_data`](https://www.getzola.org/documentation/templates/overview/#load-data) de Zola, los archivos locales deben estar dentro del directorio de Zola —ver la [lógica de búsqueda de archivos](https://www.getzola.org/documentation/templates/overview/#file-searching-logic).
+- **Formateo de bloques de código**: Para mostrar el texto como un bloque de código, debes añadir manualmente las cercas de código Markdown (comillas invertidas) y, opcionalmente, especificar el lenguaje de programación para el resaltado sintáctico.
+
+#### Uso
+
+Añade un script de Python remoto dentro de un bloque de código con resaltado sintáctico:
+
+````
+```python
+{{/* remote_text(src="https://example.com/script.py") */}}
+```
+````
+
+Visualización de texto de un archivo local:
+
+```
+{{/* remote_text(src="ruta/a/archivo.txt") */}}
+```
 
 ### Advertencias
 

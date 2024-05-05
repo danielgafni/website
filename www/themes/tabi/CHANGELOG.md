@@ -4,11 +4,67 @@ Welcome to the changelog for tabi. This document aims to provide a comprehensive
 
 We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.MINOR.PATCH. Major version changes involve significant (breaking) changes, minor versions introduce features and improvements in a backward compatible manner, and patch versions are for bug fixes and minor tweaks.
 
+## [2.8.1](https://github.com/welpo/tabi/compare/v2.8.0..v2.8.1) - 2024-05-01
+
+### 🐛 Bug fixes
+
+- Ensure spacing when all projects are shown ([50123c0](https://github.com/welpo/tabi/commit/50123c09ef7ee544d812a58a607d8a1e92369c4f)) by [@welpo](https://github.com/welpo)
+
+## [2.8.0](https://github.com/welpo/tabi/compare/v2.7.0..v2.8.0) - 2024-04-29
+
+### ✨ Features
+
+- Allow showcasing featured projects on homepage ([#297](https://github.com/welpo/tabi/issues/297)) by [@welpo](https://github.com/welpo)
+
+### 🐛 Bug fixes
+
+- *(CSP)* Add Umami API URLs to CSP ([#301](https://github.com/welpo/tabi/issues/301)) by [@arichtman](https://github.com/arichtman)
+- Align projects and posts properly ([69094d6](https://github.com/welpo/tabi/commit/69094d633579a1ea4bee1fcadd77e1511d4020ca)) by [@welpo](https://github.com/welpo)
+
+### 📝 Documentation
+
+- *(README)* Add arichtman blog to showcase ([#298](https://github.com/welpo/tabi/issues/298)) by [@arichtman](https://github.com/arichtman)
+
+### ♻️ Refactor
+
+- *(search)* Close unclosed div ([b6b48cc](https://github.com/welpo/tabi/commit/b6b48cc3b4a2ad17c2ee331664b0b2c9f1fcecc2)) by [@welpo](https://github.com/welpo)
+
+### 🔧 Miscellaneous tasks
+
+- *(README)* Remove sites no longer using tabi ([ba5acca](https://github.com/welpo/tabi/commit/ba5acca7340a940092a9be196302b01441617720)) by [@welpo](https://github.com/welpo)
+
+## [2.7.0](https://github.com/welpo/tabi/compare/v2.6.1..v2.7.0) - 2024-04-18
+
+### ✨ Features
+
+- *(i18n)* Add Dutch language ([#290](https://github.com/welpo/tabi/issues/290)) by [@Myrdincx](https://github.com/Myrdincx) and [@welpo](https://github.com/welpo)
+
+### 🐛 Bug fixes
+
+- Link 'All posts' to proper section ([#295](https://github.com/welpo/tabi/issues/295)) by [@Dalker](https://github.com/Dalker), [@Daniel](https://github.com/Daniel) Kessler (a.k.a. Dalker) and [@welpo](https://github.com/welpo)
+- Fix history url for GitLab & Codeberg ([#294](https://github.com/welpo/tabi/issues/294)) by [@TheAwiteb](https://github.com/TheAwiteb)
+
+### 💄 Styling
+
+- *(shortcodes)* Use colourful admonition icons ([e965694](https://github.com/welpo/tabi/commit/e965694cdf1c588d40e167ec98961a854e2236d0)) by [@welpo](https://github.com/welpo)
+
+### 🔧 Miscellaneous tasks
+
+- *(projects)* List Streaming Royalties Calculator ([ad289f1](https://github.com/welpo/tabi/commit/ad289f1d2caaf7781a011d610e46bd7de41e7f33)) by [@welpo](https://github.com/welpo)
+- Update nani logo ([ce1a98e](https://github.com/welpo/tabi/commit/ce1a98ed93ad38214f6455ba262289a3969cbf52)) by [@welpo](https://github.com/welpo)
+- Compress dōteki & git-sumi social media cards ([ec6ba01](https://github.com/welpo/tabi/commit/ec6ba01bbcbeecc684e2bfb49c5e1f7fac847aa5)) by [@welpo](https://github.com/welpo)
+
+### 👥 New contributors
+
+🫶 [@Dalker](https://github.com/Dalker) made their first contribution in [#295](https://github.com/welpo/tabi/pull/295)
+
+🫶 [@Myrdincx](https://github.com/Myrdincx) made their first contribution in [#290](https://github.com/welpo/tabi/pull/290)
+
 ## [2.6.1](https://github.com/welpo/tabi/compare/v2.6.0..v2.6.1) - 2024-03-21
 
 ### 🔧 Miscellaneous tasks
 
-- *(CI)* Use CHANGES.md for GitHub release notes ([38f3aaf](https://github.com/welpo/tabi/commit/38f3aafdd8a34ae5452ae9bb879881b807e5a7b4))
+- *(CI)* Use CHANGES.md for GitHub release notes ([38f3aaf](https://github.com/welpo/tabi/commit/38f3aafdd8a34ae5452ae9bb879881b807e5a7b4)) by [@welpo](https://github.com/welpo)
 
 ## [2.6.0](https://github.com/welpo/tabi/compare/v2.5.0..v2.6.0) - 2024-03-21
 
@@ -179,10 +235,6 @@ We use Semantic Versioning (SemVer) for our version numbers, formatted as MAJOR.
 
 - *(home-banner)* [**‼️BREAKING‼️**] Force proper header.img path ([#254](https://github.com/welpo/tabi/issues/254)) by [@welpo](https://github.com/welpo)
 - *(i18n)* [**‼️BREAKING‼️**] Force config.toml copyright translation ([#255](https://github.com/welpo/tabi/issues/255)) ([9f39b7f](https://github.com/welpo/tabi/commit/9f39b7fe47721eb7aaea04d8b9ee66b557b7eabf)) by [@welpo](https://github.com/welpo)
-
-### 👥 New contributors
-
-🫶 [@arichtman](https://github.com/arichtman) made their first contribution in [#231](https://github.com/welpo/tabi/pull/231)
 
 ## 1.0.0 - 2023-12-29
 
