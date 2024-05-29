@@ -12,11 +12,11 @@ This series of posts is an opinionated tutorial for setting up production-grade 
 
 This tutorial is split into 2 parts. The first part is devoted to creating EKS & supporting infra, and the second part describes Dagster installation.
 
-# 
+# Introduction
 
 In the Data & ML space, we often encounter workloads with high computational requirements. Kubernetes is a natural choice for running such workloads, because it provides near to infinite customization options and scalability. 
 
-We will be using EKS (managed AWS Kubernetes service) to deploy Dagster - an excellent Data Orchestrator with a unique declarative, asset-based programming model.  It's an ideal choice for batch processing workloads. Dagster can be deployed on Kubernetes, which enables it to orchestrate data processing at massive scale. 
+We will be using EKS (managed Kubernetes service in AWS) to deploy Dagster - an excellent Data Orchestrator with a unique declarative, asset-based programming model.  It's an ideal choice for batch processing workloads. Dagster can be deployed on Kubernetes, which enables it to orchestrate data processing at massive scale. 
 
 Here is what we would like to achieve:
 - Have an auto-scaling Dagster deployment running on Kubernetes
@@ -27,8 +27,8 @@ Here is what we would like to achieve:
 We will leverage various free & Open Source tools in order to achieve this [^2]. The tools we are going to use are:
 
 - Terraform to create the EKS cluster and other supporting infrastructure
-- Karpenter for autoscaling EC2 (spot) instances into the cluster
-- Cert Manager for getting free SSL certificates from Lets Encrypt
+- Karpenter for auto-scaling EC2 (spot) instances
+- Cert Manager for getting free SSL certificates from Let's Encrypt
 - Traefik as a reverse proxy & simple Basic Auth middleware for Dagster's Webserver
 - NodeLocal DNSCache for reducing load on AWS DNS servers (it's actually quite easy to overload them!)
 - ArgoCD to deploy Dagster and automatically create Branch Deployments for Pull Requests
@@ -135,7 +135,7 @@ The dashboard allows inspecting the created routes for more details:
 ![Traefik Dashboard](traefik-dashboard.png)
 
 This completes Part 1. We now have a production-ready EKS cluster with flexible external access configuration and basic auth set up. 
- 
+
 ---
 [^1] While this tutorial is tailored for AWS, only Karpenter from all the used tools is AWS-specific. However, Karpeneter is aiming to support other clouds in the future. 
 [^2] The only proprietary component is AWS EKS itselt.
