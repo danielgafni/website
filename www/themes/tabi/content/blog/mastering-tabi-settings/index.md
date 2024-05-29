@@ -1,7 +1,7 @@
 +++
 title = "Mastering tabi Settings: A Comprehensive Guide"
 date = 2023-09-18
-updated = 2024-05-03
+updated = 2024-05-27
 description = "Discover the many ways you can customise your tabi site."
 
 [taxonomies]
@@ -125,7 +125,7 @@ paginate_by = 5
 header = {title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Óscar Fernández, the theme's author" }
 ```
 
-If you'd rather serve the posts from `/blog`, you can set `section_path = "/blog"` in the `[extra]` section. This is the setup or this demo:
+If you'd rather serve the posts from `/blog`, you can set `section_path = "/blog"` in the `[extra]` section. This is the setup of this demo:
 
 ```toml
 title = "Latest posts"
@@ -700,6 +700,16 @@ copyright_translations.es = "© $CURRENT_YEAR $AUTHOR $SEPARATOR A menos que se 
 ---
 
 ## Metadata
+
+### Show author
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ✅  |   ✅    |      ✅       |         ✅        |         ❌          |
+
+To show the author(s) below the post title, set `show_author = true`.
+
+This will display the authors set on `authors = []` in the front matter of the post. If this is not available, it will fall back to `author = ""`in `config.toml`.
 
 ### Reading Time
 
