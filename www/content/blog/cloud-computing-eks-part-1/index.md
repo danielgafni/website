@@ -8,7 +8,7 @@ add_src_to_code_block = true
 
 +++
 
-This series of posts is an opinionated tutorial for setting up production-grade Kubernetes clusters & deployments on AWS. [^1] It aims to be as detailed and correct as possible and will provide complete pieces of relevant source code. 
+This series of posts is an opinionated tutorial for setting up production-grade Kubernetes clusters & deployments on AWS [^1]. It aims to be as detailed and correct as possible and will provide complete pieces of relevant source code. 
 
 This tutorial is split into 2 parts. The first part is devoted to creating EKS & supporting infra, and the second part describes Dagster installation.
 
@@ -137,5 +137,7 @@ The dashboard allows inspecting the created routes for more details:
 This completes Part 1. We now have a production-ready EKS cluster with flexible external access configuration and basic auth set up. 
 
 ---
-[^1] While this tutorial is tailored for AWS, only Karpenter from all the used tools is AWS-specific. However, Karpeneter is aiming to support other clouds in the future. 
-[^2] The only proprietary component is AWS EKS itselt.
+
+[^1]: While this tutorial is tailored for AWS, only Karpenter from all the used tools is AWS-specific. However, Karpeneter is aiming to support other clouds in the future. 
+
+[^2]: The only required proprietary component is AWS EKS itselt.
