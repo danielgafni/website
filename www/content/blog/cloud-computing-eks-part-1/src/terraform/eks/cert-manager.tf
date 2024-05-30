@@ -47,7 +47,6 @@ resource "helm_release" "cert-manager" {
       nameservers:
         - "1.1.1.1"
         - "8.8.8.8"
-
     YAML
   ]
 
@@ -65,21 +64,21 @@ resource "kubectl_manifest" "clusterIssuer-letsencrypt-prod-dns01" {
         namespace: cert-manager
     spec:
         acme:
-            email: "${var.acme_email}"
-            server: "https://acme-v02.api.letsencrypt.org/directory"
-            privateKeySecretRef:
-                name: "letsencrypt-prod-dns01"  # Secret resource that will be used to store the account's private key.
-            solvers:
+          email: "${var.acme_email}"
+          server: "https://acme-v02.api.letsencrypt.org/directory"
+          privateKeySecretRef:
+            name: "letsencrypt-prod-dns01"  # Secret resource that will be used to store the account's private key.
+          solvers:
             - dns01:
                 route53:
-                    region: ${var.route_53_region}
-                    hostedZoneID: ${var.hosted_zone_id}
-                selector:
-                    dnsZones:
-                        - '${local.cluster_subdomain}.${var.domain}'
-                    dnsNames:
-                        - '${local.cluster_subdomain}.${var.domain}'
-                        - '*${local.cluster_subdomain}.${var.domain}'
+                  region: ${var.route_53_region}
+                  hostedZoneID: ${var.hosted_zone_id}
+              selector:
+                dnsZones:
+                  - '${local.cluster_subdomain}.${var.domain}'
+                dnsNames:
+                  - '${local.cluster_subdomain}.${var.domain}'
+                  - '*${local.cluster_subdomain}.${var.domain}'
     YAML
 
   depends_on = [

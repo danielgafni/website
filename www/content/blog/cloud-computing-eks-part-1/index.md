@@ -14,35 +14,43 @@ This tutorial is split into 2 parts. The first part is devoted to creating EKS &
 
 # Introduction
 
-In the Data & ML space, we often encounter workloads with high computational requirements. Kubernetes is a natural choice for running such workloads, because it provides near to infinite customization options and scalability. 
+In the Data & ML space, we often encounter workloads with high computational requirements. Kubernetes with its near to infinite customization options and scalability is a natural choice for running such workloads.  
 
-We will be using EKS (managed Kubernetes service in AWS) to deploy Dagster - an excellent Data Orchestrator with a unique declarative, asset-based programming model.  It's an ideal choice for batch processing workloads. Dagster can be deployed on Kubernetes, which enables it to orchestrate data processing at massive scale. 
+Kubernetes is a platform for running applications in the cloud. We can use it to dynamically provide compute and to configure our deployments. 
 
-Here is what we would like to achieve:
-- Have an auto-scaling Dagster deployment running on Kubernetes
-- Leverage cheap Spot instances for up to 90% costs reduction
-- Have secure external access to this deployment (OSS Dagster doesn't have built-in authentication)
-- Have automatic Dagster Branch deployments for Pull Requests
+We also need a tool to orchestrate the actual jobs running on the compute resources provided by Kubernetes. [Dagster](https://dagster.io/) is an excellent Jobs & Data Orchestrator with a unique declarative, asset-based programming model. It's an ideal choice for batch processing workloads. Dagster can be deployed on Kubernetes, which enables it to orchestrate data processing at massive scale. 
 
-We will leverage various free & Open Source tools in order to achieve this [^2]. The tools we are going to use are:
+## Requirements & Tools
 
-- Terraform to create the EKS cluster and other supporting infrastructure
-- Karpenter for auto-scaling EC2 (spot) instances
-- Cert Manager for getting free SSL certificates from Let's Encrypt
-- Traefik as a reverse proxy & simple Basic Auth middleware for Dagster's Webserver
+On a high level, these are the technical requiremnets for our data processing system:
+- Have an auto-scaling Dagster deployment running on Kubernetes. Auto-scaling is important because we don't want to be paying for idle nodes, and we want to spin up a lot of them when processing large amounts of data. 
+- Leverage cheap Spot instances for up to 90% costs reduction. Spot instances are much cheaper than on-demand instances, but are not reliable and can be shut down at any moment. Workloads using Spot instances should be fault-tolerant, which is usually achieved by techniques such as checkpointing and retries.
+- We need secure external access to this deployment. Beacuse OSS Dagster doesn't have built-in authentication, we will provide a Basic Auth wrapper for its Webserver. This simple authentication layer can be later replaced by something more flexible (like OAUTH).
+- Have automatic Dagster Branch deployments for Pull Requests. Branch Deployments are incredibly useful for development and speedup software iteration cycles by an order of magnitude. 
+
+We will be using various free & Open Source tools in order to satisfy the above requirements [^2]:
+
+- [OpenTofu](https://opentofu.org/) (open Terraform fork) to create the EKS cluster and other supporting infrastructure
+- [Karpenter](https://karpenter.sh/) for auto-scaling EC2 (spot) instances
+- [Cert Manager](https://cert-manager.io/) for getting free SSL certificates from Let's Encrypt
+- [Traefik](https://traefik.io/traefik/) as a reverse proxy, ingress controller & simple Basic Auth middleware for Dagster's Webserver
 - NodeLocal DNSCache for reducing load on AWS DNS servers (it's actually quite easy to overload them!)
-- ArgoCD to deploy Dagster and automatically create Branch Deployments for Pull Requests
+- [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to deploy Dagster and automatically create Branch Deployments for Pull Requests
 
 # Who scales the autoscaler?
 
-For all things AWS, we will be using the amazing `terraform-aws-modules` Terraform modules. They provide pre-configured AWS resources for common use-cases.
+For all things AWS, we will be using the amazing [terraform-aws-modules](https://registry.terraform.io/namespaces/terraform-aws-modules) Terraform modules. They provide pre-configured AWS resources for common use-cases.
 
 Let's start by creating the EKS cluster:
+
+<details>
+<summary>Click to reveal code</summary>
 
 {{ add_src_to_code_block(src="terraform/eks/main.tf") }}
 ```terraform
 {{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/main.tf") }}
 ```
+</details>
 
 Notice how the cluster only has a single Node Group. This is because we are going to be using Karpenter for node provisioning.
 
@@ -56,10 +64,14 @@ Karpenter is aware of Kubernetes [well-known](https://kubernetes.io/docs/referen
 
 Let's install Karpenter to our cluster and add a default `NodePool`. We will be using the community [kubectl](https://github.com/alekc/terraform-provider-kubectl) Terraform provider to create Karpenter's Custom Resources (CRs), since the other official provider - [kubernetes](https://github.com/hashicorp/terraform-provider-kubernetes) - [does not properly support CRs](https://github.com/hashicorp/terraform-provider-kubernetes/issues/1367), so we are left with whatever actually works. 
 
+<details>
+<summary>Click to reveal code</summary>
+
 {{ add_src_to_code_block(src="terraform/eks/karpenter.tf") }}
 ```terraform
 {{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf") }}
 ```
+</details>
 
 This is how we can add a `NodePool` for spot instances:
 
@@ -75,9 +87,10 @@ This is how we can add a `NodePool` for spot instances:
     ...
 ```
 
-if requirement `karpenter.sh/capacity-type` is set to math both `"on-demand"` and `"spot"`, then Karpenter will prefer spot instances and automatically fallback to on-demand during shortages. 
+if the requirement `karpenter.sh/capacity-type` is set to math both `"on-demand"` and `"spot"`, then Karpenter will prefer spot instances and automatically fallback to on-demand during shortages. 
 
 The last component to complete the hyper scaling setup is NodeLocal DNS Cache. It's really important to set it up, otherwise launching more than ~500 pods will result in frequent `Temporary Name Resolution Failure` when accessing AWS services such as `S3` or `RDS`. 
+
 
 {{ add_src_to_code_block(src="terraform/eks/node-local-dns.tf") }}
 ```terraform
@@ -90,7 +103,7 @@ Now, let's get to the ingress LoadBalancer setup.
 
 # Cloud District
 
-We are aiming to expose (securely) our Kubernetes services to the outside world, and we are not running away from Load Balancers, various middlewares, autentication, route management, SSL certificates, and so on. 
+We are aiming to expose (securely) our Kubernetes services to the outside world, and we are not running away from Load Balancers, various middlewares, autentication, route management, SSL certificates, and so on. Setting all of this in automated fasion for Branch Deployments might get really complicated. 
 
 Traefik and Cert Manager are the two mainstream free and open source Kubernetes applications  often used to solve this kind of problems. I will give a brief explanation below, but the reader is welcome to dive into their documentation.
 
@@ -102,31 +115,48 @@ Both Traefik and Cert Manager can be deployed without Terraform, but using Terra
 
 Seems like a match made in ~~the cloud~~ heaven!
 
-Let's start with Cert Manager:
+Let's start by installing Traefik. 
 
-{{ add_src_to_code_block(src="terraform/eks/cert-manager.tf") }}
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/cert-manager.tf") }}
-```
-
-We installed the `cert-manager` Helm chart into `cert-manage` namespace and create a `ClusterIssuer` for the `DNS-01` challange. This challenge requires creating a given TXT record for the claimed domain, so `cert-manager`'s pod will need access to certain Route53 policies in order to create this record on Let's Enctrypt's demanbd. This is covered by creating an IAM role for `cert-manager` and providing the role's name as Kubernetes Service Account annotation.
-
-Let's continue by installing Traefik. 
+<details>
+<summary>Click to reveal code</summary>
 
 {{ add_src_to_code_block(src="terraform/eks/traefik.tf") }}
 ```terraform
 {{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/traefik.tf") }}
 ```
+</details>
 
-We installed the `Traefik` helm chart into `traefik` namespace. We annotated the Service with `service.beta.kubernetes.io/aws-load-balancer-type: nlb` to create an AWS external LoadBalancer, and created CNAME DNS records in AWS Route53 to route web requests to our domain to this LoadBalancer.
+We installed the `Traefik` helm chart into `traefik` namespace. We annotated the Service with `service.beta.kubernetes.io/aws-load-balancer-type: nlb` to create an AWS external LoadBalancer, and created CNAME DNS records in AWS Route 53 to route web requests to our domain to this LoadBalancer.
 
-Notice how the chart has the default `IngressRoute` disabled. Instead, we are going to create a custom one. 
+Notice how the chart has the default dashboard's `IngressRoute` disabled. Instead, we are going to create a custom one. We are going to need an SSL certificate to secure the dashboard with HTTPS. Let's install Cert Manager to issue this certificate:
 
-First, we create a `Certificate` - a CR provided by Cert Manager - claiming to own the domain `traefik.${local.cluster_subdomain}.${var.domain}`. Once the `Certificate` is created, Cert Manager's Controller pod will notice it and start the domain verification process agsinst Let's Encrypt by using the `DNS-01` challange. Let's Encrypt will give Cert Manager a secret token and ask it to expose it via TXT DNS record. Cert Manager will create this AWS Route53 record, thus proving our domain ownership to Let's Encrypt, and the `Certificate` is going to be issued and stored in a corresponding `Kubernetes` Secret.
+<details>
+<summary>Click to reveal code</summary>
+
+{{ add_src_to_code_block(src="terraform/eks/cert-manager.tf") }}
+```terraform
+{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/cert-manager.tf") }}
+```
+</details>
+
+We installed the `cert-manager` Helm chart into `cert-manage` namespace and created a `ClusterIssuer` for the `DNS-01` challange. This challenge requires creating a given TXT record for the claimed domain, so `cert-manager`'s pod will need access to certain Route 53 policies in order to create this record on Let's Enctrypt's demand. This is covered by creating an IAM role for `cert-manager` and providing the role's name as Kubernetes Service Account annotation.
+
+Now, we can continue with Traefik Dashboard setup:
+
+<details>
+<summary>Click to reveal code</summary>
+
+{{ add_src_to_code_block(src="terraform/eks/traefik-dashboard.tf") }}
+```terraform
+{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/traefik-dashboard.tf") }}
+```
+</details>
+
+First, we create a `Certificate` - a CR provided by Cert Manager - claiming to own the domain `traefik.${local.cluster_subdomain}.${var.domain}`. Once the `Certificate` CR is created in Kubernetes, Cert Manager's Controller pod will notice it and start the domain verification process agsinst Let's Encrypt by using the `DNS-01` challenge. Let's Encrypt will give Cert Manager a secret token and ask it to expose it via a TXT DNS record. Cert Manager will create this AWS Route 53 record, thus proving actual domain ownership to Let's Encrypt, and the `Certificate` will be issued and stored in a corresponding Kubernetes `Secret`. Note that Cert Manager supports multiple [other](https://cert-manager.io/docs/configuration/acme/dns01/#supported-dns01-providers) DNS providers other than Route 53. 
 
 We then reference this Secret in the `IngresRoute` - a CR provided by Traefik. We also create and reference a bunch of supporting resources, such as Basic Auth middleware, and store the password for it in AWS Secrets Manager. 
 
-Phew! After running `terraform apply`, a bit of patience and some tears, we should be able to: 
+Phew! After running `tofu apply`, a bit of patience and some tears, we should be able to: 
 - inspect the created AWS Secrets Manager secret for Traefik Dashboard to retrive the Traefik Dashboard password
 - access the Traefik Dashboard at `https://traefik.k8s-{region}-{cluster}.domain.com/dashboard/` (the training slash is **important**)
 
@@ -134,7 +164,13 @@ The dashboard allows inspecting the created routes for more details:
 
 ![Traefik Dashboard](traefik-dashboard.png)
 
-This completes Part 1. We now have a production-ready EKS cluster with flexible external access configuration and basic auth set up. 
+# Wrapping it up
+
+In this first part of our tutorial, we have laid a solid foundation by setting up a production-ready EKS cluster on AWS. We have configured essential components such as Karpenter for auto-scaling, NodeLocal DNS Cache for reliable DNS resolution, and Traefik with Cert Manager for secure external access. This setup ensures that our infrastructure is both scalable and secure, ready to handle high computational workloads typical in Data and ML applications.
+
+---
+
+In the next chapter, we will delve into the installation and configuration of ArgoCD, a powerful GitOps continuous delivery tool for Kubernetes. ArgoCD will enable us to manage our Kubernetes applications declaratively, ensuring consistent and automated deployment workflows, specifically for Branch Deployments. We will then use ArgoCD to deploy Dagster.
 
 ---
 
