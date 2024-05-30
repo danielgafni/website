@@ -22,8 +22,8 @@ We also need a tool to orchestrate the actual jobs running on the compute resour
 
 ## Prerequisites
 
-- AWS access with suficient permissions
-- A domain (refered to as `<domain>` in the article) managed by AWS Route 53
+- AWS access with sufficient permissions
+- A domain (referred to as `<domain>` in the article) managed by AWS Route 53
 
 ## Goals & Tools
 
