@@ -20,6 +20,11 @@ Kubernetes is a platform for running applications in the cloud. We can use it to
 
 We also need a tool to orchestrate the actual jobs running on the compute resources provided by Kubernetes. [Dagster](https://dagster.io/) is an excellent Jobs & Data Orchestrator with a unique declarative, asset-based programming model. It's an ideal choice for batch processing workloads. Dagster can be deployed on Kubernetes, which enables it to orchestrate data processing at massive scale. 
 
+## Prerequisites
+
+- AWS access with suficient permissions
+- A domain (refered to as `<domain>` in the article) managed by AWS Route 53
+
 ## Requirements & Tools
 
 On a high level, these are the technical requiremnets for our data processing system:
@@ -51,6 +56,8 @@ Let's start by creating the EKS cluster:
 {{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/main.tf") }}
 ```
 </details>
+
+The terraform code creates a local variable `local.cluster_subdomain`. We compose it as following: `k8s-<region>-<cluster-name>`. This is a human-readable sensible default as cluster names are unique per region. We will be assigning `k8s-<region>-<cluster-name>.<domain>` to Traefik's LoadBalancer later on.
 
 Notice how the cluster only has a single Node Group. This is because we are going to be using Karpenter for node provisioning.
 
@@ -156,9 +163,9 @@ First, we create a `Certificate` - a CR provided by Cert Manager - claiming to o
 
 We then reference this Secret in the `IngresRoute` - a CR provided by Traefik. We also create and reference a bunch of supporting resources, such as Basic Auth middleware, and store the password for it in AWS Secrets Manager. 
 
-Phew! After running `tofu apply`, a bit of patience and some tears, we should be able to: 
+Phew! After running `tofu apply`, a bit of patience (and possible tears if something goes wrong), we should be able to: 
 - inspect the created AWS Secrets Manager secret for Traefik Dashboard to retrive the Traefik Dashboard password
-- access the Traefik Dashboard at `https://traefik.k8s-{region}-{cluster}.domain.com/dashboard/` (the training slash is **important**)
+- access the Traefik Dashboard at `https://traefik.k8s-<region>-<cluster>.<domain>/dashboard/` (the training slash is **important**)
 
 The dashboard allows inspecting the created routes for more details:
 
