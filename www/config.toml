@@ -5,6 +5,9 @@ minify_html = true
 generate_feed = true
 theme = "tabi"
 
+# add markdown heading links
+insert_anchor_links = "left"
+
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
