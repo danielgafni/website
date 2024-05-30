@@ -8,7 +8,7 @@ add_src_to_code_block = true
 
 +++
 
-This series of posts is an opinionated tutorial for setting up production-grade Kubernetes clusters & deployments on AWS [^1]. It aims to be as detailed and correct as possible and will provide complete pieces of relevant source code. 
+This series of posts is an opinionated tutorial for setting up production-grade Kubernetes clusters & deployments on AWS [^1]. It aims to be as detailed and correct as possible and will provide complete pieces of relevant [source code](https://github.com/danielgafni/website/tree/master/www/content/blog/cloud-computing-eks-part-1/src).
 
 This tutorial is split into 2 parts. The first part is devoted to creating EKS & supporting infra, and the second part describes Dagster installation.
 
@@ -25,7 +25,7 @@ We also need a tool to orchestrate the actual jobs running on the compute resour
 - AWS access with suficient permissions
 - A domain (refered to as `<domain>` in the article) managed by AWS Route 53
 
-## Requirements & Tools
+## Goals & Tools
 
 On a high level, these are the technical requiremnets for our data processing system:
 - Have an auto-scaling Dagster deployment running on Kubernetes. Auto-scaling is important because we don't want to be paying for idle nodes, and we want to spin up a lot of them when processing large amounts of data. 
