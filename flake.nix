@@ -36,6 +36,15 @@
                 language = "system";
               };
 
+              tofu-fmt = {
+                enable = true;
+                package = pkgs.opentofu;
+                name = "tofu-fmt";
+                entry = "''${pkgs.opentofu}/bin/tofu fmt";
+                files = "^www\/content\/.*.(tf|hcl)$";
+                language = "system";
+              };
+
               lock-www = {
                 enable = true;
                 package = pkgs.nix;

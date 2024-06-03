@@ -1,9 +1,9 @@
 data "aws_region" "current" {}
 
 locals {
-  cluster_name = var.cluster_name
+  cluster_name      = var.cluster_name
   cluster_subdomain = "k8s-${data.aws_region.current.name}-${var.cluster_name}"
-  tags = var.tags
+  tags              = var.tags
 }
 
 module "eks" {
@@ -19,28 +19,28 @@ module "eks" {
   # map with IAM users/roles and Kubernetes access permissions
   access_entries = var.access_entries
 
-  create_iam_role = true
-  cluster_endpoint_public_access = true
+  create_iam_role                 = true
+  cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
   cluster_addons = {
     coredns = {
-      most_recent = true  # TODO: pin exact version
+      most_recent = true # TODO: pin exact version
     }
     kube-proxy = {
-      most_recent = true  # TODO: pin exact version
+      most_recent    = true # TODO: pin exact version
       before_compute = true
     }
     vpc-cni = {
-      most_recent = true  # TODO: pin exact version
+      most_recent    = true # TODO: pin exact version
       before_compute = true
     }
 
     aws-ebs-csi-driver = {
-      most_recent = true  # TODO: pin exact version
+      most_recent = true # TODO: pin exact version
     }
 
-    amazon-cloudwatch-observability = {  # TODO: pin exact version
+    amazon-cloudwatch-observability = { # TODO: pin exact version
       most_recent = true
     }
   }
@@ -48,9 +48,9 @@ module "eks" {
   eks_managed_node_groups = {
     default = {
       instance_types = ["t3.medium"]
-      min_size     = 2
-      max_size     = 10
-      desired_size = 2
+      min_size       = 2
+      max_size       = 10
+      desired_size   = 2
     }
   }
 
@@ -60,8 +60,7 @@ module "eks" {
   }
 
   tags = merge(
-    local.tags,
-    {
+    local.tags, {
       "karpenter.sh/discovery" = local.cluster_name
     }
   )

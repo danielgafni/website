@@ -19,12 +19,12 @@ resource "kubectl_manifest" "certificate-traefik-dashboard" {
 
 # password for the dashboard's Basic Auth
 resource "random_password" "traefik-dashboard" {
-  length = 16
+  length           = 16
   override_special = "<+)"
 }
 
 resource "aws_secretsmanager_secret" "traefik-dashboard" {
-  name = "traefik-dashboard-${local.cluster_subdomain}"
+  name        = "traefik-dashboard-${local.cluster_subdomain}"
   description = "Traefik Dashboard credentials for https://traefik.${local.cluster_subdomain}.${var.domain}/dashboard/"
   tags        = local.tags
 }
@@ -33,8 +33,8 @@ resource "aws_secretsmanager_secret" "traefik-dashboard" {
 resource "aws_secretsmanager_secret_version" "traefik-dashboard" {
   secret_id = aws_secretsmanager_secret.traefik-dashboard.id
   secret_string = jsonencode({
-    user             = "admin",
-    password             = random_password.traefik-dashboard.result
+    user     = "admin",
+    password = random_password.traefik-dashboard.result
   })
 }
 

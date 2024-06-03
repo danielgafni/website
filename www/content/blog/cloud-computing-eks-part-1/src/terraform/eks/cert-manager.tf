@@ -16,15 +16,15 @@ module "eks-irsa-cert-manager" {
 
 
 resource "helm_release" "cert-manager" {
-  namespace           = "cert-manager"
-  create_namespace    = true
-  name                = "cert-manager"
-  repository          = "https://charts.jetstack.io"
-  chart               = "cert-manager"
-  version = "1.14.5"
-  wait                = true
+  namespace        = "cert-manager"
+  create_namespace = true
+  name             = "cert-manager"
+  repository       = "https://charts.jetstack.io"
+  chart            = "cert-manager"
+  version          = "1.14.5"
+  wait             = true
 
-  values = [ <<-YAML
+  values = [<<-YAML
     installCRDs: true
 
     serviceAccount:
@@ -50,7 +50,7 @@ resource "helm_release" "cert-manager" {
     YAML
   ]
 
-    depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }
 
 
