@@ -20,20 +20,20 @@ output "cluster_name" {
 
 output "oidc_provider_arn" {
   description = "OIDC provider ARN"
-  value = module.eks.oidc_provider_arn
+  value       = module.eks.oidc_provider_arn
 }
 
 output "cluster_subdomain" {
   description = "Cluster subdomain (for Traefik)"
-  value = local.cluster_subdomain
+  value       = local.cluster_subdomain
 }
 
 output "cert_manager_installed" {
   description = "if Cert Manager is installed in the cluster"
-  value = var.install_cert_manager
+  value       = var.install_cert_manager
 }
 
 output "traefik_installed" {
   description = "if Traefik is installed in the cluster"
-  value = var.install_traefik
+  value       = var.install_traefik
 }
