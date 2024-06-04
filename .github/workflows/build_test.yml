@@ -45,5 +45,5 @@ jobs:
           name: danielgafni
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - run: nix-env -i just nixos-rebuild -f '<nixpkgs>'
-      - run: just nixos-rebuild
+      - run: NIX_SSHOPTS=-t just nixos-rebuild
         working-directory: infra
