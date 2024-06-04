@@ -18,9 +18,10 @@ jobs:
       working-directory: ./www
     - run: nix flake check
       working-directory: ./www
-    - run: nix-shell -p just --run 'just lock-www'
+    - run: nix-env -i just nixos-rebuild -f '<nixpkgs>'
+    - run: just lock-www
       working-directory: ./infra
-    - run: nix-shell -p nixos-rebuild --run 'nixos-rebuild --accept-flake-config --flake .#website build'
+    - run: nixos-rebuild --accept-flake-config --flake .#website build
       working-directory: ./infra
     - run: nix flake check
       working-directory: ./infra
@@ -39,6 +40,6 @@ jobs:
         with:
           name: danielgafni
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix-env -i just -f '<nixpkgs>'
+      - run: nix-env -i just nixos-rebuild -f '<nixpkgs>'
       - run: just nixos-rebuild
         working-directory: infra
