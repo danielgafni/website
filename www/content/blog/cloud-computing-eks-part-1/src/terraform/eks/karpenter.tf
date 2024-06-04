@@ -2,14 +2,14 @@
 # like IAM and spot instances info SQS queue
 # but doesn't deploy Karpenter itself
 module "karpenter" {
-  source = "terraform-aws-modules/eks/aws//modules/karpenter"
+  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
   version = "~> 20.8.5"
 
-  cluster_name = module.eks.cluster_name
+  cluster_name           = module.eks.cluster_name
   irsa_oidc_provider_arn = module.eks.oidc_provider_arn
 
   # Used to attach additional IAM policies to the Karpenter node IAM role
-  enable_irsa = true  # TODO: uncomment this
+  enable_irsa         = true # TODO: uncomment this
   enable_pod_identity = true
 
   node_iam_role_additional_policies = {
@@ -21,13 +21,13 @@ module "karpenter" {
 
 # here we actually install Karpenter with helm
 resource "helm_release" "karpenter" {
-  namespace           = "karpenter"
-  create_namespace    = true
-  name                = "karpenter"
-  repository          = "oci://public.ecr.aws/karpenter"
-  chart               = "karpenter"
-  version             = "0.36.0"
-  wait                = true
+  namespace        = "karpenter"
+  create_namespace = true
+  name             = "karpenter"
+  repository       = "oci://public.ecr.aws/karpenter"
+  chart            = "karpenter"
+  version          = "0.36.0"
+  wait             = true
 
   values = [
     <<-EOT
@@ -69,7 +69,7 @@ resource "kubectl_manifest" "karpenter_node_class_default" {
   YAML
 
   depends_on = [
-    helm_release.karpenter  # need to add this explicit dependency
+    helm_release.karpenter # need to add this explicit dependency
   ]
 }
 

@@ -1,15 +1,15 @@
 resource "helm_release" "traefik" {
-  namespace           = "traefik"
-  create_namespace    = true
-  name                = "traefik"
-  repository          = "https://traefik.github.io/charts"
-  chart               = "traefik"
-  version = "27.0.2"
-  wait                = true
+  namespace        = "traefik"
+  create_namespace = true
+  name             = "traefik"
+  repository       = "https://traefik.github.io/charts"
+  chart            = "traefik"
+  version          = "27.0.2"
+  wait             = true
 
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 
-  values = [ <<-YAML
+  values = [<<-YAML
     ingressClass:
       enabled: true
       isDefaultClass: true
@@ -30,10 +30,10 @@ resource "helm_release" "traefik" {
 
 data "kubernetes_service" "traefik" {
   metadata {
-    name = "traefik"
+    name      = "traefik"
     namespace = "traefik"
   }
-  depends_on = [ helm_release.traefik ]
+  depends_on = [helm_release.traefik]
 }
 
 # route subdomain.domain to the AWS LoadBalancer (just in case)
