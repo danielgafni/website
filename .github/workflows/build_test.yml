@@ -18,10 +18,32 @@ jobs:
       working-directory: ./www
     - run: nix flake check
       working-directory: ./www
-    - run: nix-shell -p just --run 'just lock-www'
+    - run: nix-env -i just nixos-rebuild -f '<nixpkgs>'
+    - run: just lock-www
       working-directory: ./infra
-    - run: nix-shell -p nixos-rebuild --run 'nixos-rebuild --accept-flake-config --flake .#website build'
+    - run: nixos-rebuild --accept-flake-config --flake .#website build
       working-directory: ./infra
     - run: nix flake check
       working-directory: ./infra
 
+  deploy:
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GAFNI_DEV_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan 49.13.127.186 >> ~/.ssh/known_hosts
+          ssh -T root@49.13.127.186 # Test SSH connection
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: cachix/cachix-action@v14
+        with:
+          name: danielgafni
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - run: nix-env -i just nixos-rebuild -f '<nixpkgs>'
+      - run: NIX_SSHOPTS=-t just nixos-rebuild
+        working-directory: infra
