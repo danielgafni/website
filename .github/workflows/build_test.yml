@@ -33,9 +33,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup SSH
-        run: mkdir ~/.ssh && echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa && chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.GAFNI_DEV_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GAFNI_DEV_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan 49.13.127.186 >> ~/.ssh/known_hosts
+          ssh -T root@49.13.127.186 # Test SSH connection
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: cachix/cachix-action@v14
         with:
