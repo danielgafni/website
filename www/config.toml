@@ -53,6 +53,7 @@ quick_navigation_buttons = true
 toc = true
 show_previous_next_article_links = true
 footnote_backlinks = true
+bottom_footnotes = false
 show_reading_time = true
 
 copy_button = true
