@@ -142,7 +142,7 @@ Now, let's reference this `EC2NodeClass` to create a `NodePool`:
 
 The `requirements` field here is really versatile and can be changed according to specific needs.
 
-## DNS caching
+# DNS caching
 
 The last component to complete the hyper scaling setup is NodeLocal DNS Cache. It's really important to set it up, otherwise launching more than ~500 pods will result in frequent `Temporary Name Resolution Failure` when accessing AWS services such as `S3` or `RDS`.
 

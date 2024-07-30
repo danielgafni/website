@@ -1,6 +1,8 @@
 +++
 title = "Cloud Computing with EKS: Dagster with ArgoCD"
 date = 2024-06-25
+draft = true
+
 [taxonomies]
 tags = ["AWS", "EKS", "Kubernetes", "DevOPS", "Terraform", "Dagster", "ArgoCD"]
 [extra]
