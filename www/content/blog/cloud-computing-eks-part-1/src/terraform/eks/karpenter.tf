@@ -48,7 +48,7 @@ resource "helm_release" "karpenter" {
 }
 
 # add a default NodeClass
-resource "kubectl_manifest" "karpenter_node_class_default" {
+resource "kubectl_manifest" "karpenter-node-class-default" {
   yaml_body = <<-YAML
     apiVersion: karpenter.k8s.aws/v1beta1
     kind: EC2NodeClass
@@ -74,7 +74,7 @@ resource "kubectl_manifest" "karpenter_node_class_default" {
 }
 
 # add a default NodePool
-resource "kubectl_manifest" "karpenter_node_pool_default" {
+resource "kubectl_manifest" "karpenter-node-pool-default" {
   yaml_body = <<-YAML
     apiVersion: karpenter.sh/v1beta1
     kind: NodePool
@@ -85,7 +85,7 @@ resource "kubectl_manifest" "karpenter_node_pool_default" {
       template:
         spec:
           nodeClassRef:
-            name: ${kubectl_manifest.karpenter_node_class_default.name}
+            name: ${kubectl_manifest.karpenter-node-class-default.name}
           requirements:
             - key: kubernetes.io/arch
               operator: In
@@ -104,5 +104,37 @@ resource "kubectl_manifest" "karpenter_node_pool_default" {
       disruption:
         consolidationPolicy: WhenEmpty
         consolidateAfter: 120s
+  YAML
+}
+
+resource "kubectl_manifest" "karpenter-node-class-deeplearning" {
+  yaml_body = <<-YAML
+    apiVersion: karpenter.k8s.aws/v1beta1
+    kind: EC2NodeClass
+    metadata:
+      name: deeplearning
+      namespace: karpenter
+    spec:
+      amiFamily: AL2
+      amiSelectorTerms:
+        - name: amazon-eks-gpu-node-${module.eks.cluster_version}-v20240703  # optimized gpu ami
+      role: ${module.karpenter.node_iam_role_name}
+      # increase static storage size to handle large DL images
+      blockDeviceMappings:
+      - deviceName: /dev/xvda
+        ebs:
+          volumeSize: ${var.volume_size_gb} # set to something like 100Gi
+          volumeType: gp3
+          iops: 10000
+          deleteOnTermination: true
+          throughput: 125
+      subnetSelectorTerms:
+        - tags:
+            karpenter.sh/discovery: ${module.eks.cluster_name}
+      securityGroupSelectorTerms:
+        - tags:
+            karpenter.sh/discovery: ${module.eks.cluster_name}
+      tags:
+        karpenter.sh/discovery: ${module.eks.cluster_name}}
   YAML
 }

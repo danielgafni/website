@@ -81,7 +81,7 @@ Let's install Karpenter to our cluster and add a default `NodePool`. We will be 
 
 {{ add_src_to_code_block(src="terraform/eks/karpenter.tf") }}
 
-```terraform
+```terraform,hide_lines=110-200
 {{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf") }}
 ```
 
@@ -109,11 +109,16 @@ If you are doing maching learning, chances are you will need GPUs in your cluste
 
 Here is how we can setup a GPU-compatible `EC2NodeClass` with Karpenter:
 
-{{ add_src_to_code_block(src="terraform/eks/karpenter-gpu-nodeclass.tf") }}
+<details>
+<summary>Click to reveal code</summary>
 
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter-gpu-nodeclass.tf") }}
+{{ add_src_to_code_block(src="terraform/eks/karpenter.tf") }}
+
+```terraform,hide_lines=1-109
+{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf") }}
 ```
+
+</details>
 
 You can explore EKS AMI [releases](https://github.com/awslabs/amazon-eks-ami/releases) for more images.
 
@@ -123,7 +128,7 @@ Now, let's reference this `EC2NodeClass` to create a `NodePool`:
     ...
     spec:
       nodeClassRef:
-        name: deeplearning
+        name: ${kubectl_manifest.karpenter-node-class-deeplearning.name}
       requirements:
         - key: kubernetes.io/arch
           operator: In
