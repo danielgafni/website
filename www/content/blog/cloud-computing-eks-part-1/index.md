@@ -241,6 +241,8 @@ In the next chapter, we will delve into the installation and configuration of Ar
 
 ---
 
+# Footnotes
+
 [^1]: While this tutorial is tailored for AWS, only Karpenter from all the used tools is AWS-specific. However, Karpeneter is aiming to support other clouds in the future.
 
 [^2]: The only required proprietary component is AWS EKS itselt.
