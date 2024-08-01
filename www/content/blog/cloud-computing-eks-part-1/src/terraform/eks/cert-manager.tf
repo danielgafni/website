@@ -76,9 +76,6 @@ resource "kubectl_manifest" "clusterIssuer-letsencrypt-prod-dns01" {
               selector:
                 dnsZones:
                   - '${local.cluster_subdomain}.${var.domain}'
-                dnsNames:
-                  - '${local.cluster_subdomain}.${var.domain}'
-                  - '*${local.cluster_subdomain}.${var.domain}'
     YAML
 
   depends_on = [
