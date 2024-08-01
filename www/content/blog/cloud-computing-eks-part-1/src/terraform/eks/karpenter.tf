@@ -38,11 +38,6 @@ resource "helm_release" "karpenter" {
     serviceAccount:
       annotations:
         eks.amazonaws.com/role-arn: ${module.karpenter.iam_role_arn}
-    tolerations:
-      - key: 'eks.amazonaws.com/compute-type'
-        operator: Equal
-        value: fargate
-        effect: "NoSchedule"
     EOT
   ]
 }
@@ -102,8 +97,8 @@ resource "kubectl_manifest" "karpenter-node-pool-default" {
       limits:
         cpu: 100
       disruption:
-        consolidationPolicy: WhenEmpty
-        consolidateAfter: 120s
+        consolidationPolicy: WhenUnderutilized
+      expireAfter: 720h
   YAML
 }
 
@@ -136,5 +131,8 @@ resource "kubectl_manifest" "karpenter-node-class-deeplearning" {
             karpenter.sh/discovery: ${module.eks.cluster_name}
       tags:
         karpenter.sh/discovery: ${module.eks.cluster_name}}
+      disruption:
+        consolidationPolicy: WhenUnderutilized
+      expireAfter: 720h
   YAML
 }
