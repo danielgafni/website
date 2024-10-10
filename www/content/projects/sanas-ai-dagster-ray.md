@@ -13,8 +13,7 @@ While working as an MLOps Engineer at [Sanas](https://sanas.ai) I designed and d
 
 ```python
 @asset
-def my_feature(ray_cluster_my_feature: MyFeatureRayClusterResource):
-    ...
+def my_feature(ray_cluster_my_feature: MyFeatureRayClusterResource): ...
 ```
 
 to automatically run the `@asset` body in an auto-scaling `KubeRay` cluster on Kubernetes. 

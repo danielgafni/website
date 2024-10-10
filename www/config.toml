@@ -55,6 +55,7 @@ show_previous_next_article_links = true
 footnote_backlinks = true
 bottom_footnotes = false
 show_reading_time = true
+add_src_to_code_block = true
 
 copy_button = true
 
