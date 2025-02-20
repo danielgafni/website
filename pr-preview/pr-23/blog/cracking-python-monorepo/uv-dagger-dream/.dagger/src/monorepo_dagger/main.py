@@ -1,6 +1,5 @@
-import dagger
-from dagger import Directory, dag, function, object_type, Container, File
 import tomli
+from dagger import Container, Directory, File, dag, function, object_type
 
 
 @object_type
