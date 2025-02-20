@@ -24,7 +24,7 @@ In contrast to using, Branch Deployments traditionally require quite some work t
 
 # And why do I need to care about ArgoCD?
 
-ArgoCD is quite an amazing piece of technology. It can easily pull off tricks which traditional CD systems will struggle to imlement. Branch Deployments is one of them.
+ArgoCD is quite an amazing piece of technology. It can easily pull off tricks which traditional CD systems will struggle to implement. Branch Deployments is one of them.
 
 ArgoCD has a concept of `ApplicationSet` - a template which can spawn multiple instances of `Applications`s. `ApplicationSet`s can be backed by various Generators, `pullRequest` being one of them.
 
