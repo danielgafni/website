@@ -10,7 +10,7 @@ class MonorepoDagger:
         source_dir: Directory,
         project: str,
     ) -> Container:
-        """Granularly builds a project and its dependencies."""
+        """Build a container containing only the source code for a given project and it's dependencies."""
         project_dir = await self.build_source_directory_for_project(source_dir, project)
         container = project_dir.docker_build(
             target="deps-dev",
