@@ -11,6 +11,12 @@ dev = [
     "pyright>=1.1.394",
     "ruff>=0.9.7",
 ]
+dagger = [
+    "monorepo-dagger",
+]
 
 [tool.uv.workspace]
 members = ["projects/lib-one", "projects/lib-two"]
+
+[tool.uv.sources]
+monorepo-dagger = { path = ".dagger" }

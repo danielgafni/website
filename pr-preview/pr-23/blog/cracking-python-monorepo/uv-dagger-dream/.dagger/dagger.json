@@ -1,0 +1,7 @@
+{
+  "name": "monorepo-dagger",
+  "engineVersion": "v0.16.1",
+  "sdk": {
+    "source": "python"
+  }
+}
