@@ -23,6 +23,7 @@ from dagger import (
     dag,
     function,
     object_type,
+    BuildArg,
 )
 from dagger.client.gen import BuildArg
 
@@ -52,7 +53,66 @@ SourceDir: TypeAlias = Annotated[
 
 @object_type
 class MonorepoDagger:
-    async def get_local_sources(
+    @function
+    async def build_project(
+        self,
+        source_dir: Directory,
+        project: str,
+    ) -> Container:
+        """Build a container containing only the source code for a given project and it's dependencies."""
+        # we start by creating a container including only third-party dependencies
+        # with no source code (except pyproject.toml and uv.lock from the repo root)
+        container = self.container_with_third_party_dependencies(
+            pyproject_toml=source_dir.file("pyproject.toml"),
+            uv_lock=source_dir.file("uv.lock"),
+            dockerfile=source_dir.file("Dockerfile"),
+            project=project,
+        )
+
+        # here we parse the uv.lock file to find the source code of the dependencies of a given project
+        project_sources_map = await self.get_project_sources_map(source_dir, project)
+
+        # we create empty directories in the container so that the next step passes
+        container = self.copy_source_code(container, source_dir, project_sources_map)
+
+        # we run `uv sync` to create editable installs of the local dependencies
+        # pointing (for now) to the dummy directories we created in the previous step
+        container = self.install_local_dependencies(container, project)
+
+        # finally, we fill the dummy directories with the actual source code
+        container = self.copy_project_source_code(container, project_sources_map)
+
+        return container
+
+    def container_with_third_party_dependencies(
+        self,
+        pyproject_toml: File,
+        uv_lock: File,
+        dockerfile: File,
+        project: str,
+    ) -> Container:
+        # create an empty directory to make sure only the pyproject.toml
+        # and uv.lock files are copied to the build context (to affect caching)
+        build_context = (
+            dag.directory()
+            .with_file(
+                "pyproject.toml",
+                pyproject_toml,
+            )
+            .with_file(
+                "uv.lock",
+                uv_lock,
+            )
+            .with_new_file("README.md", "Dummy README.md")
+        )
+
+        return build_context.docker_build(
+            target="deps-dev",
+            dockerfile=dockerfile,
+            build_args=[BuildArg(f"PACKAGE={project}")],
+        )
+
+    async def get_project_sources_map(
         self,
         uv_lock: File,
         project: str,
@@ -62,7 +122,7 @@ class MonorepoDagger:
 
         members = set(uv_lock_dict["manifest"]["members"])
 
-        local_dependencies = {project}
+        local_projects = {project}
 
         # first, find the dependencies of our project
         for package in uv_lock["package"]:
@@ -70,112 +130,44 @@ class MonorepoDagger:
                 dependencies = package.get("dependencies", [])
                 for dep in dependencies:
                     if isinstance(dep, dict) and dep.get("name") in members:
-                        local_dependencies.add(dep["name"])
+                        local_projects.add(dep["name"])
 
         # now, gather all the directories with the dependency sources
 
-        local_dependencies_sources = {}
+        project_sources_map = {}
 
         for package in uv_lock["package"]:
-            if package["name"] in local_dependencies:
-                local_dependencies_sources[package["name"]] = package["source"][
-                    "editable"
-                ]
+            if package["name"] in local_projects:
+                project_sources_map[package["name"]] = package["source"]["editable"]
 
-        return local_dependencies_sources
+        return project_sources_map
 
-    async def build_source_directory_for_project(
-        self,
+    def copy_source_code(
+        container: Container,
         source_dir: SourceDir,
-        project: str,
-    ) -> Directory:
-        """Creates a clean source directory containing only the source code for a given project and it's dependencies."""
-        local_sources = await self.get_local_sources(
-            source_dir.file("uv.lock"), project=project
-        )
-
-        project_source_code = dag.directory()
-
-        for source in local_sources.values():
-            project_source_code.add_directory(source)
-
-        return project_source_code
-
-    @function
-    async def build_project(
-        self,
-        source_dir: Directory,
-        project: str,
+        project_source_mapping: dict[str, str],
     ) -> Container:
-        """Build a container containing only the source code for a given project and it's dependencies."""
+        # copy the full source code
 
-        project_dir = (
-            await self.build_source_directory_for_project(source_dir, project)
-            .with_file(
-                "pyproject.toml",
-                source_dir.file("pyproject.toml"),
-            )
-            .with_file(
-                "uv.lock",
-                source_dir.file("uv.lock"),
-            )
-        )
-
-        container = project_dir.docker_build(
-            target="deps-dev",
-            dockerfile=project_dir.file("Dockerfile"),
-        )
-
-        local_sources = await self.get_local_sources(
-            source_dir.file("uv.lock"), project=project
-        )
-
-        # this loop only creates the directory structure
-        # and copies pyproject.toml files
-        # so that the actual source code can be copied in the next step after uv sync
-        # and only pyproject.toml files affect caching
-        for package, location in local_sources.items():
-            package_name = (
-                tomli.loads(
-                    await source_dir.directory(location)
-                    .file("pyproject.toml")
-                    .contents()
-                )["project"]["name"]
-                .lower()
-                .replace("-", "_")
+        for package, location in project_source_mapping.items():
+            container = container.with_directory(
+                location,
+                source_dir.directory(location),
             )
 
-            container = (
-                container.with_exec(["mkdir", "-p", location])
-                .with_exec(["touch", f"{location}/README.md"])
-                .with_exec(["mkdir", "-p", f"{location}/src/{package_name}"])
-                .with_exec(["touch", f"{location}/src/{package_name}/__init__.py"])
-            )
+        return container
 
-        for package, location in local_sources.items():
-            container = container.with_file(
-                f"{location}/pyproject.toml",
-                source_dir.directory(location).file("pyproject.toml"),
-            )
-
+    def install_local_dependencies(
+        self, container: Container, project: str
+    ) -> Container:
         container = container.with_exec(
             [
                 "uv",
                 "sync",
-                "--no-install-package",
-                "anam-engine",
                 "--inexact",
                 "--package",
                 project,
             ]
         )
-
-        # copy the source code
-
-        for package, location in local_sources.items():
-            container = container.with_directory(
-                location,
-                source_dir.directory(location),
-            )
 
         return container
