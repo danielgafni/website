@@ -1,7 +1,7 @@
 +++
 title = "Seguro por defecto"
 date = 2023-02-22
-updated = 2024-03-15
+updated = 2024-08-28
 description = "tabi tiene una Política de Seguridad de Contenido (CSP) fácilmente personalizable con configuraciones seguras. Obtén tranquilidad y una calificación de A+ en Mozilla Observatory."
 
 [taxonomies]
@@ -32,6 +32,15 @@ Esta función permite personalizar fácilmente las cabeceras de seguridad del si
 
 Puedes desactivar las cabeceras (permitiendo todo) en una página, sección, o globalmente configurando `enable_csp = false` en el front matter o en el archivo `config.toml`.
 
-**Nota**: [habilitar los comentarios](@/blog/comments/index.es.md) o [las analíticas](@/blog/mastering-tabi-settings/index.es.md#analisis-web) automáticamente permite scripts/frames/estilos/conexiones en función del servicio habilitado.
+**Notas**:
+
+- [Habilitar los comentarios](@/blog/comments/index.es.md), [las analíticas](@/blog/mastering-tabi-settings/index.es.md#analisis-web), o [los diagramas mermaid](@/blog/shortcodes/index.es.md#diagramas-de-mermaid) permite automáticamente los scripts/frames/estilos/conexiones pertinentes.
+- Para usar un [tema de resaltado de sintaxis integrado en Zola](https://www.getzola.org/documentation/getting-started/configuration/#syntax-highlighting), has de permitir `unsafe-inline` en la directiva `style-src`:
+
+    ```
+    { directive = "style-src", domains = ["'self'", "'unsafe-inline'"] },
+    ```
+
+---
 
 [^1]: Requiere una configuración adecuada del servidor web (por ejemplo, redirigir el tráfico HTTP a HTTPS).

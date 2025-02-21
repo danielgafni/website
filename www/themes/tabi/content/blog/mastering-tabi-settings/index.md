@@ -1,14 +1,14 @@
 +++
 title = "Mastering tabi Settings: A Comprehensive Guide"
 date = 2023-09-18
-updated = 2024-05-27
+updated = 2025-02-16
 description = "Discover the many ways you can customise your tabi site."
 
 [taxonomies]
 tags = ["showcase", "tutorial", "FAQ"]
 
 [extra]
-footnote_backlinks = true
+pinned = true
 quick_navigation_buttons = true
 social_media_card = "social_cards/blog_mastering_tabi_settings.jpg"
 +++
@@ -26,11 +26,12 @@ tabi has a hierarchy that allows you to customise your site at different levels.
 
 1. **Global settings**: These are the settings that apply to your entire site. They are set in `config.toml`.
 2. **Section settings**: These are the settings that apply to a section of your site (e.g.`/blog` or `/projects`). They are set in the front matter of the `_index.md` file of the section.
-3. **Page settings**: These are the settings that apply to a single page. They are set in the front matter of the page.
+3. **Parent page settings**: For nested pages (pages within pages), these are the settings from the parent page.
+4. **Page settings**: These are the settings that apply to a single page. They are set in the front matter of the page.
 
 In all cases, tabi's settings are set in the `[extra]` section.
 
-For settings which follow this hierarchy, the value set on a page overrides the value for a section, which overrides the global value. In short: the more specific the setting, the higher priority it has, or `page > section > config.toml`.
+For settings which follow this hierarchy, the value set on a page overrides the value for a section, which overrides the global value. In short: the more specific the setting, the higher priority it has, or `page > parent page/section > config.toml`.
 
 ---
 
@@ -87,7 +88,7 @@ For technical details about the search implementation in tabi, including when th
 
 ## Multilingual Support
 
-tabi offers comprehensive multilingual support for your Zola site, from setting a default language to adding as many as you wish. Refer to the [multilingual FAQ](blog/faq-languages/) for more information.
+tabi offers comprehensive multilingual support for your Zola site, from setting a default language to adding as many as you wish. Refer to the [multilingual FAQ](@/blog/faq-languages/index.md) for more information.
 
 ---
 
@@ -112,35 +113,79 @@ The description is regular Markdown content, set outside the front matter.
 
 #### Listing Recent Posts
 
-If you'd like to show posts on the main page, you first need to decide whether their path will be `/` or something like `/blog`.
+To show posts on your main page, you first need to decide where these posts will be served from: the root path (`/`) or a subdirectory (e.g., `/blog`). 
 
-If you want to serve the posts from `/`, you need to set `paginate_by = 5` in the front matter of your `_index.md` file. **Note**: this is not in the `[extra]` section, but in the main front matter. Example:
+**Option A: Serve posts from the root path (`/`)**
 
-```toml
-sort_by = "date"
-template = "section.html"
-paginate_by = 5
-
-[extra]
-header = {title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Óscar Fernández, the theme's author" }
-```
-
-If you'd rather serve the posts from `/blog`, you can set `section_path = "/blog"` in the `[extra]` section. This is the setup of this demo:
+Set `paginate_by` in the front matter of your `content/_index.md` file:
 
 ```toml
 title = "Latest posts"
 sort_by = "date"
-template = "section.html"
+paginate_by = 5  # Show 5 posts per page.
 
 [extra]
-header = {title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Óscar Fernández, the theme's author" }
-section_path = "blog/_index.md"
-max_posts = 4
+header = {title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Your Name" }
 ```
 
-Notice how if you set `section_path`, you don't need to set `paginate_by`. You can set `max_posts` to the determine the number of posts you want to show on the main page.
+{{ admonition(type="note", text="The `paginate_by` setting goes in the main front matter, not in the `[extra]` section.") }}
 
-The `title` is the header that appears above the posts.
+**Option B: Serve posts from a subdirectory (e.g., `/blog`)**
+
+Use `section_path` in the `[extra]` section of your `content/_index.md` file:
+
+```toml
+title = "Latest posts"
+sort_by = "date"
+# Do not set `paginate_by` here.
+
+[extra]
+header = {title = "Hello! I'm tabi~", img = "img/main.webp", img_alt = "Your Name" }
+section_path = "blog/_index.md"  # Where to find your posts.
+max_posts = 5  # Show up to 5 posts on the main page.
+```
+
+{{ admonition(type="warning", text="Do not set both `paginate_by` and `section_path`. These settings are mutually exclusive and using both may result in no posts being displayed.") }}
+
+Additional notes:
+
+- The `title` in the front matter sets the header that appears above the posts.
+- Use the full path to the section's `_index.md` file for `section_path`. Using `section_path = "blog/"` will not work.
+
+##### Pinning Posts
+
+You can pin posts to keep them at the top of the main page listing. In this demo, this post is pinned, so it appears first with a "pinned" icon and label:
+
+{{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/pinned_post_light.webp", dark_src="blog/mastering-tabi-settings/img/pinned_post_dark.webp", alt="Pinned post", full_width=true) }}
+
+Pinned posts are shown first, maintaining their relative order of the section's `sort_by`, followed by regular posts.
+
+To pin a post, add the following to its front matter:
+
+```toml
+[extra]
+pinned = true
+```
+
+{{ admonition(type="info", text="This setting only affects your site's main pages (like `/`, `/es/`, `/fr/`). Other sections like `blog/`, `tags/`, or `archive/` show posts in their normal order.") }}
+
+{{ admonition(type="warning", text='When using pagination (`paginate_by`), pinned posts may appear twice: once on top of page 1, and again in their normal chronological position on subsequent pages.') }}
+
+##### Display the Date of Posts in Listing
+
+By default, when listing posts, the date of post creation is shown. You can configure which date(s) to display using the `post_listing_date` option. Available settings:
+
+- `date`: Show only the original date of the post (default).
+- `updated`: Show only the last updated date of the post. If there is no last updated date, it shows the original date.
+- `both`: Show both the original date and the last updated date.
+
+```toml
+post_listing_date = "date"
+```
+
+{% admonition(type="tip") %}
+This setting follows the hierarchy: you can set a global value in `config.toml` or override it for specific sections in their `_index.md` file. In both cases, add it to the `[extra]` section.
+{% end %}
 
 #### Listing Projects
 
@@ -185,6 +230,37 @@ tabi's skins change the main colour of the site. You can set the skin in `config
 
 Explore the available skins and learn how to create your own reading [the documentation](/blog/customise-tabi/#skins).
 
+### Sans-serif Font
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
+
+tabi uses a serif font for article paragraphs (the one you're seeing now). You can switch to using a sans-serif font (the one on the headers/menu) throughout your entire site by setting `override_serif_with_sans = true` in your `config.toml`.
+
+Click on the image below to compare the two looks:
+
+{{ image_toggler(default_src="blog/mastering-tabi-settings/img/serif.webp", toggled_src="blog/mastering-tabi-settings/img/sans-serif.webp", default_alt="Serif font", toggled_alt="Sans-serif font", full_width=true) }}
+
+### External Link Indicator
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
+
+{{ admonition(type="info", text="Requires Zola 0.20.0 or later.") }}
+
+If you'd like to add an icon to external links, configure the `[markdown]` (not `[extra]`) section in your `config.toml`:
+
+```toml
+[markdown]
+external_links_class = "external"
+```
+
+This will add a small icon next to external links:
+
+{{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/external_link_light.webp", dark_src="blog/mastering-tabi-settings/img/external_link_dark.webp", alt="External link icon", full_width=true) }}
+
 ### Custom CSS
 
 | Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
@@ -224,6 +300,44 @@ By default, the [tags page](/tags) displays tags as:
 Setting `compact_tags = true` will display them as:
 
 [TagName](#) <sup>n</sup>
+
+### Tags Sorting
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
+
+By default, the [tags page](/tags) sorts tags alphabetically, given the default setting of `tag_sorting = "name"`.
+
+Setting `tag_sorting = "frequency"` will sort them by number-of-posts (descending).
+
+---
+
+## Series
+
+For a detailed explanation of the series feature, see the [series documentation](@/blog/series/index.md).
+
+### Jump to posts link
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ❌  |     ✅  |      ✅       |           ✅      |         ❌          |
+
+By default, a "Jump to posts" link automatically appears next to the series title when a series has a content over 2000 characters:
+
+{{ dual_theme_image(light_src="blog/series/img/jump_to_series_posts_light.webp", dark_src="blog/series/img/jump_to_series_posts_dark.webp" alt="jump to series posts link", full_width=true) }}
+
+Set `show_jump_to_posts = true` to force the feature on and `show_jump_to_posts = false` to force it off.
+
+### Series pages indexation
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ❌  |     ✅  |      ✅       |           ✅      |         ❌          |
+
+By default, series page are indexed (using a 1-based indexing) as per the series section `sort_by`.
+
+Set `post_listing_index_reversed = true` to reverse this index.
 
 ---
 
@@ -265,7 +379,7 @@ Clicking on this link will take you to the commit history of the post, where you
 
 ### Projects
 
-tabi has a built-in projects template. To enable it, you can create a directory in `content/projects/`. There, you can create a `_index.md` file with the following front matter:
+tabi has a built-in projects (cards) template. To enable it, you can create a directory in `content/projects/`. There, you can create a `_index.md` file with the following front matter:
 
 ```toml
 title = "Projects"
@@ -285,11 +399,11 @@ quick_navigation_buttons = true
 - `show_reading_time = false` hides the [reading time](#reading-time).
 - `quick_navigation_buttons = true` shows the [quick navigation buttons](#quick-navigation-buttons) are shown.
 
-Alongside the `_index.md` file, you can create a file for each project. For example, this is the front matter for the [tabi project page](/projects/tabi/):
+Alongside the `_index.md` file, you can create a file for each project. For example, this is the front matter for the [tabi project page](@/projects/tabi/index.md):
 
 ```toml
 title = "tabi"
-description = "A fast, lightweight, and modern Zola theme with multi-language support."
+description = "A feature-rich modern Zola theme with first-class multi-language support."
 weight = 1
 
 [extra]
@@ -304,6 +418,33 @@ local_image = "img/tabi.webp"
 When a user clicks on the image or title of a project, they will be taken to the project's page. If you'd rather have users go to an external link, you can set `link_to = "https://example.com` in the `[extra]` section of the project's `.md` file.
 
 The individual project's page is rendered with the default template, unless you set another one, e.g. `template = "info-page.html"`.
+
+#### Filtering Projects
+
+If you add tags to your projects, you will see a tag filter:
+
+{{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/projects_tag_filter_light.webp", dark_src="blog/mastering-tabi-settings/img/projects_tag_filter_dark.webp", alt="Projects page with tag filter", full_width=true) }}
+
+The tag filtering system uses progressive enhancement:
+
+- Without JavaScript: Tags link directly to dedicated tag pages (e.g. `/tags/tag-name`)
+- With JavaScript: Instant filtering, URL syncing (#tag-name), and keyboard navigation
+
+To disable this feature, set `enable_cards_tag_filtering = false` in the `[extra]` section of the `projects/_index.md` file or in `config.toml`.
+
+{% admonition(type="tip") %}
+
+To filter projects by tags, you need to set tags in the front matter of each project. For example:
+
+```toml
+title = "project name"
+weight = 40
+
+[taxonomies]
+tags = ["tag one", "tag 2", "third tag"]
+```
+
+{% end %}
 
 ### Archive
 
@@ -325,7 +466,14 @@ By default, the archive will list posts located in `blog/`. To customise this, y
   section_path = ["blog/", "notes/", "path-three/"]
   ```
 
-**Note**: the Archive page will only list posts that have a date in their front matter.
+The archive displays posts in reverse chronological order (newest first). You can reverse this order by setting `archive_reverse = true` in the `[extra]` section:
+
+```toml
+[extra]
+archive_reverse = true  # displays oldest posts first.
+```
+
+{{ admonition(type="note", text="The Archive page will only list posts that have a date in their front matter.") }}
 
 ### Tags
 
@@ -373,6 +521,17 @@ path = "about"
 ```
 
 Notice how the `path` is set to `about`. Zola will place the page at `$base_url/about/`. If you'd like to have the page available at `/contact/`, you'd set `path = "contact"`.
+
+The `info-page.html` template can also be used to create landing pages at the path root (`"/"`). To do that, the `content/_index.md` file should look like this:
+
+```markdown
++++
+title = "Landing Page Title"
+template = "info-page.html"
++++
+
+Place your landing page Markdown content here.
+```
 
 ---
 
@@ -422,7 +581,7 @@ For example, if you set `base_canonical_url = "https://example.com"`, the canoni
 
 Social media cards are the images that are displayed when you share a link on social media:
 
-![A screenshot of WhatsApp showing a link with a social media card](/blog/mastering-tabi-settings/img/with_social_media_card.webp)
+{{ dimmable_image(src="img/with_social_media_card.webp", alt="A screenshot of WhatsApp showing a link with a social media card") }}
 
 You can set the social media image with `social_media_card = "img/social_media_card.png"`.
 
@@ -436,7 +595,21 @@ If both relative and absolute paths are valid, the relative path will take prece
 
 Since it follows the [hierarchy](#settings-hierarchy), if it's not set on a page, but is set on a section, the section's image will be used. If it's not set on a page or section, but is set in `config.toml`, the global image will be used.
 
-**Protip**: automate their creation with a [script](https://github.com/welpo/osc.garden/blob/main/static/code/social-cards-zola): [From Bashful to Social Butterfly: Automating Link Previews for Zola Sites](https://osc.garden/blog/automating-social-media-cards-zola/).
+{{ admonition(type="tip", title="PROTIP", text="Automate their creation with a [script](https://github.com/welpo/osc.garden/blob/main/static/code/social-cards-zola): [Automating Link Previews for Zola Sites](https://osc.garden/blog/automating-social-media-cards-zola/).") }}
+
+### Fediverse Creator
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
+
+You can highlight your fediverse profile in Mastodon link previews by setting the `fediverse_creator` variable in your `config.toml`. For example, for @username@example.com, use:
+
+```toml
+fediverse_creator = { handle = "username", domain = "example.com" }
+```
+
+This adds metadata to your HTML, allowing Mastodon to display the author's fediverse profile when your content is shared.
 
 ---
 
@@ -448,7 +621,9 @@ Since it follows the [hierarchy](#settings-hierarchy), if it's not set on a page
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
 |  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
 
-The navigation bar is the bar at the top of the page that contains the site title and the navigation menu. You can customise which items appear by setting `menu` in `config.toml`. For example:
+The navigation bar is the bar at the top of the page that contains the site title and the navigation menu. You can customise which items appear by setting `menu` in `config.toml`.
+
+The menu supports both relative URLs for internal pages and absolute URLs for external links. For example:
 
 ```toml
 menu = [
@@ -457,6 +632,7 @@ menu = [
     { name = "tags", url = "tags", trailing_slash = true },
     { name = "projects", url = "projects", trailing_slash = true },
     { name = "about", url = "about", trailing_slash = true },
+    { name = "github", url = "https://github.com/welpo/tabi", trailing_slash = false },
 ]
 ```
 
@@ -482,7 +658,7 @@ To enable them, set `quick_navigation_buttons = true`.
 
 Enable the table of contents right below the post's title and metadata with `toc = true`.
 
-Read more about the table of contents and how to customise it by reading [the docs](/blog/toc/).
+Read more about the table of contents and how to customise it by reading [the docs](@/blog/toc/index.md).
 
 ### Previous and Next Article Links
 
@@ -494,7 +670,7 @@ Displays links to the previous and next articles at the bottom of posts. It look
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/show_previous_next_article_links_light.webp", dark_src="blog/mastering-tabi-settings/img/show_previous_next_article_links_dark.webp" alt="Previous and next article links", full_width=true) }}
 
-To activate this feature, set `show_previous_next_article_links = true`.
+To activate this feature, set `show_previous_next_article_links = true` and ensure your section has a `sort_by` value (e.g. `sort_by = "date"`).
 
 By default, next articles will be on the left side of the page and previous articles will be on the right side.
 To reverse the order (next articles on the right and previous articles on the left), set `invert_previous_next_article_links = true`.
@@ -505,6 +681,8 @@ To make it narrower, matching the article width, set `previous_next_article_link
 All of these settings follow the hierarchy.
 
 ### Footnote Backlinks
+
+{{ admonition(type="warning", title="DEPRECATION WARNING", text="Zola v0.19.0 and later can do this natively. Set `bottom_footnotes = true` in your config's `[markdown]` section.") }}
 
 | Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
@@ -530,13 +708,21 @@ Setting `copy_button = true` will add a small copy button to the top right of co
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_light.webp", dark_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_dark.webp" alt="Copy button on code blocks", full_width=true) }}
 
-### Source/Path on Code Blocks
+### Clickable Code Block Names
 
 | Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
 |  ✅  |   ✅    |      ✅       |         ✅        |         ✅          |
 
-Setting `add_src_to_code_block = true` enables the use of the [`add_src_to_code_block` shortcode](@/blog/shortcodes/index.md#show-source-or-path).
+Setting `code_block_name_links = true` enables URLs in code block names to become clickable links. Check out the [documentation](@/blog/shortcodes/index.md#show-source-or-path) for examples and usage.
+
+### Force Code Blocks LTR
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ✅  |   ✅    |      ✅       |         ✅        |         ❌          |
+
+By default, code blocks are rendered left-to-right, regardless of the overall text direction. Set `force_codeblock_ltr = false` to allow code blocks to follow the document's text direction. Useful for RTL languages needing RTL code blocks.
 
 ### KaTeX Support
 
@@ -546,17 +732,29 @@ Setting `add_src_to_code_block = true` enables the use of the [`add_src_to_code_
 
 KaTeX is a fast, easy-to-use JavaScript library for TeX math rendering on the web. You can enable it with `katex = true`. See what it looks like in tabi [here](/blog/markdown/#katex).
 
+### Mermaid Support
+
+| Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
+|:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
+|  ✅  |    ✅    |      ✅       |         ✅         |         ✅          |
+
+[Mermaid](https://github.com/mermaid-js/mermaid) is a JavaScript-based diagramming and charting tool. You can enable it with `mermaid = true`.
+
+By default, the Mermaid library is served locally. If you prefer to use a CDN, set `serve_local_mermaid = false` in `config.toml`. Using a CDN will serve the latest version of Mermaid; the local option will serve the version bundled with tabi.
+
+See the [Mermaid documentation](@/blog/shortcodes/index.md#mermaid-diagrams) for usage instructions and examples.
+
 ### Custom Font Subset
 
 | Page | Section | `config.toml` | Follows Hierarchy | Requires JavaScript |
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
 |  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
 
-Custom fonts cause flashing text in Firefox. To amend this, tabi loads a subset of glyphs for the header. Since this (slightly) increases the initial load time, it's a good idea to try and minimise the size of this subset.
+Custom fonts cause flashing text in Firefox. To amend this, tabi loads a subset of glyphs for the header. Since this (slightly) increases the initial load time, it's a good idea to try and minimise the size of this subset, or disable it completely if you're not using a custom font in your skin.
 
-You can create a custom subset tailored to your site, save it as `static/custom_subset.css`, and have it load with `custom_subset = true`.
+You can create a custom subset tailored to your site, save it as `static/custom_subset.css`, and have it load with `custom_subset = true`. Disabling the subset can be done with `enable_subset = false`.
 
-For more information, including instructions on how to create a custom subset, see the [docs](/blog/custom-font-subset/).
+For more information, including instructions on how to create a custom subset, see the [docs](@/blog/custom-font-subset/index.md).
 
 ### Full Content in Feed
 
@@ -572,7 +770,10 @@ By default, the Atom feed only contains the summary/description of your posts. Y
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
 |  ✅  |   ✅    |      ✅       |         ✅        |         ❌          |
 
-You can hide specific pages or entire sections from your feed by setting `hide_from_feed = true`.
+You can control how content appears in your feeds using two settings:
+
+1. `hide_from_feed = true`: Hides content from all feeds (main, section, and tag feeds)
+2. `hide_from_main_feed = true`: Hides content only from the main feed while keeping it visible in section and tag feeds
 
 ### Comments {#adding-comments}
 
@@ -586,7 +787,7 @@ To enable a system globally (on all pages), set `enabled_for_all_posts = true` i
 
 If you have enabled a system globally, but want to disable it on a specific page, set the name of the system to `false` in the front matter of that page. For example, `utterances = false`.
 
-Read [the docs](/blog/comments/) for more information on the available systems and their setup.
+Read [the docs](@/blog/comments/index.md) for more information on the available systems and their setup.
 
 ### Analytics
 
@@ -601,7 +802,7 @@ You can set them up in the `[extra.analytics]` section of your `config.toml`.
 - `service`: Specifies which analytics service to use. Supported options are `"goatcounter"`, `"umami"`, and `"plausible"`.
 
 - `id`: The unique identifier for your analytics service. This varies based on the service:
-  - For GoatCounter, it's the code chosen during signup. Self-hosted instances don't require this field.
+  - For GoatCounter, it's the code chosen during signup. Self-hosted instances of GoatCounter don't require this field.
   - For Umami, it's the website ID.
   - For Plausible, it's the domain name.
 
@@ -641,7 +842,17 @@ socials = [
 ]
 ```
 
-The icons are from Font Awesome. To see a list of all the available icons, take a look at the [`static/social_icons` directory](https://github.com/welpo/tabi/tree/main/static/social_icons).
+To see a list of all the built-in icons, take a look at the [`static/social_icons` directory on GitHub](https://github.com/welpo/tabi/tree/main/static/social_icons).
+
+Missing an icon? If you think it would be a good addition to tabi, feel free to [open an issue](https://github.com/welpo/tabi/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=) or submit a pull request ([example](https://github.com/welpo/tabi/pull/333)).
+
+To use a custom icon, you can add it to your site's `static/social_icons` directory. For example, if you add `custom.svg`, you can reference it like this:
+
+```
+{ name = "custom", url = "https://example.com", icon = "custom" }
+```
+
+{{ admonition(type="note", text="All social links include the `rel='me'` [attribute](https://developer.mozilla.org/docs/Web/HTML/Attributes/rel/me). This helps search engines and web services verify that the social media accounts are owned by you.") }}
 
 ### Feed Icon
 
@@ -650,6 +861,8 @@ The icons are from Font Awesome. To see a list of all the available icons, take 
 |  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
 
 You can add a link to your RSS/Atom feed to the footer with `feed_icon = true`.
+
+Note for Zola 0.19.X users: when there are two filenames in `feed_filenames`, only the first one will be linked in the footer.
 
 ### Footer Menu
 
@@ -737,7 +950,7 @@ By default, the date is shown below the post title. You can hide it with `show_d
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
 |  ❌  |   ❌    |      ✅       |         ❌        |         ❌          |
 
-tabi has two date formats: `long_date_format` and `short_date_format`. The short format is used in a post's metadata, while the long format is used when listing posts (i.e. on the [blog section](/blog/) or the [main page](/)).
+tabi has two date formats: `long_date_format` and `short_date_format`. The short format is used in a post's metadata, while the long format is used when listing posts (i.e. on the [blog section](@/blog/_index.md) or the [main page](@/_index.md)).
 
 The default is "6th July 2049" for both formats in English. For other languages, the defaut is `"%d %B %Y"` for the long format and `"%-d %b %Y"` for the short format.
 
@@ -801,7 +1014,7 @@ allowed_domains = [
 
 This feature is enabled by default. To disable it (and allow all connections), set `enable_csp = false` on a page, section or globally. The `enable_csp` setting follows the [hierarchy](#settings-hierarchy).
 
-See the [CSP documentation page](/blog/security/) for more information.
+See the [CSP documentation page](@/blog/security/index.md) for more information.
 
 ---
 

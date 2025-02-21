@@ -1,29 +1,34 @@
 #banner-container-home {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
     margin: 0.2rem auto;
     width: 100%;
 
     @media only screen and (max-width: 600px) {
         display: block;
-        margin-bottom: 2rem;
+        margin-block-end: 2rem;
     }
 
     #home-banner-text {
-        margin-bottom: 1.5rem;
+        flex: 1;
+        margin-block-end: 1.5rem;
         color: var(--primary-color);
         font-size: 1.875rem;
         line-height: 3rem;
 
+        li {
+            font-size: 1rem;
+        }
+
         #home-banner-header {
             margin: 0;
-            margin-bottom: 1rem;
+            margin-block-end: 1rem;
             font-weight: 550;
             font-size: 2.8rem;
 
             @media only screen and (max-width: 600px) {
-                margin-bottom: 0;
+                margin-block-end: 0;
                 font-size: 2.2rem;
             }
         }
@@ -49,9 +54,9 @@
 
     #image-container-home {
         position: relative;
-        padding-left: 2rem;
-        min-width: 11rem;
-        min-height: 11rem;
+        margin: auto 0;
+        padding-inline-start: 2rem;
+        max-width: 11rem;
         overflow: hidden;
         text-align: center;
 
@@ -59,9 +64,8 @@
             border: none;
             aspect-ratio: 1 / 1;
             width: 100%;
-            max-width: 15rem;
-            height: auto;
-            max-height: 15rem;
+            height: 100%;
+            object-fit: cover;
 
             @media only screen and (max-width: 600px) {
                 max-width: 12rem;
@@ -70,7 +74,9 @@
         }
 
         @media only screen and (max-width: 600px) {
-            padding-left: 0;
+            padding-inline-start: 0;
+            width: 100%;
+            max-width: none;
         }
     }
 }

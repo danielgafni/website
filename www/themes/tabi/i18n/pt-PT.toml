@@ -23,6 +23,8 @@ one_results = "$NUMBER resultado"  # "1 result"
 many_results = "$NUMBER resultados"  # "3 results"
 
 # Navigation.
+pinned = "Fixado"
+jump_to_posts = "Ir para as publicações"
 read_more = "Ler mais"
 one_posts = "$NUMBER publicação"
 many_posts = "$NUMBER publicações"
@@ -55,7 +57,7 @@ many_min_read = "$NUMBER mins de leitura"
 zero_words = "Nenhuma palavra"
 one_words = "$NUMBER palavra"
 many_words = "$NUMBER palavras"
-last_updated_on = "Última atualização em"
+last_updated_on = "Atualizado em $DATE"
 see_changes = "Ver alterações"
 
 # Post body.

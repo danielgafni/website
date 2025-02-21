@@ -4,7 +4,7 @@ header {
 }
 
 .page-header {
-    margin: 4rem 0px 1rem 0px;
+    margin-block: 4rem 1rem;
     font-size: 3em;
     line-height: 100%;
     font-family: var(--header-font);
@@ -17,24 +17,37 @@ header {
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
-    padding: 1em 0;
+    padding-block: 1em;
     max-width: var(--max-layout-width);
 }
 
 .nav-navs {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
 
     ul {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
+        flex-wrap: inherit;
+        justify-content: inherit;
+        align-items: inherit;
         gap: 1px;
         margin: 0;
         padding: 0;
         list-style: none;
     }
+}
+
+.menu-icons-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.menu-icons-group {
+    gap: 1px;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-links {
@@ -48,7 +61,7 @@ header {
 }
 
 .home-title {
-    margin-left: -0.12rem;
+    margin-inline-start: -0.12rem;
     border: none;
     padding: 0.12rem;
     color: var(--primary-color);
@@ -76,17 +89,28 @@ header {
 
     ul,
     li {
-        display: inline;
+        display: inline-block;
+        margin-inline-end: 0.2rem;
         font-family: var(--sans-serif-font);
         list-style-type: none;
     }
+
+    .tag {
+        margin-inline-end: 0;
+    }
+
+    .separator {
+        margin-inline-end: 0.2rem;
+        user-select: none;
+    }
 }
+
 .language-switcher {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 0.5rem;
-    margin-left: 0.5rem;
+    margin-inline-start: 0.5rem;
+    margin-inline-end: 0.5rem;
 
     .language-switcher-icon {
         -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.8' d='M1 12a11 11 90 0 0 22 0 11 11 90 0 0-22 0m1-4h20M2 16h20M11 1a21 21 90 0 0 0 22m2-22a21 21 90 0 1 0 22'/%3E%3C/svg%3E%0A");
@@ -129,8 +153,8 @@ header {
         transform: translateX(-50%);
         z-index: 1;
         background: var(--background-color);
-        padding-right: 0.5rem;
-        padding-left: 0.5rem;
+        padding-inline-start: 0.5rem;
+        padding-inline-end: 0.5rem;
         text-align: center;
         white-space: nowrap;
 
@@ -147,21 +171,21 @@ header {
 
     .nav-navs {
         display: flex;
-        justify-content: flex-end;
+        justify-content: center;
+    }
+
+    .menu-icons-container {
+        margin-left: 0;
     }
 }
 
 @media only screen and (max-width: 600px) {
     .nav-navs {
-        flex-wrap: wrap;
-        justify-content: center;
         margin-top: 0.8rem;
-        width: 100%;
     }
 
     .navbar {
         flex-direction: column;
-        justify-content: center;
         align-items: center;
     }
 }

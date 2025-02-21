@@ -1,7 +1,7 @@
 +++
 title = "Ejemplos de Markdown"
 date = 2023-01-31
-updated = 2023-09-01
+updated = 2024-11-23
 description = "Esta publicación muestra algunos ejemplos de formato Markdown, incluyendo una tabla, bloques de código y etiquetas, citas, tablas y notas al pie de página."
 
 [taxonomies]
@@ -9,7 +9,6 @@ tags = ["markdown", "funcionalidad"]
 
 [extra]
 katex = true
-footnote_backlinks = true
 social_media_card = "social_cards/es_blog_markdown.jpg"
 +++
 
@@ -60,6 +59,42 @@ fn main() {
 }
 ```
 
+### Con números de línea
+
+```rust,linenos
+use std::collections::HashMap;
+
+#[derive(Debug)]
+struct TwinPeaksCharacter {
+    name: String,
+    coffee_rating: f32,
+    pie_preference: String,
+}
+
+fn main() {
+    let mut black_lodge = HashMap::new();
+
+    black_lodge.insert("agent", TwinPeaksCharacter {
+        name: String::from("Dale Cooper"),
+        coffee_rating: 9999.99,
+        pie_preference: String::from("Damn Fine Cherry"),
+    });
+
+    black_lodge.insert("giant", TwinPeaksCharacter {
+        name: String::from("The Fireman"),
+        coffee_rating: 42.424242,
+        pie_preference: String::from("Garmonbozia"),
+    });
+
+    // Calculate total appreciation of damn fine coffee
+    let total_coffee: f32 = black_lodge.values()
+        .map(|character| character.coffee_rating)
+        .sum();
+
+    println!("☕ Total coffee appreciation: {:.2} cups", total_coffee);
+}
+```
+
 ## Etiquetas de código
 
 En Rust, declaras una variable mutable con `let mut x = 5;`, mientras que en Python, simplemente usas `x = 5`. De manera similar, para imprimir un valor en Rust, utilizarías `println!("Valor: {}", x);`, pero en Python, es tan sencillo como `print(f"Valor: {x}")`.
@@ -70,6 +105,6 @@ En Rust, declaras una variable mutable con `let mut x = 5;`, mientras que en Pyt
 >
 > — Miguel de Unamuno, Niebla
 
-<hr>
+---
 
 [^1]: ¡Y aquí tienes un ejemplo de una nota al pie de página!

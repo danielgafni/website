@@ -12,55 +12,103 @@
 {%- endif -%}
 
 {# Debugging #}
-{# {% set last_ancestor = page.ancestors | slice(start=-1) %}
-{% set current_section = get_section(path=last_ancestor.0) %}
+{# <div><pre>
+    Page path: {{ page.path }}
+    Page components: {{ page.components | join(sep=", ") }}
+    Page ancestors: {{ page.ancestors | join(sep=", ") }}
+    Current language: {{ lang }}
+    Default language: {{ config.default_language }}
+    Current section: {% if current_section %}{{ current_section.path }}{% else %}None{% endif %}
+    Page extra: {{ page.extra | json_encode() }}
+    {% if section -%}
+        {%- set current_section = section -%}
+    {%- elif page -%}
+        {%- set current_section = "" -%}
+        {%- if page.ancestors | length > 0 -%}
+            {%- set last_ancestor = page.ancestors | slice(start=-1) -%}
+            {%- set_global current_section = get_section(path=last_ancestor.0, metadata_only=true) -%}
+        {%- else -%}
+            {%- set components = page.components -%}
+            {%- for i in range(start=1, end=components | length) -%}
+                {%- if lang == config.default_language -%}
+                    {%- set potential_path = components | slice(end=components | length - i) | join(sep="/") -%}
+                    {%- set potential_page = potential_path ~ "/index.md" -%}
+                    {%- set potential_section = potential_path ~ "/_index.md" -%}
+                {%- else -%}
+                    {%- set potential_path = components | slice(start=1, end=components | length - i) | join(sep="/") -%}
+                    {%- set potential_page = potential_path ~ "/index." ~ lang ~ ".md" -%}
+                    {%- set potential_section = potential_path ~ "/_index." ~ lang ~ ".md" -%}
+                {%- endif -%}
+                Checking parent page: {{ potential_page }}
+                {%- set page_data = load_data(path=potential_page, required=false) -%}
+                {%- if page_data -%}
+                    {%- set_global current_section = get_page(path=potential_page) %}
+    Parent page found: {{ current_section.path }}
+                    {%- break -%}
+                {%- endif -%}
+                Checking section: {{ potential_section }}
+                {%- set section_data = load_data(path=potential_section, required=false) -%}
+                {%- if section_data -%}
+                    {%- set_global current_section = get_section(path=potential_section, metadata_only=true) -%}
+                    Section found: {{ current_section.path }}
+                    {%- break -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endif %}
+Found nearest parent/section: {% if current_section %}{{ current_section.path }}{% else %}None{% endif %}
+Current section extra: {% if current_section %}{{ current_section.extra | json_encode() }}{% else %}None{% endif %}
+</pre></div>
 
-{% set settings_to_test = [
-    "footnote_backlinks",
-    "add_src_to_code_block",
-    "copy_button",
-    "katex",
-    "quick_navigation_buttons",
-    "show_reading_time",
-    "show_date",
-    "show_author",
-    "show_remote_changes",
-    "toc",
-    "show_previous_next_article_links",
-    "invert_previous_next_article_links",
-    "previous_next_article_links_full_width",
-    "enable_csp",
-] %}
+    {% set settings_to_test = [
+        "enable_cards_tag_filtering",
+        "footnote_backlinks",
+        "add_src_to_code_block",
+        "force_codeblock_ltr",
+        "copy_button",
+        "katex",
+        "quick_navigation_buttons",
+        "show_reading_time",
+        "show_date",
+        "show_author",
+        "show_remote_changes",
+        "toc",
+        "show_previous_next_article_links",
+        "invert_previous_next_article_links",
+        "previous_next_article_links_full_width",
+        "enable_csp",
+    ] %}
 
-<table>
-    <thead>
-        <tr>
-            <th>setting</th>
-            <th>page</th>
-            <th>section</th>
-            <th>config</th>
-            <th>macro output</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for setting in settings_to_test %}
+    <table>
+        <thead>
             <tr>
-                <td><code>{{ setting }}</code></td>
-                <td>{{ page.extra[setting] | default(value="⬛") }}</td>
-                <td>{{ current_section.extra[setting] | default(value="⬛") }}</td>
-                <td>{{ config.extra[setting] | default(value="⬛") }}</td>
-                <td>{{ macros_settings::evaluate_setting_priority(setting=setting, page=page) }}</td>
+                <th>setting</th>
+                <th>page</th>
+                <th>section</th>
+                <th>config</th>
+                <th>macro output</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table> #}
+        </thead>
+        <tbody>
+            {% for setting in settings_to_test %}
+                <tr>
+                    <td><code>{{ setting }}</code></td>
+                    <td>{{ page.extra[setting] | default(value="⬛") }}</td>
+                    <td>{{ current_section.extra[setting] | default(value="⬛") }}</td>
+                    <td>{{ config.extra[setting] | default(value="⬛") }}</td>
+                    <td>{{ macros_settings::evaluate_setting_priority(setting=setting, page=page) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div> #}
 {# {{ __tera_context }} #}
 {# End debugging #}
 
 <main>
     <article>
         <h1 class="article-title">
-            {{ page.title }}
+            {{ page.title | markdown(inline=true) | safe }}
         </h1>
 
         <ul class="meta">
@@ -93,24 +141,26 @@
                 {%- set previous_visible = true -%}
             {% endif %}
 
+            {%- set separator_with_class = "<span class='separator' aria-hidden='true'>" ~ separator ~ "</span>"-%}
+
             {#- Date -#}
             {% if page.date and macros_settings::evaluate_setting_priority(setting="show_date", page=page, default_global_value=true) == "true" %}
-                {%- if previous_visible -%}&nbsp;{{ separator }}&nbsp;{%- endif -%}<li>{{ macros_format_date::format_date(date=page.date, short=true, language_strings=language_strings) }}</li>
+                <li>{%- if previous_visible -%}{{ separator_with_class | safe }}{%- endif -%}{{ macros_format_date::format_date(date=page.date, short=true, language_strings=language_strings) }}</li>
                 {#- Variable to keep track of whether we've shown a section, to avoid separators as the first element -#}
                 {%- set previous_visible = true -%}
             {% endif %}
 
             {#- Reading time -#}
-            {% if macros_settings::evaluate_setting_priority(setting="show_reading_time", page=page, default_global_value=true) == "true" %}
-                {%- if previous_visible -%}&nbsp;{{ separator }}&nbsp;{%- endif -%}<li title="{{ macros_translate::translate(key="words", number=page.word_count, default="$NUMBER words", language_strings=language_strings) }}">{{ macros_translate::translate(key="min_read", number=page.reading_time, default="$NUMBER min read", language_strings=language_strings) }}</li>
+            {%- if macros_settings::evaluate_setting_priority(setting="show_reading_time", page=page, default_global_value=true) == "true" -%}
+                <li title="{{ macros_translate::translate(key="words", number=page.word_count, default="$NUMBER words", language_strings=language_strings) }}">{%- if previous_visible -%}{{ separator_with_class | safe }}{%- endif -%}{{ macros_translate::translate(key="min_read", number=page.reading_time, default="$NUMBER min read", language_strings=language_strings) }}</li>
                 {%- set previous_visible = true -%}
-            {% endif %}
+            {%- endif -%}
 
             {#- Tags -#}
             {%- if page.taxonomies and page.taxonomies.tags -%}
-                {%- if previous_visible -%}&nbsp;{{ separator }}&nbsp;{%- endif -%}<li>{{- macros_translate::translate(key="tags", default="tags", language_strings=language_strings) | capitalize -}}:&nbsp;</li>
+                <li class="tag">{%- if previous_visible -%}{{ separator_with_class | safe }}{%- endif -%}{{- macros_translate::translate(key="tags", default="tags", language_strings=language_strings) | capitalize -}}:&nbsp;</li>
                 {%- for tag in page.taxonomies.tags -%}
-                    <li><a href={{ get_taxonomy_url(kind='tags', name=tag, lang=lang) | safe }}>{{ tag }}</a>
+                    <li class="tag"><a href="{{ get_taxonomy_url(kind='tags', name=tag, lang=lang) | safe }}">{{ tag }}</a>
                     {%- if not loop.last -%}
                         ,&nbsp;
                     {%- endif -%}
@@ -121,53 +171,97 @@
 
             {#- Last updated on -#}
             {% if page.updated %}
-                </ul><ul class="meta last-updated"><li>{{ macros_translate::translate(key="last_updated_on", default="Last updated on", language_strings=language_strings) }} {{ macros_format_date::format_date(date=page.updated, short=true, language_strings=language_strings) }}</li>
-                {# Show link to remote changes if enabled #}
-                {% if config.extra.remote_repository_url and macros_settings::evaluate_setting_priority(setting="show_remote_changes", page=page, default_global_value=true) == "true" %}
-                    {%- if previous_visible -%}{{ separator }}&nbsp;{%- endif -%}
-                    <li><a href="{% include "partials/history_url.html" %}" {{ blank_target }} rel="{{ rel_attributes }}">{{ macros_translate::translate(key="see_changes", default="See changes", language_strings=language_strings) }}<small>&nbsp;<span class="arrow-corner">↗</span></small></a></li>
-                {% endif %}
+                {%- set last_updated_str = macros_translate::translate(key="last_updated_on", default="Updated on $DATE", language_strings=language_strings) -%}
+                {%- set formatted_date = macros_format_date::format_date(date=page.updated, short=true, language_strings=language_strings) -%}
+                {%- set updated_str = last_updated_str | replace(from="$DATE", to=formatted_date) -%}
+                {%- set previous_visible = true -%}
+                </ul><ul class="meta last-updated"><li>{{ updated_str }}</li>
+                {#- Show link to remote changes if enabled -#}
+                {%- if config.extra.remote_repository_url and macros_settings::evaluate_setting_priority(setting="show_remote_changes", page=page, default_global_value=true) == "true" -%}
+                    <li>{%- if previous_visible -%}{{ separator_with_class | safe }}{%- endif -%}<a class="external" href="{% include "partials/history_url.html" %}" {{ blank_target }} rel="{{ rel_attributes }}">{{ macros_translate::translate(key="see_changes", default="See changes", language_strings=language_strings) }}</a></li>
+                {%- endif -%}
             {% endif %}
         </ul>
 
+        {#- A page is part of a series if one of the sections above (whether it is transparent or not) has the `extra.series` parameter set to true. -#}
+        {#- As a series might be a transparent section in order to mix up its articles with those of the section just above or the root, -#}
+        {#- there is no other way but to compute the potential path of each ancestor section related to the page and look for the first one being a series. -#}
+        {#- Using the `ancestors` field of a section is not possible because transparent sections are not present in this field. -#}
+        {%- set series_path_components = [] -%}
+        {%- set section_paths = [] -%}
+        {%- for path in page.relative_path | split(pat="/") | slice(end=-1) -%}
+            {%- set_global series_path_components = series_path_components | concat(with=path) -%}
+            {%- set section_path = series_path_components | concat(with="_index.md") | join(sep="/") -%}
+            {%- set_global section_paths = section_paths | concat(with=section_path) -%}
+        {%- endfor -%}
+        {#- The series the page is part of is the closest section flagged as a series, if any -#}
+        {%- for section_path in section_paths | reverse -%}
+            {%- set section_file_exists = load_data(path=section_path, required=false) -%}
+            {%- if section_file_exists -%}
+                {%- set loaded_section = get_section(path=section_path,lang=lang) -%}
+                {%- if "series" in loaded_section.extra and loaded_section.extra.series -%}
+                    {%- set_global series_section = loaded_section -%}
+                    {%- set_global series_ordered_pages = loaded_section.pages -%}
+                    {%- if loaded_section.paginated | default(value=0) > 0 and loaded_section.paginate_reversed -%}
+                        {%- set_global series_ordered_pages = loaded_section.pages | reverse -%}
+                    {%- endif -%}
+                    {%- break -%}
+                {%- endif -%}
+            {%- endif -%}
+        {%- endfor -%}
+
         {% if page.extra.tldr %}
-            <div class="tldr">
-                <h3>TL;DR:</h3>
-                <p>{{ page.extra.tldr }}</p>
+            <div class="admonition note">
+                <div class="admonition-icon admonition-icon-note"></div>
+                <div class="admonition-content">
+                    <strong class="admonition-title">
+                        <span title="Too long; didn't read (summary)">TL;DR</span>
+                    </strong>
+                    <p>{{ page.extra.tldr | markdown | safe }}</p>
+                </div>
             </div>
         {% endif %}
 
-        {# Optional table of contents below the header #}
+        {#- Optional table of contents below the header -#}
         {% if page.toc and macros_settings::evaluate_setting_priority(setting="toc", page=page, default_global_value=false) == "true" %}
             {{ macros_toc::toc(page=page, header=true, language_strings=language_strings) }}
         {% endif %}
 
         <section class="body">
-            {# The replace pattern is used to enable arbitrary locations for the Table of Contents #}
-            {# This is Philipp Oppermann's workaround: https://github.com/getzola/zola/issues/584#issuecomment-474329637 #}
-            {{ page.content | replace(from="<!-- toc -->", to=macros_toc::toc(page=page, header=false, language_strings=language_strings)) | safe }}
+            {#- Replace series_intro placeholder -#}
+            {%- set content_with_intro = page.content -%}
+            {%- if "<!-- series_intro -->" in page.content -%}
+                {%- set series_intro_html = macros_series_page::get_introduction(page=page, series_section=series_section, series_ordered_pages=series_ordered_pages, language_strings=language_strings) -%}
+                {%- set content_with_intro = content_with_intro | replace(from="<!-- series_intro -->", to=series_intro_html) -%}
+            {%- elif series_section -%}
+                {%- set series_intro_html = macros_series_page::get_introduction(page=page, series_section=series_section, series_ordered_pages=series_ordered_pages, language_strings=language_strings) -%}
+                {%- set content_with_intro = series_intro_html ~ content_with_intro -%}
+            {%- endif -%}
+
+            {#- Handle series_outro placeholder -#}
+            {%- set processed_content = content_with_intro -%}
+            {%- if "<!-- series_outro -->" in content_with_intro -%}
+                {%- set series_outro_html = macros_series_page::get_outro(page=page, series_section=series_section, series_ordered_pages=series_ordered_pages, language_strings=language_strings) -%}
+                {%- set processed_content = processed_content | replace(from="<!-- series_outro -->", to=series_outro_html) -%}
+            {%- elif series_section -%}
+                {%- set series_outro_html = macros_series_page::get_outro(page=page, series_section=series_section, series_ordered_pages=series_ordered_pages, language_strings=language_strings) -%}
+                {#- We want the outro at the end of the article, but before footnote definitions -#}
+                {%- set footnotes_marker = '<hr><ol class="footnotes-list">' -%}
+                {%- if footnotes_marker in content_with_intro -%}
+                    {%- set content_sections = processed_content | split(pat=footnotes_marker) -%}
+                    {%- set main_content = content_sections | first -%}
+                    {%- set footnotes_content = content_sections | slice(start=1) | join(sep=footnotes_marker) -%}
+                    {%- set processed_content = main_content ~ series_outro_html ~ footnotes_marker ~ footnotes_content -%}
+                {%- else -%}
+                    {%- set processed_content = processed_content ~ series_outro_html -%}
+                {%- endif -%}
+            {%- endif -%}
+
+            {#- Replace TOC and render final content -#}
+            {#- The replace pattern is used to enable arbitrary locations for the Table of Contents -#}
+            {#- This is Philipp Oppermann's workaround: https://github.com/getzola/zola/issues/584#issuecomment-474329637 -#}
+            {{ processed_content | replace(from="<!-- toc -->", to=macros_toc::toc(page=page, header=false, language_strings=language_strings)) | safe }}
         </section>
-
-        {# Check if comments are enabled, checking that they are not disabled on the specific page #}
-        {% set systems = ["giscus", "utterances", "hyvortalk", "isso"] %}
-        {% set enabled_systems = 0 %}
-        {% set comment_system = "" %}
-
-        {% for system in systems %}
-            {% set global_enabled = config.extra[system].enabled_for_all_posts | default(value=false) %}
-            {% set page_enabled = page.extra[system] | default(value=global_enabled) %}
-            {% set is_enabled = global_enabled and page_enabled != false or page_enabled == true %}
-
-            {% if is_enabled %}
-                {% set_global comment_system = system %}
-                {% set_global enabled_systems = enabled_systems + 1 %}
-            {% endif %}
-        {% endfor %}
-
-        {# Ensure only one comment system is enabled #}
-        {% if enabled_systems > 1 %}
-            {{ throw(message="ERROR: Multiple comment systems have been enabled for the same page. Check your config.toml and individual page settings to ensure only one comment system is activated at a time.") }}
-        {% endif %}
 
         {% if macros_settings::evaluate_setting_priority(setting="show_previous_next_article_links", page=page, default_global_value=true) == "true" %}
             {%- if page.lower or page.higher -%}
@@ -203,20 +297,39 @@
                 <div>
                 {%- if left_link and left_label and left_title -%}
                 <a href="{{ left_link | safe }}" aria-label="{{ left_label }}" aria-describedby="left_title"><span class="arrow">←</span>&nbsp;{{ left_label }}</a>
-                <p aria-hidden="true" id="left_title">{{ left_title | truncate(length=100, end="…") }}</p>
+                <p aria-hidden="true" id="left_title">{{ left_title | truncate(length=100, end="…") | markdown(inline=true) | safe }}</p>
                 {%- endif -%}
                 </div>
                 <div>
                 {%- if right_link and right_label and right_title -%}
                 <a href="{{ right_link | safe }}" aria-label="{{ right_label }}" aria-describedby="right_title">{{ right_label }}&nbsp;<span class="arrow">→</span></a>
-                <p aria-hidden="true" id="right_title">{{ right_title | truncate(length=100, end="…") }}</p>
+                <p aria-hidden="true" id="right_title">{{ right_title | truncate(length=100, end="…") | markdown(inline=true) | safe }}</p>
                 {%- endif -%}
                 </div>
             </nav>
             {%- endif -%}
         {%- endif -%}
 
-        {# Comments #}
+        {#- Comments -#}
+        {#- Check if comments are enabled, checking that they are not disabled on the specific page -#}
+        {% set systems = ["giscus", "utterances", "hyvortalk", "isso"] %}
+        {% set enabled_systems = 0 %}
+        {% set comment_system = "" %}
+
+        {% for system in systems %}
+            {% set global_enabled = config.extra[system].enabled_for_all_posts | default(value=false) %}
+            {% set page_enabled = page.extra[system] | default(value=global_enabled) %}
+            {% set is_enabled = global_enabled and page_enabled != false or page_enabled == true %}
+
+            {% if is_enabled %}
+                {% set_global comment_system = system %}
+                {% set_global enabled_systems = enabled_systems + 1 %}
+            {% endif %}
+        {% endfor %}
+        {#- Ensure only one comment system is enabled -#}
+        {% if enabled_systems > 1 %}
+            {{ throw(message="ERROR: Multiple comment systems have been enabled for the same page. Check your config.toml and individual page settings to ensure only one comment system is activated at a time.") }}
+        {% endif %}
         {% if comment_system %}
             {% include "partials/comments.html" %}
         {% endif %}
