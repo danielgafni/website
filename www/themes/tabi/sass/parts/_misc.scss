@@ -1,7 +1,16 @@
+kbd {
+    border: 1px solid var(--divider-color);
+    border-radius: 5px;
+    background-color: var(--bg-0);
+    padding: 0.1rem 0.3rem;
+    font-size: 0.8rem;
+}
+
 .draft-label {
-    margin-right: 0.3rem;
+    margin-inline-end: 0.3rem;
     background-color: var(--primary-color);
-    padding: 2px 4px;
+    padding-inline: 4px;
+    padding-block: 2px;
     color: var(--hover-color);
 }
 
@@ -16,9 +25,9 @@
 
 iframe {
     display: block;
-    margin-right: 15%;
-    margin-bottom: 3vmin;
-    margin-left: 15%;
+    margin-inline-start: 15%;
+    margin-inline-end: 15%;
+    margin-block-end: 3vmin;
     border: none;
     aspect-ratio: 16/9;
     width: 100vmin;
@@ -30,7 +39,7 @@ ul {
 }
 
 .toc-container {
-    margin-bottom: 4vmin;
+    margin-block-end: 4vmin;
 }
 
 .padding-top {
@@ -62,8 +71,8 @@ ul {
 
 blockquote {
     margin: 0;
-    border-left: 0.3rem solid var(--primary-color);
-    padding-left: 1em;
+    border-inline-start: 0.3rem solid var(--primary-color);
+    padding-inline-start: 1em;
 }
 
 a {
@@ -73,21 +82,63 @@ a {
     text-decoration: inherit;
 }
 
+// External link styles with `external_links_class = "external"`.
+main {
+    --external-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3Cpath d='M11 5h-6v14h14v-6'/%3E%3Cpath d='M13 11l7 -7'/%3E%3Cpath d='M21 3h-6M21 3v6'/%3E%3C/g%3E%3C/svg%3E");
+    a.external:not(:has(img, svg, video, picture, figure)) {
+        display: inline-block;
+        padding-inline-end: 0.9em;
+    }
+
+    a.external:not(:has(img, svg, video, picture, figure))::after {
+        -webkit-mask-image: var(--external-link-icon);
+        -webkit-mask-size: 100% 100%;
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        mask-image: var(--external-link-icon);
+        mask-size: 100% 100%;
+        margin-inline-start: 0.2em;
+        inset-inline-end: 0;
+        background-color: currentColor;
+        width: 0.8em;
+        height: 0.8em;
+        content: '';
+    }
+
+    &:dir(rtl) a.external:not(:has(img, svg, video, picture, figure))::after {
+        transform: translateY(-50%) rotate(-90deg);
+    }
+
+    .meta a.external:not(:has(img, svg, video, picture, figure))::after {
+        background-color: var(--meta-color);
+    }
+
+    a.external:not(:has(img, svg, video, picture, figure)):hover::after {
+        background-color: var(--hover-color);
+    }
+}
+
 a:hover {
     background-color: var(--primary-color);
     color: var(--hover-color);
 }
 
-a:not(.no-hover-padding):hover::after {
+a:hover rt {
+    color: var(--text-color);
+}
+
+a:not(.no-hover-padding):hover::before {
     display: inline-block;
     position: absolute;
-    top: 0;
-    right: -0.15em;
-    bottom: 0;
-    left: -0.15em;
     z-index: -1;
+    inset-block-end: 0;
+    inset-block-start: 0;
+    inset-inline-end: -0.15em;
+    inset-inline-start: -0.15em;
     background-color: var(--primary-color);
-    max-width: 105%;  // This fixes multi-line links (see #225)
+    max-inline-size: 105%;
     content: "";
 }
 
@@ -105,16 +156,21 @@ hr {
     height: 1px;
 }
 
+.footnotes-list,
+.footnotes {
+    text-align: start;
+}
+
 .footnote-reference {
     font-size: 0.7rem;
     font-family: var(--serif-font);
 }
 
 .footnote-definition {
-    margin-bottom: 0.6rem;
+    margin-block-end: 0.6rem;
 
     sup {
-        margin-right: 0.15rem;
+        margin-inline-end: 0.15rem;
         font-size: 0.75rem;
         font-family: var(--serif-font);
     }
@@ -125,21 +181,30 @@ hr {
 }
 
 .footnote-backlink {
-    margin-left: 0.2rem;
+    margin-inline-start: 0.2rem;
+    font-size: 0.8rem;
+}
+
+.footnotes-list a[href^="#fr-"],
+.footnotes a[href^="#fr-"] {
+    font-size: 0.8rem;
+}
+
+.footnotes code {
     font-size: 0.8rem;
 }
 
 .references p {
-    margin-left: 2.4rem;
+    margin-inline-start: 2.4rem;
     text-indent: -2.4rem;
 }
 
 .info-box {
     margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-block-end: 1rem;
     border: 1px solid var(--primary-color);
-    border-left-width: 0.3rem;
     border-radius: 10px;
+    border-inline-start-width: 0.3rem;
     padding: 1rem;
     text-align: center;
 }
@@ -183,18 +248,18 @@ details summary {
 
 .article-navigation {
     display: flex;
-    margin-top: 2rem;
-    border-top: var(--divider-color) solid 0.5px;
-    padding-top: 2rem;
+    margin-block-start: 2rem;
+    border-block-start: var(--divider-color) solid 0.5px;
+    padding-block-start: 2rem;
 
     div:first-child {
         flex: 1;
-        text-align: left;
+        text-align: start;
     }
 
     div:last-child {
         flex: 1;
-        text-align: right;
+        text-align: end;
     }
 
     div p {
@@ -214,23 +279,58 @@ details summary {
     }
 }
 
-:dir(rtl) .article-navigation {
-    div:first-child {
-        text-align: right;
-    }
-
-    div:last-child {
-        text-align: left;
-    }
-}
-
 :dir(rtl) .arrow {
     display: inline-block;
-    transform: rotate(180deg);
+    transform: scaleX(-1);
 }
 
 // This for the arrows that point to a corner, (e.g. '↗', '↘', '↙', '↖')
 :dir(rtl) .arrow-corner {
     display: inline-block;
-    transform: rotate(270deg);
+    transform: rotate(-90deg);
+}
+
+.mermaid p {
+    font-family: var(--sans-serif-font) !important;
+}
+
+.mermaid .node .label {
+    max-width: none !important;
+}
+
+// For the `force_text_direction` shortcode.
+[data-force-text-direction="ltr"] {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}
+
+[data-force-text-direction="rtl"] {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+[data-force-text-direction="ltr"] *,
+[data-force-text-direction="rtl"] * {
+    direction: inherit;
+}
+
+.title-with-jump {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-with-jump h1 {
+    flex: 1;
+}
+
+.jump-link {
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 500px) {
+    .title-with-jump {
+        flex-direction: column;
+    }
 }

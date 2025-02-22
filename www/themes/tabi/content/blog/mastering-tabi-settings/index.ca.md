@@ -1,14 +1,14 @@
 +++
 title = "Domina la configuració de tabi: guia completa"
 date = 2023-09-18
-updated = 2024-05-25
+updated = 2025-02-16
 description = "Descobreix les múltiples maneres en què pots personalitzar tabi."
 
 [taxonomies]
 tags = ["funcionalitat", "tutorial", "preguntes freqüents"]
 
 [extra]
-footnote_backlinks = true
+pinned = true
 quick_navigation_buttons = true
 social_media_card = "social_cards/ca_blog_mastering_tabi_settings.jpg"
 +++
@@ -26,11 +26,12 @@ tabi té una jerarquia que permet personalitzar el teu lloc a diferents nivells.
 
 1. **Configuracions globals**: Aquestes són les configuracions que s'apliquen a tot el teu lloc. Es configuren a `config.toml`.
 2. **Configuracions de secció**: Aquestes són les configuracions que s'apliquen a una secció del teu lloc (per exemple, `/blog` o `/projects`). Es configuren a la metainformació de l'arxiu `_index.md` de la secció.
-3. **Configuracions de pàgina**: Aquestes són les configuracions que s'apliquen a una sola pàgina. Es configuren a la metainformació de la pàgina.
+3. **Configuració de la pàgina «pare»**: Per a pàgines anidades (pàgines dins de pàgines), aquestes són les configuracions de la pàgina que les conté.
+4. **Configuracions de pàgina**: Aquestes són les configuracions que s'apliquen a una sola pàgina. Es configuren a la metainformació de la pàgina.
 
 En tots els casos, les opcions de tabi es configuren a la secció `[extra]`.
 
-Per a les configuracions que segueixen aquesta jerarquia, el valor establert a una pàgina reemplaça el valor d'una secció, que al seu torn reemplaça el valor global. En resum: com més específica sigui la configuració, més prioritat tindrà, o `pàgina > secció > config.toml`.
+Per a les configuracions que segueixen aquesta jerarquia, el valor establert a una pàgina reemplaça el valor d'una secció, que al seu torn reemplaça el valor global. En resum: com més específica sigui la configuració, més prioritat tindrà, o `pàgina > pàgina pare/secció > config.toml`.
 
 ---
 
@@ -87,7 +88,7 @@ Per a detalls tècnics sobre la implementació de la cerca, incloent quan es car
 
 ## Suport multilingüe
 
-tabi ofereix suport multilingüe complet per al teu lloc Zola, des de configurar un idioma predeterminat fins a afegir tots els que vulguis. Consulta les [preguntes freqüents sobre idiomes](/ca/blog/faq-languages/) per a més informació.
+tabi ofereix suport multilingüe complet per al teu lloc Zola, des de configurar un idioma predeterminat fins a afegir tots els que vulguis. Consulta les [preguntes freqüents sobre idiomes](@/blog/faq-languages/index.ca.md) per a més informació.
 
 ---
 
@@ -110,37 +111,76 @@ header = {title = "Hola! Soc tabi~", img = "img/main.webp", img_alt = "Óscar Fe
 
 La descripció és contingut Markdown normal, escrit fora del front matter.
 
-#### Mostrant publicacions recents
+#### Llistant publicacions recents
 
-Si vols mostrar publicacions a la pàgina principal, primer necessites decidir si la seva ruta serà `/` o quelcom diferent, com ara `/blog/`.
+Per mostrar publicacions a la pàgina principal, primer has de decidir d'on es serviran: de la ruta arrel (`/`) o d'un subdirectori (per exemple, `/blog`).
 
-Si vols servir les publicacions des de `/`, necessites configurar `paginate_by = 5` al front matter del teu arxiu `_index.md`. **Nota**: això no es configura a l'apartat `[extra]`, sinó al front matter principal. Exemple:
+**Opció A: Servir publicacions des de la ruta arrel (`/`)**
 
-```toml
-sort_by = "date"
-template = "section.html"
-paginate_by = 5
-
-[extra]
-header = {title = "Hola! Sóc tabi~", img = "img/main.webp", img_alt = "Óscar Fernández, l'autor del tema" }
-```
-
-Si prefereixes servir les publicacions des de `/blog`, pots configurar `section_path = "/blog"` a la secció `[extra]`. Aquesta és la configuració d'aquesta demo:
+Configura `paginate_by` al front matter del teu arxiu `content/_index.md`:
 
 ```toml
-title = "Publicacions recents"
+title = "Últimes publicacions"
 sort_by = "date"
-template = "section.html"
+paginate_by = 5  # Mostra 5 publicacions per pàgina.
 
 [extra]
-header = {title = "Hola! Sóc tabi~", img = "img/main.webp", img_alt = "Óscar Fernández, l'autor del tema" }
-section_path = "blog/_index.es.md"
-max_posts = 4
+header = {title = "Hola! Soc tabi~", img = "img/main.webp", img_alt = "El teu nom" }
 ```
 
-Fixa't que si configures `section_path`, no cal que configuris `paginate_by`. Pots establir `max_posts` per determinar el nombre de publicacions que vols mostrar a la pàgina principal.
+{{ admonition(type="note", text="La configuració `paginate_by` va al front matter principal, no a la secció `[extra]`.") }}
 
-El `title` és el títol que apareix a sobre de les publicacions.
+**Opció B: Servir publicacions des d'un subdirectori (per exemple, `/blog`)**
+
+Utilitza `section_path` a la secció `[extra]` del teu arxiu `content/_index.md`:
+
+```toml
+title = "Últimes publicacions"
+sort_by = "date"
+# No configuris `paginate_by` aquí.
+
+[extra]
+header = {title = "Hola! Soc tabi~", img = "img/main.webp", img_alt = "El teu nom" }
+section_path = "blog/_index.md"  # On trobar les teves publicacions.
+max_posts = 5  # Mostra fins a 5 publicacions a la pàgina principal.
+```
+
+{{ admonition(type="warning", title="ALERTA", text="No configuris `paginate_by` i `section_path` alhora. Aquestes configuracions són mútuament excloents i usar ambdues pot fer que no es mostrin publicacions.") }}
+
+Notes addicionals:
+
+- El `title` al front matter estableix el títol que apareix sobre les publicacions.
+- Utilitza la ruta completa a l'arxiu `_index.md` de la secció per a `section_path`. Usar `section_path = "blog/"` no funcionarà.
+
+##### Fixar entrades
+
+Pots fixar entrades per mantenir-les a la part superior de la pàgina principal. En aquesta demo, aquesta entrada està fixada, així que apareix primera amb una icona i etiqueta de "fixada":
+
+{{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/pinned_post_light.webp", dark_src="blog/mastering-tabi-settings/img/pinned_post_dark.webp", alt="Entrada fixada", full_width=true) }}
+
+Les entrades fixades es mostren primer, mantenint el seu ordre relatiu segons el `sort_by` de la secció, seguides per les entrades regulars.
+
+Per fixar una entrada, afegeix el següent al seu front matter:
+
+```toml
+[extra]
+pinned = true
+```
+
+{{ admonition(type="info", text="Aquesta configuració només afecta les pàgines principals del lloc (com `/`, `/es/`, `/fr/`). Altres seccions com `blog/`, `tags/` o `archive/` mostren les publicacions en el seu ordre habitual.") }}
+
+{{ admonition(type="warning", text='Quan s'utilitza la paginació (`paginate_by`), les entrades fixades poden aparèixer dues vegades: una vegada a la part superior de la primera pàgina, i una altra en la seva posició cronològica normal en pàgines posteriors.') }}
+
+##### Mostrar la data dels articles al llistat
+Per defecte, quan es llisten els articles, es mostra la data de creació. Pots configurar quina(es) data(es) mostrar utilitzant l'opció `post_listing_date`. Configuracions disponibles:
+
+- `date`: Mostra només la data de publicació original de l'article (opció per defecte).
+- `updated`: Mostra només la data de l'última actualització de l'article. Si no hi ha data d'actualització, es mostra la data de publicació original.
+- `both`: Mostra tant la data de publicació original com la data de l'última actualització.
+
+{% admonition(type="tip") %}
+Aquesta configuració segueix la jerarquia: pots establir un valor global a `config.toml` o canviar-lo per a seccions específiques al seu arxiu `_index.md`. En ambdós casos, afegeix-lo a la secció `[extra]`.
+{% end %}
 
 #### Llistat de Projectes
 
@@ -185,6 +225,37 @@ Les skins («pells») de tabi canvien el color principal del lloc web. Pots conf
 
 Explora les skins disponibles i aprèn com crear la teva pròpia consultant [la documentació](/ca/blog/customise-tabi/#skins).
 
+### Font sans serif (pal sec)
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:---------------:|:-------------------:|
+|   ❌   |   ❌    |      ✅       |        ❌        |         ❌          |
+
+tabi utilitza una font serif per als paràgrafs dels articles (la que estàs veient ara). Pots canviar a una font sans-serif (la que veus als encapçalaments/menú) a tot el teu lloc configurant `override_serif_with_sans = true` a `config.toml`.
+
+Fes clic a la imatge a continuació per comparar les fonts:
+
+{{ image_toggler(default_src="blog/mastering-tabi-settings/img/serif.webp", toggled_src="blog/mastering-tabi-settings/img/sans-serif.webp", default_alt="Font serif", toggled_alt="Font sans-serif", full_width=true) }}
+
+### Indicador d'enllaços externs
+
+| Pàgina | Secció | `config.toml` | Segueix Jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:-----------------:|:-------------------:|
+|   ❌   |   ❌   |      ✅       |         ❌        |         ❌          |
+
+{{ admonition(type="info", text="Requereix Zola 0.20.0 o posterior.") }}
+
+Si vols afegir una icona als enllaços externs, configura la secció `[markdown]` (no `[extra]`) al teu `config.toml`:
+
+```toml
+[markdown]
+external_links_class = "external"
+```
+
+Això afegirà una petita icona al costat dels enllaços externs:
+
+{{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/external_link_light.webp", dark_src="blog/mastering-tabi-settings/img/external_link_dark.webp", alt="Icona d'enllaç extern", full_width=true) }}
+
 ### Estils CSS personalitzats
 
 | Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
@@ -217,13 +288,50 @@ Aquesta variable accepta qualsevol color CSS vàlid, així que pots utilitzar pa
 |:------:|:------:|:-------------:|:-----------------:|:--------------------:|
 |   ❌   |   ❌   |      ✅       |         ❌        |          ❌          |
 
-Per defecte, la [pàgina d'etiquetes](/tags) mostra les etiquetes com:
+Per defecte, la [pàgina d'etiquetes](/ca/tags) mostra les etiquetes com:
 
 [NomEtiqueta](#) — n entrada[es]
 
 Establir `compact_tags = true` les mostrarà com:
 
 [NomEtiqueta](#) <sup>n</sup>
+
+### Ordre de les etiquetes
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:-----------------:|:--------------------:|
+|   ❌   |   ❌   |      ✅       |         ❌        |          ❌          |
+
+Per defecte, la [pàgina d'etiquetes](/ca/tags) ordena les etiquetes alfabèticament, donada la configuració predeterminada de `tag_sorting = "name"`.
+Si configures `tag_sorting = "frequency"`, s'ordenaran segons el nombre de publicacions (de més a menys).
+
+---
+
+## Sèries
+
+Per a una explicació detallada, consulta la [documentació de sèries](@/blog/series/index.ca.md).
+
+### Enllaç per saltar a les publicacions
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:-------:|:-------------:|:------------------:|:-------------------:|
+|   ❌   |   ✅    |      ✅       |        ✅          |         ❌          |
+
+Per defecte, apareix automàticament un enllaç "Salta a les publicacions" al costat del títol de la sèrie quan una sèrie té un contingut de més de 2000 caràcters:
+
+{{ dual_theme_image(light_src="blog/series/img/jump_to_series_posts_light.webp", dark_src="blog/series/img/jump_to_series_posts_dark.webp" alt="enllaç per saltar a les publicacions de la sèrie", full_width=true) }}
+
+Estableix `show_jump_to_posts = true` per forçar l'activació de la funció i `show_jump_to_posts = false` per desactivar-la.
+
+### Indexació de pàgines de sèries
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:-------:|:-------------:|:------------------:|:-------------------:|
+|   ❌   |   ✅    |      ✅       |        ✅          |         ❌          |
+
+Per defecte, les pàgines de sèries s'indexen (usant una indexació basada en 1) segons el `sort_by` de la secció de sèries.
+
+Estableix `post_listing_index_reversed = true` per invertir aquest índex.
 
 ---
 
@@ -285,7 +393,7 @@ quick_navigation_buttons = true
 - `show_reading_time = false` amaga el temps estimat de lectura.
 - `quick_navigation_buttons = true` mostra els botons de navegació ràpida.
 
-Al costat del fitxer `_index.md`, pots crear un fitxer per a cada projecte. Per exemple, aquest és el bloc de metadades per a la pàgina del projecte [tabi](/ca/projects/tabi/):
+Al costat del fitxer `_index.md`, pots crear un fitxer per a cada projecte. Per exemple, aquest és el bloc de metadades per a la pàgina del projecte [tabi](@/projects/tabi/index.ca.md):
 
 ```toml
 title = "tabi"
@@ -304,6 +412,33 @@ local_image = "img/tabi.webp"
 Quan un usuari faci clic a la imatge o al títol d'un projecte, serà portat a la pàgina del projecte. Si prefereixes que els usuaris vagin a un enllaç extern, pots establir `link_to = "https://example.com"` a la secció `[extra]` del fitxer `.md` del projecte.
 
 La pàgina del projecte individual es renderitza amb la plantilla predeterminada, tret que estableixis una altra, per exemple, `template = "info-page.html"`.
+
+#### Filtrar projectes
+
+Si afegeixes etiquetes als teus projectes, veuràs un filtre d'etiquetes:
+
+{{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/projects_tag_filter_light.webp", dark_src="blog/mastering-tabi-settings/img/projects_tag_filter_dark.webp", alt="Pàgina de projectes amb filtre d'etiquetes", full_width=true) }}
+
+El sistema de filtratge d'etiquetes utilitza millora progressiva:
+
+- Sense JavaScript: Les etiquetes enllacen directament a pàgines d'etiquetes dedicades (per exemple, `/tags/nom-de-l-etiqueta`).
+- Amb JavaScript: Filtratge instantani, sincronització d'URL (#nom-etiqueta) i navegació amb el teclat.
+
+Per desactivar aquesta funció, estableix `enable_cards_tag_filtering = false` a la secció `[extra]` del fitxer `projects/_index.md` o a `config.toml`.
+
+{% admonition(type="tip") %}
+
+Per filtrar projectes per etiquetes, necessites establir etiquetes a la front matter de cada projecte. Per exemple:
+
+```toml
+title = "nom del projecte"
+weight = 40
+
+[taxonomies]
+tags = ["etiqueta", "etiqueta 2", "tercera etiqueta"]
+```
+
+{% end %}
 
 ### Arxiu
 
@@ -325,7 +460,14 @@ Per defecte, l'arxiu llistarà les publicacions situades a `blog/`. Per personal
   section_path = ["blog/", "notes/", "camí-tres/"]
   ```
 
-**Nota**: la pàgina d'arxiu només llistarà publicacions que tinguin una data al seu encapçalament.
+L'arxiu mostra les publicacions en ordre cronològic invers (les més recents primer). Pots invertir aquest ordre establint `archive_reverse = true` a la secció `[extra]`:
+
+```toml
+[extra]
+archive_reverse = true  # mostra les publicacions més antigues primer
+```
+
+{{ admonition(type="note", title="nota" text="La pàgina d'arxiu només llistarà publicacions que tinguin data al seu encapçalament.") }}
 
 ### Etiquetes
 
@@ -373,6 +515,17 @@ path = "about"
 ```
 
 Fixa't com s'estableix `path = "about"`. Zola situarà la pàgina a `$base_url/about/`. Si vols que la pàgina estigui disponible a `/contacte/`, hauries d'establir `path = "contacte"`.
+
+La plantilla `info-page.html` també es pot utilitzar per crear landing pages a la ruta arrel (`"/"`). Per fer-ho, l'arxiu `content/_index.md` hauria de ser així:
+
+```markdown
++++
+title = "Títol de la pàgina"
+template = "info-page.html"
++++
+
+Contingut amb Markdown.
+```
 
 ---
 
@@ -422,7 +575,7 @@ Per exemple, si configures `base_canonical_url = "https://example.com"`, l'URL c
 
 Les targetes per a xarxes socials són les imatges que es mostren quan comparteixes un enllaç a les xarxes socials:
 
-![Una captura de pantalla de WhatsApp mostrant un enllaç amb una targeta per a xarxes socials](/blog/mastering-tabi-settings/img/with_social_media_card.webp)
+{{ dimmable_image(src="img/with_social_media_card.webp", alt="Una captura de pantalla de WhatsApp mostrant un enllaç amb una targeta per a xarxes socials") }}
 
 Pots establir la imatge per a xarxes socials amb `social_media_card = "img/social_media_card.png"`.
 
@@ -436,7 +589,19 @@ Si ambdues rutes, relativa i absoluta, són vàlides, la ruta relativa tindrà p
 
 Ja que segueix la [jerarquia](#jerarquia-de-configuracio), si no està configurat en una pàgina, però sí ho està en una secció, s'utilitzarà la imatge de la secció. Si no està configurat en una pàgina o secció, però sí en `config.toml`, s'utilitzarà la imatge global.
 
-**Consell**: automatitza la seva creació amb un [script](https://github.com/welpo/osc.garden/blob/main/static/code/social-cards-zola): [De reservat a rei de les xarxes: automatitzant les vistes prèvies dels enllaços amb Zola](https://osc.garden/ca/blog/automating-social-media-cards-zola/).
+{{ admonition(type="tip", title="CONSELL", text="Automatitza la seva creació amb un [script](https://github.com/welpo/osc.garden/blob/main/static/code/social-cards-zola): [Automatitzant les vistes prèvies dels enllaços amb Zola](https://osc.garden/ca/blog/automating-social-media-cards-zola/).") }}
+
+### Creador del fedivers
+
+| Pàgina | Secció | `config.toml` | Segueix jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:-----------------:|:--------------------:|
+|   ❌   |   ❌   |      ✅       |         ❌        |          ❌          |
+
+Pots mostrar el perfil del fedivers de l'autor en les previsualitzacions d'enllaços de Mastodon configurant la variable `fediverse_creator` al teu `config.toml`. Per exemple, per a @username@example.com, fes servir:
+
+```toml
+fediverse_creator = { handle = "username", domain = "example.com" }
+```
 
 ---
 
@@ -448,7 +613,9 @@ Ja que segueix la [jerarquia](#jerarquia-de-configuracio), si no està configura
 |:------:|:------:|:-------------:|:---------------:|:-------------------:|
 |   ❌   |   ❌   |      ✅       |        ❌       |         ❌          |
 
-La barra de navegació és la franja a la part superior de la pàgina que conté el títol del lloc i el menú de navegació. Pots personalitzar els elements que apareixen configurant `menu` en `config.toml`. Per exemple:
+La barra de navegació és la franja a la part superior de la pàgina que conté el títol del lloc i el menú de navegació. Pots personalitzar els elements que apareixen configurant `menu` en `config.toml`.
+
+Soporta links relatius per a pàgines internes i links absoluts per a enllaços externs. Per exemple:
 
 ```toml
 menu = [
@@ -457,6 +624,7 @@ menu = [
     { name = "etiquetes", url = "tags", trailing_slash = true },
     { name = "projectes", url = "projects", trailing_slash = true },
     { name = "sobre nosaltres", url = "about", trailing_slash = true },
+    { name = "github", url = "https://github.com/welpo/tabi", trailing_slash = false },
 ]
 ```
 
@@ -480,7 +648,7 @@ Per activar-los, estableix `quick_navigation_buttons = true`.
 
 Activa l'índex de continguts just sota del títol i metadades de l'article amb `toc = true`.
 
-Per saber més sobre com personalitzar-ho, consulta [la documentació sobre la Taula de continguts](/ca/blog/toc/).
+Per saber més sobre com personalitzar-ho, consulta [la documentació sobre la Taula de continguts](@/blog/toc/index.ca.md).
 
 ### Enllaços als articles anterior i següent
 
@@ -492,7 +660,7 @@ Mostra enllaços als articles anterior i següent a la part inferior dels posts.
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/show_previous_next_article_links_light.webp", dark_src="blog/mastering-tabi-settings/img/show_previous_next_article_links_dark.webp", alt="Enllaços als articles anterior i següent", full_width=true) }}
 
-Per activar aquesta funció, estableix `show_previous_next_article_links = true`.
+Per activar aquesta funció, estableix `show_previous_next_article_links = true` i assegura't que la secció té un valor `sort_by` (per exemple `sort_by = "date"`).
 
 Per defecte, els articles següents estaran al costat esquerre de la pàgina i els articles anteriors al costat dret.
 Per invertir l'ordre (articles següents al costat dret i articles anteriors al costat esquerre), configura `invert_previous_next_article_links = true`.
@@ -502,6 +670,8 @@ Per defecte, aquesta secció de navegació tindrà l'amplada completa del lloc (
 Totes aquestes configuracions segueixen la jerarquia.
 
 ### Enllaços de retorn a les notes a peu de pàgina
+
+{{ admonition(type="warning", title="ADVERTÈNCIA DE DEPRECACIÓ", text="Zola v0.19.0 i posterior pot fer això de forma nativa. Estableix `bottom_footnotes = true` a la secció `[markdown]` de la teva configuració.") }}
 
 | Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
 |:------:|:------:|:-------------:|:------------------:|:--------------------:|
@@ -527,13 +697,21 @@ Establir `copy_button = true` afegirà un petit botó de copiar a la part superi
 
 {{ dual_theme_image(light_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_light.webp", dark_src="blog/mastering-tabi-settings/img/copy_button_on_code_blocks_dark.webp", alt="Botó de copiar en blocs de codi", full_width=true) }}
 
-### Mostrar ruta/URL en blocs de codi
+### Nom del bloc de codi clicable
 
 | Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
 |:------:|:-------:|:-------------:|:---------------:|:-------------------:|
 |   ✅   |   ✅    |      ✅       |        ✅       |         ✅          |
 
-Estableix `add_src_to_code_block = true` per habilitar l'ús del [shortcode `add_src_to_code_block`](@/blog/shortcodes/index.ca.md#mostrar-ruta-o-url).
+En establir `code_block_name_links = true` s'habiliten els enllaços clicables als noms dels blocs de codi. Consulta la [documentació](@/blog/shortcodes/index.ca.md#mostrar-ruta-o-url) per veure exemples i ús.
+
+### Forçar blocs de codi d'esquerra a dreta
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:-----------------:|:--------------------:|
+|   ✅   |   ✅   |      ✅       |         ✅        |          ❌          |
+
+Per defecte, els blocs de codi es renderitzen d'esquerra a dreta, independentment de la direcció general del text. Estableix `force_codeblock_ltr = false` per permetre que els blocs de codi segueixin la direcció del document. Útil per a idiomes de dreta a esquerra que necessiten blocs de codi de dreta a esquerra.
 
 ### Suport per a KaTeX
 
@@ -543,17 +721,31 @@ Estableix `add_src_to_code_block = true` per habilitar l'ús del [shortcode `add
 
 KaTeX és una biblioteca JavaScript ràpida i fàcil d'usar per a la representació de matemàtiques TeX a la web. Pots habilitar-ho amb `katex = true`. Mira com es veu en tabi [aquí](/ca/blog/markdown/#katex).
 
+### Suport per a Mermaid
+
+| Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
+|:------:|:------:|:-------------:|:-----------------:|:--------------------:|
+|   ✅   |   ✅   |      ✅       |         ✅        |          ✅          |
+
+[Mermaid](https://github.com/mermaid-js/mermaid) és una eina de diagramació i gràfics basada en JavaScript. Pots activar-la amb `mermaid = true`.
+
+Per defecte, la biblioteca Mermaid es serveix localment. Si prefereixes utilitzar un CDN, estableix `serve_local_mermaid = false` a `config.toml`. L'ús d'un CDN servirà la versió més recent de Mermaid; l'opció local servirà la versió inclosa amb tabi.
+
+Consulta la [documentació de Mermaid](@/blog/shortcodes/index.ca.md#diagrames-de-mermaid) per a instruccions d'ús i exemples.
+
 ### Subconjunt de tipus de lletra personalitzat
 
 | Pàgina | Secció | `config.toml` | Segueix la jerarquia | Requereix JavaScript |
 |:------:|:------:|:-------------:|:------------------:|:--------------------:|
 |   ❌   |   ❌   |      ✅       |        ❌          |          ❌          |
 
-Les tipus de lletra personalitzades causen parpalleig del text en Firefox. Per resoldre això, tabi carrega un subconjunt de glifs per a la capçalera. Donat que això (lleugerament) augmenta el temps de càrrega inicial, és una bona idea intentar minimitzar la mida d'aquest subconjunt.
+Les tipus de lletra personalitzades causen parpalleig del text en Firefox. Per resoldre això, tabi carrega un subconjunt de glifs per a la capçalera. Donat que això (lleugerament) augmenta el temps de càrrega inicial, és una bona idea intentar minimitzar la mida d'aquest subconjunt, o desactivar-lo completament si no estàs fent servir un tipus de lletra personalitzat al teu tema.
 
 Pots crear un subconjunt personalitzat adaptat al teu lloc, guardar-lo com a `static/custom_subset.css`, i fer que es carregui amb `custom_subset = true`.
 
-Per obtenir més informació, incloent instruccions sobre com crear un subconjunt personalitzat, consulta la [documentació](/ca/blog/custom-font-subset/).
+Per desactivar el subconjunt, utilitza `enable_subset = false`.
+
+Per obtenir més informació, incloent instruccions sobre com crear un subconjunt personalitzat, consulta la [documentació](@/blog/custom-font-subset/index.ca.md).
 
 ### Contingut complet al feed
 
@@ -569,7 +761,10 @@ Per defecte, el feed Atom només conté el resum o descripció de les teves publ
 |:----:|:-------:|:-------------:|:-----------------:|:-------------------:|
 |  ✅  |   ✅    |      ✅       |         ✅        |         ❌          |
 
-Pots amagar pàgines específiques o seccions senceres del feed amb `hide_from_feed = true`.
+Pots controlar com apareix el contingut als feeds utilitzant dues configuracions:
+
+- `hide_from_feed = true`: Amaga el contingut de tots els feeds (feed principal, feeds de secció i feeds d'etiquetes)
+- `hide_from_main_feed = true`: Amaga el contingut només del feed principal mentre el manté visible als feeds de secció i d'etiquetes
 
 ### Comentaris {#afegir-comentaris}
 
@@ -583,7 +778,7 @@ Si vols activar els comentaris de forma global, pots fer-ho establint `enabled_f
 
 Si has activat un sistema de forma global i vols desactivar-lo per a una pàgina específica, pots fer-ho establint el nom del sistema com a `false` al front matter. Per exemple, `utterances = false`.
 
-Llegeix la [documentació](/ca/blog/comments/) per a més informació sobre els sistemes disponibles i la seva configuració.
+Llegeix la [documentació](@/blog/comments/index.ca.md) per a més informació sobre els sistemes disponibles i la seva configuració.
 
 ### Anàlisi web
 
@@ -598,7 +793,7 @@ Pots configurar-los en la secció `[extra.analytics]` del teu arxiu `config.toml
 - `service`: el servei a utilitzar. Les opcions disponibles són `"goatcounter"`, `"umami", i "plausible"`.
 
 - `id`: l'identificador únic per al teu servei d'anàlisi. Això varia segons el servei:
-  - Per a GoatCounter, és el codi triat durant el registre. Instàncies auto-allotjades no requereixen aquest camp.
+  - Per a GoatCounter, és el codi triat durant el registre. Instàncies auto-allotjades de GoatCounter no requereixen aquest camp.
   - Per a Umami, és l'ID del lloc web.
   - Per a Plausible, és el nom de domini.
 
@@ -636,7 +831,17 @@ socials = [
 ]
 ```
 
-Le icones provenen de Font Awesome. Per veure una llista de tots els icones disponibles, fes una ullada al [directori `static/social_icons`](https://github.com/welpo/tabi/tree/main/static/social_icons).
+Per veure una llista de totes les icones integrades, fes un cop d'ull al directori [`static/social_icons` a GitHub](https://github.com/welpo/tabi/tree/main/static/social_icons).
+
+Trobes a faltar algun icona? Si creus que seria una bona addició a tabi, no dubtis en [obrir un issue](https://github.com/welpo/tabi/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=) o enviar una pull request ([exemple](https://github.com/welpo/tabi/pull/333)).
+
+Per utilitzar una icona personalitzada, pots afegir-la al directori `static/social_icons` del teu lloc web. Per exemple, si afegeixes `custom.svg`, la pots referenciar així:
+
+```
+{ name = "custom", url = "https://example.com", icon = "custom" }
+```
+
+{{ admonition(type="note", title="NOTA", text="Tots els enllaços a xarxes socials inclouen l'[atribut](https://developer.mozilla.org/docs/Web/HTML/Attributes/rel/me) `rel='me'`. Això ajuda els motors de cerca i serveis web a verificar que les comptes de xarxes socials et pertanyen.") }}
 
 ### Icona de feed
 
@@ -645,6 +850,8 @@ Le icones provenen de Font Awesome. Per veure una llista de tots els icones disp
 |   ❌   |   ❌    |      ✅       |          ❌           |         ❌          |
 
 Pots afegir un enllaç al teu feed RSS/Atom al peu de pàgina amb `feed_icon = true`.
+
+Nota pels usuaris de Zola 0.19.X: quan hi ha dos noms de fitxer a `feed_filenames`, només s'enllaçarà el primer al peu de pàgina.
 
 #### Menú de peu de pàgina
 
@@ -796,7 +1003,7 @@ allowed_domains = [
 
 Aquesta opció està habilitada per defecte. Per desactivar-la per una pàgina, secció o globalment, estableix `enable_csp = false`. La configuració de `enable_csp` segueix la jerarquia.
 
-Per a més informació, consulta la [pàgina de documentació de CSP](/ca/blog/security/).
+Per a més informació, consulta la [pàgina de documentació de CSP](@/blog/security/index.ca.md).
 
 ---
 

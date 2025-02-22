@@ -27,6 +27,8 @@ one_results = "$NUMBER 結果"  # "1 result"
 many_results = "$NUMBER 結果"  # "3 results"
 
 # Navigation.
+pinned = "固定"
+jump_to_posts = "投稿へジャンプ"
 read_more = "続きを読む"
 one_posts = "$NUMBER 投稿"
 many_posts = "$NUMBER 投稿"
@@ -59,7 +61,7 @@ many_min_read = "$NUMBER 分の読了時間"
 zero_words = "単語数ゼロ"
 one_words = "$NUMBER 単語"
 many_words = "$NUMBER 単語"
-last_updated_on = "最終更新日"
+last_updated_on = "$DATE に更新"
 see_changes = "変更を見る"
 
 # Post body.

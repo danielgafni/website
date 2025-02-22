@@ -1,7 +1,10 @@
 +++
 title = "tabi"
 description = "A feature-rich modern Zola theme with first-class multi-language support."
-weight = 30
+weight = 40
+
+[taxonomies]
+tags = ["web", "JavaScript"]
 
 [extra]
 local_image = "projects/tabi/tabi.webp"
@@ -18,13 +21,16 @@ social_media_card = "social_cards/projects_tabi.jpg"
 
 - [Set any language as default](https://welpo.github.io/tabi/blog/faq-languages/#how-do-i-set-a-default-language-for-my-site). Set your base site to Chinese, Spanish, French, Hindi… or any [other supported language](https://welpo.github.io/tabi/blog/faq-languages/#what-languages-does-tabi-support). The theme's interface will be translated accordingly.
 - [Integration with remote repositories](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#git-repository-integration) on GitHub, GitLab, Gitea & Codeberg for commit history and showing the site source.
+- [Series support](https://welpo.github.io/tabi/blog/series/) for creating sequential content like tutorials, courses, and multi-part stories.
 - Dark and light themes. Defaults to the OS setting, with a switcher in the navigation bar.
 - Thorough documentation. See [Mastering tabi Settings: A Comprehensive Guide](https://welpo.github.io/tabi/blog/mastering-tabi-settings/).
 - Perfect Lighthouse score (Performance, Accessibility, Best Practices and SEO).
 - [Comprehensive multi-language support](https://welpo.github.io/tabi/blog/faq-languages/#how-does-tabi-handle-multilingual-support). Add as many languages as you wish.
 - Support for [comments using giscus, utterances, Hyvor Talk, or Isso](https://welpo.github.io/tabi/blog/comments/).
 - Code syntax highlighting with colours based on [Catppuccin](https://github.com/catppuccin/catppuccin) Frappé.
+- [Mermaid support](https://welpo.github.io/tabi/blog/shortcodes/#mermaid-diagrams) to create diagrams and charts with text.
 - [Local search](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#search) with an accessible, multi-lingual interface.
+- [Custom Twitter card](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#social-media-cards) and automatic Open Graph tags.
 - [KaTeX](https://katex.org/) support for mathematical notation.
 - [Stylized and human readable Atom feed](https://welpo.github.io/tabi/atom.xml).
 - [Stylized and human readable sitemap](https://welpo.github.io/tabi/sitemap.xml).
@@ -38,11 +44,11 @@ social_media_card = "social_cards/projects_tabi.jpg"
 - [Custom canonical URLs](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#canonical-url).
 - [Customizable skins](https://welpo.github.io/tabi/blog/customise-tabi/).
 - [Custom shortcodes](https://welpo.github.io/tabi/blog/shortcodes/).
-- [Footnote backlinks](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#footnote-backlinks).
 - [Social media cards](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#social-media-cards).
 - Responsive design.
 - [Projects page](https://welpo.github.io/tabi/projects/).
 - [Archive page](https://welpo.github.io/tabi/archive/).
+- [Pinned posts](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#pinning-posts).
 - [Social links](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#social-media-icons).
 - [Tags](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#tags).
 

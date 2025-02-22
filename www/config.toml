@@ -2,11 +2,9 @@ base_url = "https://gafni.dev"
 title = "~/danielgafni"
 author = "Daniel Gafni"
 minify_html = true
-generate_feed = true
+generate_feeds = true
+feed_filenames = ["atom.xml"]
 theme = "tabi"
-
-# add markdown heading links
-insert_anchor_links = "left"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -26,6 +24,8 @@ extra_syntaxes_and_themes = ["highlight_themes", "syntaxes"]
 highlight_theme = "css"
 render_emoji = true
 smart_punctuation = true
+# add markdown heading links
+insert_anchor_links = "left"
 
 [extra]
 author = "danielgafni"
@@ -67,7 +67,7 @@ socials = [
 
 email = "ZGFuaWVsZ2FmbmkxNkBnbWFpbC5jb20K"
 
-copyright = "UNLICENSED $CURRENT_YEAR $AUTHOR $SEPARATOR The contents of this website are free to use" 
+copyright = "UNLICENSED $CURRENT_YEAR $AUTHOR $SEPARATOR The contents of this website are free to use"
 
 [extra.giscus]
 enabled_for_all_posts = true
@@ -106,4 +106,3 @@ lazy_loading = true
 [extra.analytics]
 services = "plausible"
 id = "gafni.dev"
-
