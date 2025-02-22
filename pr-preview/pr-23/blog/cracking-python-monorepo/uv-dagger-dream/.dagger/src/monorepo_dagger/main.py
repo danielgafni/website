@@ -25,7 +25,6 @@ from dagger import (
     object_type,
     BuildArg,
 )
-from dagger.client.gen import BuildArg
 
 
 IGNORE = Ignore(
@@ -39,6 +38,7 @@ IGNORE = Ignore(
         "**/.ruff_cache",
     ]
 )
+
 RootDir: TypeAlias = Annotated[
     dagger.Directory,
     DefaultPath("."),
@@ -109,7 +109,7 @@ class MonorepoDagger:
         return build_context.docker_build(
             target="deps-dev",
             dockerfile=dockerfile,
-            build_args=[BuildArg(f"PACKAGE={project}")],
+            build_args=[BuildArg(name="PACKAGE", value=project)],
         )
 
     async def get_project_sources_map(
