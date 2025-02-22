@@ -20,3 +20,6 @@ members = ["projects/lib-one", "projects/lib-two"]
 
 [tool.uv.sources]
 monorepo-dagger = { path = ".dagger" }
+
+[project.entry-points."dagger.mod"]
+main_object = "monorepo_dagger:MonorepoDagger"
