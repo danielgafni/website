@@ -1,5 +1,27 @@
 {
   "nodes": {
+    "dagger": {
+      "inputs": {
+        "nixpkgs": [
+          "website",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1739370180,
+        "narHash": "sha256-Zg72xzAhu29yysTL1Gc/QQnJjsefeCankzqc1CO864E=",
+        "ref": "4247e1fcb92981bcad5fec447a2994ea29c8d344",
+        "rev": "4247e1fcb92981bcad5fec447a2994ea29c8d344",
+        "revCount": 66,
+        "type": "git",
+        "url": "https://github.com/dagger/nix"
+      },
+      "original": {
+        "ref": "4247e1fcb92981bcad5fec447a2994ea29c8d344",
+        "type": "git",
+        "url": "https://github.com/dagger/nix"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -78,6 +100,7 @@
     },
     "website": {
       "inputs": {
+        "dagger": "dagger",
         "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
@@ -85,7 +108,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-6XeBfYDVsCibbLFhwFT969Juj5p6Okow8rtrOmw19y0=",
+        "narHash": "sha256-iDfb8qajDXpeXCiUQgqPqIqAGg8xKPhTG9/L3lrMoLY=",
         "path": "../www",
         "type": "path"
       },

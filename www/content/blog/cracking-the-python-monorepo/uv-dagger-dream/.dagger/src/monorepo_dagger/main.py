@@ -61,7 +61,7 @@ class MonorepoDagger:
             project=project,
         )
 
-        # here we parse the uv.lock file to find the source code of the dependencies of a given project
+        # find the source code locations for the dependencies of a given project
         project_sources_map = await self.get_project_sources_map(
             root_dir.file("uv.lock"), project
         )
@@ -76,7 +76,7 @@ class MonorepoDagger:
 
         # change the working directory to the project's source directory
         # so that commands in CI are automatically run in the context of this project
-        container = container.with_workdir(f"/src/{project_sources_map['project']}")
+        container = container.with_workdir(f"/src/{project_sources_map[project]}")
 
         return container
 
