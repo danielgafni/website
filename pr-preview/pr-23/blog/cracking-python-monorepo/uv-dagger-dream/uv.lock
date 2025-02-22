@@ -4,6 +4,7 @@ requires-python = ">=3.12"
 [manifest]
 members = [
     "lib-one",
+    "lib-three",
     "lib-two",
     "uv-dagger-dream",
 ]
@@ -240,6 +241,21 @@ wheels = [
 name = "lib-one"
 version = "0.1.0"
 source = { editable = "projects/lib-one" }
+
+[[package]]
+name = "lib-three"
+version = "0.1.0"
+source = { editable = "weird-location/nested/lib-three" }
+dependencies = [
+    { name = "lib-one" },
+    { name = "lib-two" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "lib-one", editable = "projects/lib-one" },
+    { name = "lib-two", editable = "projects/lib-two" },
+]
 
 [[package]]
 name = "lib-two"

@@ -16,7 +16,7 @@ dagger = [
 ]
 
 [tool.uv.workspace]
-members = ["projects/lib-one", "projects/lib-two"]
+members = ["projects/lib-one", "projects/lib-two", "weird-location/nested/lib-three"]
 
 [tool.uv.sources]
 monorepo-dagger = { path = ".dagger" }

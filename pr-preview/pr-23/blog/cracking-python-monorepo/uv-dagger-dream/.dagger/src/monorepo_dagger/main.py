@@ -39,12 +39,14 @@ IGNORE = Ignore(
     ]
 )
 
+# this represents the repo root
 RootDir: TypeAlias = Annotated[
     dagger.Directory,
     DefaultPath("."),
     IGNORE,
 ]
 
+# this represents the source directory of a specific project in the monorepo
 SourceDir: TypeAlias = Annotated[
     dagger.Directory,
     IGNORE,
@@ -56,31 +58,36 @@ class MonorepoDagger:
     @function
     async def build_project(
         self,
-        source_dir: Directory,
+        root_dir: RootDir,
         project: str,
+        debug_sleep: float = 0.0,
     ) -> Container:
         """Build a container containing only the source code for a given project and it's dependencies."""
         # we start by creating a container including only third-party dependencies
         # with no source code (except pyproject.toml and uv.lock from the repo root)
         container = self.container_with_third_party_dependencies(
-            pyproject_toml=source_dir.file("pyproject.toml"),
-            uv_lock=source_dir.file("uv.lock"),
-            dockerfile=source_dir.file("Dockerfile"),
+            pyproject_toml=root_dir.file("pyproject.toml"),
+            uv_lock=root_dir.file("uv.lock"),
+            dockerfile=root_dir.file("Dockerfile"),  # this could be a parameter
             project=project,
         )
 
         # here we parse the uv.lock file to find the source code of the dependencies of a given project
-        project_sources_map = await self.get_project_sources_map(source_dir, project)
+        project_sources_map = await self.get_project_sources_map(
+            root_dir.file("uv.lock"), project
+        )
 
-        # we create empty directories in the container so that the next step passes
-        container = self.copy_source_code(container, source_dir, project_sources_map)
+        container = self.copy_source_code(container, root_dir, project_sources_map)
+
+        container = container.with_exec(["sleep", str(debug_sleep)])
 
         # we run `uv sync` to create editable installs of the local dependencies
         # pointing (for now) to the dummy directories we created in the previous step
         container = self.install_local_dependencies(container, project)
 
-        # finally, we fill the dummy directories with the actual source code
-        container = self.copy_project_source_code(container, project_sources_map)
+        # change the working directory to the project's source directory
+        # so that commands in CI are automatically run in the context of this project
+        container = container.with_workdir(f"/src/{project_sources_map['project']}")
 
         return container
 
@@ -103,12 +110,16 @@ class MonorepoDagger:
                 "uv.lock",
                 uv_lock,
             )
+            .with_file(
+                "/Dockerfile",
+                dockerfile,
+            )
             .with_new_file("README.md", "Dummy README.md")
         )
 
         return build_context.docker_build(
             target="deps-dev",
-            dockerfile=dockerfile,
+            dockerfile="/Dockerfile",
             build_args=[BuildArg(name="PACKAGE", value=project)],
         )
 
@@ -125,7 +136,7 @@ class MonorepoDagger:
         local_projects = {project}
 
         # first, find the dependencies of our project
-        for package in uv_lock["package"]:
+        for package in uv_lock_dict["package"]:
             if package["name"] == project:
                 dependencies = package.get("dependencies", [])
                 for dep in dependencies:
@@ -136,23 +147,22 @@ class MonorepoDagger:
 
         project_sources_map = {}
 
-        for package in uv_lock["package"]:
+        for package in uv_lock_dict["package"]:
             if package["name"] in local_projects:
                 project_sources_map[package["name"]] = package["source"]["editable"]
 
         return project_sources_map
 
     def copy_source_code(
+        self,
         container: Container,
-        source_dir: SourceDir,
-        project_source_mapping: dict[str, str],
+        root_dir: RootDir,
+        project_sources_map: dict[str, str],
     ) -> Container:
-        # copy the full source code
-
-        for package, location in project_source_mapping.items():
+        for project, project_source_path in project_sources_map.items():
             container = container.with_directory(
-                location,
-                source_dir.directory(location),
+                f"/src/{project_source_path}",
+                root_dir.directory(project_source_path),
             )
 
         return container
@@ -160,6 +170,8 @@ class MonorepoDagger:
     def install_local_dependencies(
         self, container: Container, project: str
     ) -> Container:
+        # the following uv command installs the project
+        # and its dependencies in editable mode
         container = container.with_exec(
             [
                 "uv",
@@ -171,3 +183,15 @@ class MonorepoDagger:
         )
 
         return container
+
+    @function
+    async def pytest(self, source_dir: SourceDir, project: str) -> str:
+        """Run pytest for a given project."""
+        container = self.build_project(source_dir, project)
+        return container.with_exec(["pytest"]).stdout()
+
+    @function
+    async def pyright(self, source_dir: SourceDir, project: str) -> str:
+        """Run pyright for a given project."""
+        container = self.build_project(source_dir, project)
+        return container.with_exec(["pyright"]).stdout()
