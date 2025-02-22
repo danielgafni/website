@@ -2675,6 +2675,7 @@ window.onload = function () {
         results.innerHTML = '';
         resultsContainer.style.display = 'none';
         searchInput.removeAttribute('aria-activedescendant');
+        clearSearchButton.style.display = 'none';
     }
 
     // Close modal when clicking/tapping outside.
@@ -2685,7 +2686,7 @@ window.onload = function () {
         event.stopPropagation(); // Prevents tapping through the modal.
     }
     searchModal.addEventListener('click', handleModalInteraction);
-    searchModal.addEventListener('touchend', handleModalInteraction);
+    searchModal.addEventListener('touchend', handleModalInteraction, { passive: true });
 
     // Close modal when pressing escape.
     document.addEventListener('keydown', function (event) {
@@ -2710,7 +2711,7 @@ window.onload = function () {
     // Clicking/tapping the search button opens the modal.
     searchButton.addEventListener('mouseover', loadSearchIndex);
     searchButton.addEventListener('click', openSearchModal);
-    searchButton.addEventListener('touchstart', openSearchModal);
+    searchButton.addEventListener('touchstart', openSearchModal, { passive: true });
 
     let searchIndexPromise = null;
     function loadSearchIndex() {
@@ -2941,10 +2942,13 @@ window.onload = function () {
     searchInput.addEventListener(
         'input',
         async function () {
-            const searchTerm = this.value.trim();
+            const inputValue = this.value;
+            const searchTerm = inputValue.trim();
             const searchIndex = await searchIndexPromise;
             results.innerHTML = '';
 
+            // Use the raw input so the "clear" button appears even if there's only spaces.
+            clearSearchButton.style.display = inputValue.length > 0 ? 'block' : 'none';
             resultsContainer.style.display = searchTerm.length > 0 ? 'block' : 'none';
 
             // Perform the search and store the results.
@@ -3010,6 +3014,24 @@ window.onload = function () {
             results.addEventListener('mouseover', function (event) {
                 if (event.target.closest('div[role="option"]')) {
                     updateSelection(event.target.closest('div[role="option"]'));
+                }
+            });
+
+            results.addEventListener('click', function(event) {
+                const clickedElement = event.target.closest('a');
+                if (clickedElement) {
+                    const clickedHref = clickedElement.getAttribute('href');
+                    const currentPageUrl = window.location.href;
+
+                    // Normalise URLs by removing the text fragment and trailing slash.
+                    const normalizeUrl = (url) => url.split('#')[0].replace(/\/$/, '');
+
+                    // Check if the clicked link matches the current page.
+                    // If using Ctrl+click or Cmd+click, don't close the modal.
+                    if (normalizeUrl(clickedHref) === normalizeUrl(currentPageUrl) &&
+                        !event.ctrlKey && !event.metaKey) {
+                        closeModal();
+                    }
                 }
             });
 
@@ -3087,7 +3109,7 @@ window.onload = function () {
         resultDivs.forEach((div) => {
             // Remove existing listener to avoid duplicates.
             div.removeEventListener('touchstart', handleTouchStart);
-            div.addEventListener('touchstart', handleTouchStart);
+            div.addEventListener('touchstart', handleTouchStart, { passive: true });
         });
     }
 
