@@ -16,7 +16,17 @@ taxonomies = [
     {name = "tags", feed = true},
 ]
 
+ignored_content = [
+    # https://github.com/getzola/zola/issues/2556
+    "**/.venv",
+    "**/.venv/**",
+    "**/README.*",
+    "content/blog/cracking-python-monorepo/uv-dagger-dream/**"
+]
+
 [markdown]
+# add markdown heading links
+insert_anchor_links = "left"
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
@@ -24,8 +34,6 @@ extra_syntaxes_and_themes = ["highlight_themes", "syntaxes"]
 highlight_theme = "css"
 render_emoji = true
 smart_punctuation = true
-# add markdown heading links
-insert_anchor_links = "left"
 
 [extra]
 author = "danielgafni"

@@ -27,14 +27,32 @@
             hooks = {
               alejandra.enable = true;
 
-              blacken-docs = {
+              ruff-format = {
                 enable = true;
-                package = pkgs.blacken-docs;
-                name = "blacken-docs";
-                entry = "''${pkgs.blacken-docs}/bin/blacken-docs";
-                files = "\\.(md)$";
+                package = pkgs.ruff;
+                name = "ruff-format";
+                entry = "''${pkgs.ruff}/bin/ruff format";
                 language = "system";
+                pass_filenames = false;
               };
+
+              ruff-check = {
+                enable = true;
+                package = pkgs.ruff;
+                name = "ruff-check";
+                entry = "''${pkgs.ruff}/bin/ruff check --fix";
+                language = "system";
+                pass_filenames = false;
+              };
+
+              # blacken-docs = {
+              #   enable = true;
+              #   package = pkgs.blacken-docs;
+              #   name = "blacken-docs";
+              #   entry = "''${pkgs.blacken-docs}/bin/blacken-docs";
+              #   files = "\\.(md)$";
+              #   language = "system";
+              # };
 
               tofu-fmt = {
                 enable = true;

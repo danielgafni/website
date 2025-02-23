@@ -14,7 +14,7 @@ This tutorial is split into 2 parts. The first part is devoted to creating EKS &
 
 # Introduction
 
-In the Data & ML space, we often encounter workloads with high computational requirements. Kubernetes with its near to infinite customization options and scalability is a natural choice for running such workloads.  
+In the Data & ML space, we often encounter workloads with high computational requirements. Kubernetes with its near to infinite customization options and scalability is a natural choice for running such workloads.
 
 Kubernetes is a platform for running applications in the cloud. We can use it to dynamically provide compute and to configure our deployments.
 
@@ -31,7 +31,7 @@ On a high level, these are the technical requiremnets for our data processing sy
 
 - Have an auto-scaling Dagster deployment running on Kubernetes. Auto-scaling is important because we don't want to be paying for idle nodes, and we want to spin up a lot of them when processing large amounts of data.
 - Leverage cheap Spot instances for up to 90% costs reduction. Spot instances are much cheaper than on-demand instances, but are not reliable and can be shut down at any moment. Workloads using Spot instances should be fault-tolerant, which is usually achieved by techniques such as checkpointing and retries.
-- We need secure external access to this deployment. Beacuse OSS Dagster doesn't have built-in authentication, we will provide a Basic Auth wrapper for its Webserver. This simple authentication layer can be later replaced by something more flexible (like OAUTH).
+- We need secure external access to this deployment. Because OSS Dagster doesn't have built-in authentication, we will provide a Basic Auth wrapper for its Webserver. This simple authentication layer can be later replaced by something more flexible (like OAUTH).
 - Have automatic Dagster Branch deployments for Pull Requests. Branch Deployments are incredibly useful for development and speedup software iteration cycles by an order of magnitude.
 
 We will be using various free & Open Source tools in order to satisfy the above requirements [^2]:
@@ -105,7 +105,7 @@ if the requirement `karpenter.sh/capacity-type` is set to math both `"on-demand"
 
 ## GPU nodes
 
-If you are doing maching learning, chances are you will need GPUs in your cluster!
+If you are doing machine learning, chances are you will need GPUs in your cluster!
 
 Here is how we can setup a GPU-compatible `EC2NodeClass` with Karpenter:
 
