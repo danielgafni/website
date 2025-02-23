@@ -1,10 +1,9 @@
 +++
 title = "Cracking the Python Monorepo"
-date = 2025-02-20
-draft = true
+date = 2025-02-23
 
 [taxonomies]
-tags = ["Python", "Dagger", "Monorepo"]
+tags = ["Python", "Dagger", "uv", "Monorepo"]
 [extra]
 code_block_name_links = true
 stylesheets = ["css/custom.css"]
@@ -33,11 +32,11 @@ However, nowadays we have a bunch of excellent tooling available with great out-
 
 ## The dream of the monorepo
 
-In this post, I am going to share an approach to building Python monorepos that solves these issues in a very elegant way. The goals are:
-- **integration/compatibility with any `uv` project**
-- **little to zero maintenance and boilerplate**
-- **end-to-end build pipeline caching**
-- **easy to run locally and in CI**
+In this post, I am going to share an approach to building Python monorepos that solves these issues in a very elegant way. The benefits of this approach are:
+- **it works with any `uv` project** (even yours!)
+- **it needs little to zero maintenance and boilerplate**
+- **it provides end-to-end build pipeline caching**
+- **it's easy to run locally and in CI**
 
 We will walk through a typical monorepo setup and use [uv](https://astral.sh/uv) and [Dagger](https://dagger.io) to build lightning-fast and modular build pipelines. Feel free to check out the docs for these tools ([uv quickstart](https://docs.astral.sh/uv/getting-started/), [Dagger quickstart](https://docs.dagger.io/quickstart/daggerize)). Impatient readers can jump straight to the [Dagger module](#a-thousand-daggers).
 
@@ -212,7 +211,7 @@ dependencies = [
 
 :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada:
 
-The very first line of the `uv.lock` file is the `members` key. It contains a list of all the workspace members (our local packages), including the root package.
+At the beginning of the `uv.lock` file is the `members` array. It contains a list of all the workspace members (our local packages), including the root member `uv-dagger-dream`.
 
 Next comes the `package` array. Each element in the `package` array describes a package (local or third-party) in the monorepo. Notice the `source` key in the `package` table. It points to the source code of the package. And we can use it to identify the local dependencies of a given package.
 
