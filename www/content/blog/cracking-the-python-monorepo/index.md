@@ -6,7 +6,7 @@ draft = true
 [taxonomies]
 tags = ["Python", "Dagger", "Monorepo"]
 [extra]
-add_src_to_code_block = true
+code_block_name_links = true
 stylesheets = ["css/custom.css"]
 
 +++
@@ -23,7 +23,7 @@ Dagster's monorepo wasn't perfect either. Some of the drawbacks were:
 - Slow CI/CD pipelines: builds could run for hours!
 - Legacy Python packaging made maintaining dependencies and CI pipelines quite complicated. Making a change to dependencies required editing multiple configuration files carefully.
 
-{{ admonition(type="note", text="I started migrating Dagster's monorepo to `uv` but at the time got [blocked](https://github.com/dagster-io/dagster/pull/23814#issuecomment-2364694200) by the fact that we had conflicting development dependencies for different test suites. This blocker is now resolved as `uv` now supports conflicting development dependency groups.") }}
+{{ aside(position="right", text="I started migrating Dagster's monorepo to `uv` but at the time got [blocked](https://github.com/dagster-io/dagster/pull/23814#issuecomment-2364694200) by  conflicting development dependencies for different test suites, which was not supported by `uv` at that time (but is now).") }}
 
 This post focuses on a very specific use case --- `uv` Python monorepos. Until very recently, Python monorepos were quite hard to set up and maintain, with problems like the ones I mentioned above being quite common.
 
@@ -131,8 +131,7 @@ For simplicity, all the subprojects will share the same `Dockerfile`. Behold!
 <details>
 <summary><strong>Click to reveal the Dockerfile</strong></summary>
 
-{{ add_src_to_code_block(src="Dockerfile") }}
-```dockerfile
+```dockerfile,name=Dockerfile
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/Dockerfile") }}
 ```
 
@@ -147,7 +146,7 @@ That's a lot of Docker magic! Let's break it down:
 
 What a great Dockerfile! It's so efficient that it's almost a crime. Or is it not? Can you spot the problem?
 
-Let's have a hypothetical conversation between you (the dear reader) and me (the Docker guru):
+Let's have a hypothetical conversation between you (the dear reader) and a Docker guru:
 
 -- You: Hey, I know! Just look at that filthy `COPY . .` before the final `uv sync`! It will invalidate the cache every time any file in the monorepo changes!
 
@@ -173,7 +172,7 @@ RUN uv sync --all-extras --inexact --package $PACKAGE
 
 -- Docker guru: Oh and what if we have multiple packages that depend on each other? Are you going to write a new `COPY` instruction for each of them? Are you going to maintain a separate `Dockerfile` for each set of dependencies? What if they are scattered around the repo instead of being carefully placed in `projects/` and hard to track? By the way, `COPY . .` is cursed in another way. It will always invalidate the final image cache and trigger potentially expensive downstream steps in your CI pipeline like running tests. A pipeline like this is doomed to be slow.
 
-With just Docker, we are left with two options:
+With plain Docker, we are left with two options:
 1. Carefully (probably manually) track all inter-package dependencies and maintain `COPY` instructions in multiple `Dockerfile`s.
 2. Slap a `COPY . .` and accept the fact that the final image will always be rebuilt from scratch.
 
@@ -211,7 +210,7 @@ dependencies = [
 ]
 ```
 
-:tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada:
+:tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada: :tada:
 
 The very first line of the `uv.lock` file is the `members` key. It contains a list of all the workspace members (our local packages), including the root package.
 
@@ -296,8 +295,7 @@ First, we will do a bunch of imports and define some useful types:
 
 <!-- blacken-docs:off -->
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=43-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=43-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -311,8 +309,7 @@ dagger call build-project
 
 from the command line. The `build_project` function will build the Docker image for a given project and will **only contain the dependencies and source code required for that project**. This function will call other high-level methods of the class to achieve this.
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-44 82-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-44 82-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -322,8 +319,7 @@ The `debug_sleep` argument will be useful later.
 
 Let's implement the `container_with_third_party_dependencies` method first. That's easy, we just need to use the existing `Dockerfile` and specify the `deps-dev` target stage. Note how we don't need **any files** except `pyproject.toml` and `uv.lock` to build the Docker image for a given project. This is possible thanks to `uv` workspaces.
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-82 114-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-82 114-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -333,8 +329,7 @@ Let's implement the `container_with_third_party_dependencies` method first. That
 
 The `project_sources_map` dictionary is the precious information we need to enable granular copying of the source code. Here is the implementation of the `get_project_sources_map` method which retrieves it:
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-114 144-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-114 144-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -342,14 +337,13 @@ This function will parse the `uv.lock` file and return a dictionary where the ke
 
 {{ admonition(type="info", text="Most of the Dagger operations are lazy. The operations which trigger materializations are `async` and therefore must be explicitly awaited. This is why we use `await` to fetch the `uv.lock` file contents. It's a very elegant way to express blocking operations, because once part of the code becomes `async` (blocking), all the code that calls it must also be `async` (blocking). Smart!") }}
 
-{{ admonition(type="note", text="For extra cache efficiency this can be replaced by creating dummy directories and files similar to the `Dockerfile` trick above, but we will keep it simple for the sake of this blog post.") }}
+{{ admonition(type="note", text="For extra cache efficiency this can be replaced by creating empty directories and files and delaying the source code copying to after the last `uv sync` command, but we will keep it simple for the sake of this blog post. Also, the current approach is already good enough.") }}
 
 ---
 
 Our source code is still not copied into the image. Let's implement the `copy_source_code` method which will granularly copy the source code of a given project and its dependencies into the image. This is why we are here!
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-144 158-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-144 158-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -357,8 +351,7 @@ Our source code is still not copied into the image. Let's implement the `copy_so
 
 Now the only thing left is to install the local dependencies in editable mode:
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-158 175-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-158 175-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -369,8 +362,7 @@ All together:
 <details>
 <summary><strong>Click to reveal the full Dagger module</strong></summary>
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=175-1000,linenos
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=175-1000,linenos
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -471,8 +463,7 @@ Hooray! The build only took `2.6s` now --- the cache has not been invalidated an
 
 Now that we have a Dagger Function which builds a container for a given project, we can easily create downstream steps in our CI pipeline. For example, this is how we can run tests for a project after building the container:
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-175 181-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-175 181-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -486,8 +477,7 @@ Note how we can do it in one function call. Any upstream steps (like building th
 
 Another one with `pyright`:
 
-{{ add_src_to_code_block(src=".dagger/src/monorepo_dagger/main.py") }}
-```python,hide_lines=1-181
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-181
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
