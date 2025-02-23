@@ -19,14 +19,14 @@
     <generator uri="https://www.getzola.org/">Zola</generator>
     <updated>2025-02-20T00:00:00+00:00</updated>
     <id>https://danielgafni.github.io/website/pr-preview/pr-23/atom.xml</id><entry xml:lang="en">
-        <title>Cracking The Python Monorepo</title>
+        <title>Cracking the Python Monorepo</title>
         <published>2025-02-20T00:00:00+00:00</published>
         <updated>2025-02-20T00:00:00+00:00</updated>
         <author>
             <name>Daniel Gafni</name>
         </author>
-        <link rel="alternate" href="https://danielgafni.github.io/website/pr-preview/pr-23/blog/cracking-python-monorepo/" type="text/html"/>
-        <id>https://danielgafni.github.io/website/pr-preview/pr-23/blog/cracking-python-monorepo/</id>
+        <link rel="alternate" href="https://danielgafni.github.io/website/pr-preview/pr-23/blog/cracking-the-python-monorepo/" type="text/html"/>
+        <id>https://danielgafni.github.io/website/pr-preview/pr-23/blog/cracking-the-python-monorepo/</id>
         </entry><entry xml:lang="en">
         <title>Cloud Computing with EKS: Dagster with ArgoCD</title>
         <published>2024-06-25T00:00:00+00:00</published>
