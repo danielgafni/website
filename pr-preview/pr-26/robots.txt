@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-Allow: /
-Sitemap: https://danielgafni.github.io/website/pr-preview/pr-26/sitemap.xml
