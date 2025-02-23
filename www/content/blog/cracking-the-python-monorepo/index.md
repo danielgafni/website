@@ -22,6 +22,8 @@ Dagster's monorepo wasn't perfect either. Some of the drawbacks were:
 - Slow CI/CD pipelines: builds could run for hours!
 - Legacy Python packaging made maintaining dependencies and CI pipelines quite complicated. Making a change to dependencies required editing multiple configuration files carefully.
 
+These problems were mostly due to technical debt
+
 {{ aside(position="right", text="I started migrating Dagster's monorepo to `uv` but at the time got [blocked](https://github.com/dagster-io/dagster/pull/23814#issuecomment-2364694200) by  conflicting development dependencies for different test suites, which was not supported by `uv` at that time (but is now).") }}
 
 This post focuses on a very specific use case --- `uv` Python monorepos. Until very recently, Python monorepos were quite hard to set up and maintain, with problems like the ones I mentioned above being quite common.
@@ -35,7 +37,7 @@ However, nowadays we have a bunch of excellent tooling available with great out-
 In this post, I am going to share an approach to building Python monorepos that solves these issues in a very elegant way. The benefits of this approach are:
 - **it works with any `uv` project** (even yours!)
 - **it needs little to zero maintenance and boilerplate**
-- **it provides end-to-end build pipeline caching**
+- **it provides end-to-end pipeline caching** --- including steps downstream to building the image (like running linters and tests), which is quite rare
 - **it's easy to run locally and in CI**
 
 We will walk through a typical monorepo setup and use [uv](https://astral.sh/uv) and [Dagger](https://dagger.io) to build lightning-fast and modular build pipelines. Feel free to check out the docs for these tools ([uv quickstart](https://docs.astral.sh/uv/getting-started/), [Dagger quickstart](https://docs.dagger.io/quickstart/daggerize)). Impatient readers can jump straight to the [Dagger module](#a-thousand-daggers).
@@ -46,9 +48,9 @@ Please look at the emojis above until you get it. Yes, managing packaging in a P
 
 And it's really not with the right tooling.
 
-- `uv` has the concept of [workspaces](https://astral.sh/uv/docs/workspaces) which allows installing individual packages from a monorepo and makes managing dependencies a breeze. It standardizes dependency management and maintenance operations in monorepos, including local dependencies.
+- `uv` has the concept of [workspaces](https://astral.sh/uv/docs/workspaces) which allows installing individual packages from a monorepo and makes managing dependencies a breeze. It standardizes dependency management and maintenance operations in monorepos, including operations with local dependencies.
 - `Dagger` --- a universal build tool which supports multiple languages (including Python) to define containerized build pipelines. Because Dagger pipelines can be written in Python, they can be easily adapted to work with monorepos of arbitrary complexity and structure. Dagger is essentially a glorified Dockerfile generator available in your favorite programming language. Dagger pipelines are huge graphs of `BuildKit` (the engine used by Docker when building images) steps, so the entire pipeline can be optimized, parallelized, and cached by BuildKit.
-- modern linting tooling like `ruff` and `pyright` have first-class support for monorepos and is able to automatically discover and merge configuration files from multiple subprojects.
+- modern QA tooling: `ruff` and `pyright` have first-class support for monorepos and are able to automatically discover and merge configuration files from multiple subdirectories.
 
 ## A brief history of Python packaging
 
@@ -181,7 +183,7 @@ Pick your poison.
 
 Remember our goal: to avoid unnecessary rebuilds of the final image and granularly include only the source code of the packages that are actually needed. What if we could programmatically define the Dockerfile? What if we could define the build process in Python? What if there is already a place in our project where the local dependencies graph is defined precisely?
 
-Think about it for a moment. I will give you a hint: it's {{ spoiler(text="the `uv.lock` file", fixed_blur=false) }}. I'm sorry this wasn't a hint but a direct answer. Let's move on.
+Think about it for a moment. I will give you a hint: it's {{ spoiler(text="the `uv.lock` file.", fixed_blur=false) }} I'm sorry this wasn't a hint but a direct answer, but let's move on.
 
 # A thousand daggers
 
@@ -493,8 +495,8 @@ I encourage you to explore the documentation for these tools to fully understand
 # References and Acknowledgements
 
 - [source code](https://github.com/danielgafni/website/tree/master/www/content/blog/cracking-the-python-monorepo/uv-dagger-dream) for this blog post
-- [uv Documentation](https://docs.astral.sh/uv/getting-started/)
-- [Dagger Documentation](https://docs.dagger.io/quickstart/cli)
+- [uv docs](https://docs.astral.sh/uv/getting-started/)
+- [Dagger docs](https://docs.dagger.io/quickstart/cli)
 
 ---
 

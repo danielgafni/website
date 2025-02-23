@@ -174,13 +174,13 @@ class MonorepoDagger:
         return container
 
     @function
-    async def pytest(self, source_dir: SourceDir, project: str) -> str:
+    async def pytest(self, root_dir: RootDir, project: str) -> str:
         """Run pytest for a given project."""
-        container = self.build_project(source_dir, project)
+        container = await self.build_project(root_dir, project)
         return await container.with_exec(["pytest"]).stdout()
 
     @function
-    async def pyright(self, source_dir: SourceDir, project: str) -> str:
+    async def pyright(self, root_dir: RootDir, project: str) -> str:
         """Run pyright for a given project."""
-        container = self.build_project(source_dir, project)
+        container = await self.build_project(root_dir, project)
         return await container.with_exec(["pyright"]).stdout()
