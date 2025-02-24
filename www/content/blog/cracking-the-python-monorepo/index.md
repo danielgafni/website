@@ -14,13 +14,13 @@ A monorepo is a single repository that contains multiple projects. It is a popul
 
 For a long time, I did not understand the benefits of monorepos. I thought they were used because people could not figure out how to split their codebases into smaller parts.
 
-After working at [Dagster](https://dagster.io) (on a pretty huge monorepo with more than 140k lines of code and 70+ subprojects), I realized that monorepos can provide quite a pleasant development experience when done right --- with the right tooling, practices, and, of course, the right use case. Monorepos solve a very specific problem: local dependencies between projects force them to be updated together, which eliminates technical debt and ensures all current projects are always compatible with each other.
+After working at [Dagster](https://dagster.io) (on a pretty huge monorepo with more than 140k lines of code and 70+ subprojects), I realized that monorepos can provide quite a pleasant development experience when done right --- with the right tooling, practices, and, of course, the right use case. Monorepos solve a very specific problem: local dependencies between projects force them to be updated together, which eliminates certain types of technical debt (e.g. ensures all current projects are always compatible with each other). I also anjoyed **using** all this tooling which somebody else has built for me (but I imagine it's not as fun to **build** it).
 
 It's worth noting that monorepos are not a silver bullet. They have their own set of challenges, mostly the need to build custom tooling and to organize the development workflow. The big tech companies have the resources to build and maintain these tools, but for smaller companies, it can be quite challenging.
 
 Dagster's monorepo wasn't perfect either. Some of the drawbacks were:
 - Slow CI/CD pipelines: builds could run for hours!
-- Legacy Python packaging made maintaining dependencies and CI pipelines quite complicated. Making a change to dependencies required editing multiple configuration files carefully.
+- Legacy Python packaging made maintaining dependencies and CI pipelines quite complicated. Making a change to dependencies required editing multiple configuration files at a few locations with great care.
 
 These problems were mostly due to technical debt
 
@@ -56,7 +56,10 @@ And it's really not with the right tooling.
 
 Contrary to what you might think, Python packaging is not a nightmare anymore. It used to be, but with the introduction of [PEP 517](https://peps.python.org/pep-0517/) and [PEP 518](https://peps.python.org/pep-0518/), and the rise of `uv`, it's actually in pretty good shape --- I rarely have to pull out my hair when working with Python packaging nowadays.
 
-The PEPs and their adoption were important to standardize the way Python packages are built and distributed. cracking-the-python-monorepo the overwhelming majority of Python packages now provide correct distribution metadata (like hashes of the package contents), it's much easier for advanced and optimized package managers like `uv` to do their job really well. Some machine learning dependencies --- and [specifically PyTorch](https://github.com/pytorch/pytorch/issues/76557) --- used to sabotage the Python packaging ecosystem, but even PyTorch now (mostly) provides the hashes with the various wheels they build for all these CUDA versions.
+{{ aside(position="right", text="I remember sweating hard before running `poetry lock` which I knew would run for an hour or two with my shitty internet connection because these juicy PyTorch wheels just had to be downloaded and hashed for every combination of Python and OS. Good times!") }}
+
+
+The PEPs and their adoption were important to standardize the way Python packages are built and distributed. Because the overwhelming majority of Python packages now provide correct distribution metadata (like hashes of the package contents), it's much easier for advanced and optimized package managers like `uv` to do their job really well. Some machine learning dependencies --- and [specifically PyTorch](https://github.com/pytorch/pytorch/issues/76557) --- used to sabotage the Python packaging ecosystem, but even PyTorch now (mostly) provides the hashes with the various wheels they build for all these CUDA versions.
 
 Therefore, I'd like to note that the improvements with packaging are not only due to better tooling like `uv`, but also due to the community's effort to standardize and improve the Python packaging ecosystem in general.
 
@@ -104,7 +107,7 @@ After this section, you should see something like this (non-essential files are 
 
 Projects recognized by `uv` as workspace members share the same `uv.lock` file, environment, can be added as dependencies to each other, and can be managed with `uv` commands.
 
-{{ admonition(type="tip", text="I usually like to edit the root `pyproject.toml` and set `workspace.members` to `['projects/*']` so that all the packages in the `projects` directory are recognized as workspace members.") }}
+{{ admonition(type="tip", text="I like to edit the root `pyproject.toml` and set `workspace.members` to `['projects/*']` so that all the packages in the `projects` directory are recognized as workspace members.") }}
 
 To demonstrate how one project can be added as a dependency to another, let's add `lib-one` as a dependency to `lib-two`:
 
@@ -138,8 +141,10 @@ For simplicity, all the subprojects will share the same `Dockerfile`. Behold!
 
 </details>
 
+{{ admonition(type="note", text="The resulting image will contain a subset of the monorepo dependencies needed for the specific project due to the `--package` flag.") }}
+
 That's a lot of Docker magic! Let's break it down:
-- The `deps-prod` stage installs only production dependencies. This is useful for building the final image.
+- The `deps-prod` stage installs only runtime dependencies. This is useful for building a more lightweight image for deployment.
 - The `deps-dev` stage installs development dependencies. This is useful for building an image for QA checks or running tests.
 - The `final` stage installs the package itself. Only at this point the source code is copied into the image. The last `uv sync` invocation doesn't install any third-party dependencies, only the dependencies from our monorepo (`uv` workspace). Noticed the `--no-install-workspace` flag spammed all over the place? It's quite important as it configures `uv sync` to ignore the missing source code and install only the dependencies.
 
@@ -218,12 +223,12 @@ At the beginning of the `uv.lock` file is the `members` array. It contains a lis
 Next comes the `package` array. Each element in the `package` array describes a package (local or third-party) in the monorepo. Notice the `source` key in the `package` table. It points to the source code of the package. And we can use it to identify the local dependencies of a given package.
 
 The plan:
-1. build the original `Dockerfile` up to the `deps-prod` stage. At this point, we have all the production dependencies installed, but the source code is not copied and installed yet.
+1. build the original `Dockerfile` up to the `deps-dev` stage. At this point, we have all the production dependencies installed, but the source code is not copied and installed yet.
 2. extract the information about the local dependencies from the `uv.lock` file (with Python)
 3. use it to copy the source code of each local dependency into the image
 4. then we can run `uv sync` to install the local dependencies (including our project) in editable mode
 
-Docker can't cover steps 2, 3 and 5. But Dagger can! Let's write a `Dagger` function to do this.
+Docker can't cover steps 2, and 3. But Dagger can! Let's write a `Dagger` function to do this.
 
 {{ admonition(type="note", text="The words `container` and `image` are used interchangeably in this post. Technically, a container is a running instance of an image, but Dagger defines the `Container` type, so I will use the word `container` to refer to images most of the time.") }}
 
@@ -290,7 +295,7 @@ Now we can run the `dagger call` command from the repo root.
 
 ## Building the build pipeline
 
-We will go backwards cracking-the-python-monorepo it's somewhat easier to understand in my opinion. Feel free to consult the Dagger Python SDK [documentation](https://dagger-io.readthedocs.io/en/sdk-python-v0.16.1/).
+We will go backwards because it's somewhat easier to understand in my opinion. Feel free to consult the Dagger Python SDK [documentation](https://dagger-io.readthedocs.io/en/sdk-python-v0.16.1/).
 
 First, we will do a bunch of imports and define some useful types:
 
@@ -324,7 +329,7 @@ Let's implement the `container_with_third_party_dependencies` method first. That
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
-{{ admonition(type="note", text="We also create a dummy `README.md` file cracking-the-python-monorepo `Hatch` --- the default build system in `uv` projects --- requires it to be present.") }}
+{{ admonition(type="note", text="We also create a dummy `README.md` file because `Hatch` --- the default build system in `uv` projects --- requires it to be present.") }}
 
 ---
 
@@ -431,7 +436,7 @@ workdir: /src
 
 </details>
 
-Now let's confirm caching works as expected. `lib-one` doesn't depend on `lib-two`, so modifying files in `lib-two` should not invalidate the cache for `lib-one`. cracking-the-python-monorepo Dagger doesn't always log the intermediate hash digests, we will use the `--debug-sleep` flag to check whether the build stage is skipped.
+Now let's confirm caching works as expected. `lib-one` doesn't depend on `lib-two`, so modifying files in `lib-two` should not invalidate the cache for `lib-one`. Because Dagger doesn't always log the intermediate hash digests, we will use the `--debug-sleep` flag to check whether the build stage is skipped.
 
 The first build:
 
@@ -458,7 +463,7 @@ dagger call build-project --root-dir . --project lib-one --debug-sleep=5
 
 Hooray! The build only took `2.6s` now --- the cache has not been invalidated and the build stage has been skipped!
 
-{{ admonition(type="info", text="The build is not fully cached because the `--root-dir` argument points at the entire repo (which did change). But it doesn't matter cracking-the-python-monorepo the **final** image is cached and the build stage is skipped.") }}
+{{ admonition(type="info", text="The build is not fully cached because the `--root-dir` argument points at the entire repo (which did change). But it doesn't matter because the **final** image is cached and the build stage is skipped.") }}
 
 ## Growing the pipeline
 
@@ -488,7 +493,7 @@ Now we can just call these Dagger functions locally or in our CI/CD system (typi
 
 When combined together, `uv` and `Dagger` provide powerful features that dramatically simplify build processes in Python monorepos, while maintaining flexibility and providing enormous performance gains.
 
-The pipeline we built is a good starting point for further customization and optimization. You can add more steps to the pipeline, such as linting, code formatting, and deployment steps, and add configuration options to create a comprehensive build process that meets your specific requirements. It's very easy because it's just Python code.
+The pipeline we built is a good starting point for further customization and optimization. You can add more steps to the pipeline, such as linting, code formatting, and deployment steps, and add configuration options to create a comprehensive build process that meets your specific requirements. It's very easy because it's just Python code. You could even generalize this approach to work with multiple `uv` workspaces (so multiple `uv.lock` files) in a single monorepo.
 
 I encourage you to explore the documentation for these tools to fully understand their capabilities and how they can be tailored to your specific needs.
 
