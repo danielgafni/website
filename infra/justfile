@@ -4,8 +4,8 @@ deploy-infra:
 lock-www:
     nix flake update website
 
-test-nixos-rebuild: lock-www
+test-deploy: lock-www
     nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake ".#website" dry-build
 
-nixos-rebuild: lock-www
+deploy: lock-www
     nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake ".#website" switch
