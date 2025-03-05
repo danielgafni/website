@@ -30,7 +30,7 @@ This post focuses on a very specific use case --- `uv` Python monorepos. Until v
 
 However, nowadays we have a bunch of excellent tooling available with great out-of-the-box monorepo support.
 
-{{ admonition(type="warning", text="`uv` shouldn’t need any introduction. In 2024, `uv` took the Python ecosystem by storm, and it’s now the go-to tool for Python development. Using anything else (except perhaps [Pixi](https://pixi.sh/latest/) which builds on top of `uv` and extends it to handle Conda packages) doesn't make much sense anymore. If you haven’t heard about `uv`, that’s a sure sign you’ve been living in a cave—or otherwise off the grid—for the past year.") }}
+{{ admonition(type="warning", text="`uv` shouldn’t need any introduction. In 2024, `uv` took the Python ecosystem by storm, and it’s now the go-to tool for Python development. Using anything else (except perhaps [Pixi](https://pixi.sh/latest/) which builds on top of `uv` and extends it to handle Conda packages) doesn't make much sense anymore. Learn move about `uv` [here](https://docs.astral.sh/uv/).") }}
 
 ## The dream of the monorepo
 
