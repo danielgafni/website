@@ -119,23 +119,24 @@ class MonorepoDagger:
     ) -> dict[str, str]:
         """Returns a dictionary of the local dependencies' (of a given project) source directories."""
         uv_lock_dict = tomli.loads(await uv_lock.contents())
-
         members = set(uv_lock_dict["manifest"]["members"])
 
+        # first, find the dependencies of our project
         local_projects = {project}
 
-        # first, find the dependencies of our project
-        for package in uv_lock_dict["package"]:
-            if package["name"] == project:
-                dependencies = package.get("dependencies", [])
-                for dep in dependencies:
-                    if isinstance(dep, dict) and dep.get("name") in members:
-                        local_projects.add(dep["name"])
+        def find_deps_for_package(package_name: str):
+            for package in uv_lock_dict["package"]:
+                if package["name"] == package_name:
+                    dependencies = package.get("dependencies", [])
+                    for dep in dependencies:
+                        if isinstance(dep, dict) and dep.get("name") in members:
+                            local_projects.add(dep["name"])
+                            find_deps_for_package(dep["name"])
+
+        find_deps_for_package(project)
 
         # now, gather all the directories with the dependency sources
-
         project_sources_map = {}
-
         for package in uv_lock_dict["package"]:
             if package["name"] in local_projects:
                 project_sources_map[package["name"]] = package["source"]["editable"]

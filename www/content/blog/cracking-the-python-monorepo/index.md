@@ -335,7 +335,7 @@ Let's implement the `container_with_third_party_dependencies` method first. That
 
 The `project_sources_map` dictionary is the precious information we need to enable granular copying of the source code. Here is the implementation of the `get_project_sources_map` method which retrieves it:
 
-```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-114 144-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-114 145-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -349,7 +349,7 @@ This function will parse the `uv.lock` file and return a dictionary where the ke
 
 Our source code is still not copied into the image. Let's implement the `copy_source_code` method which will granularly copy the source code of a given project and its dependencies into the image. This is why we are here!
 
-```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-144 158-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-145 159-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -357,7 +357,7 @@ Our source code is still not copied into the image. Let's implement the `copy_so
 
 Now the only thing left is to install the local dependencies in editable mode:
 
-```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-158 175-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-159 176-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -368,7 +368,7 @@ All together:
 <details>
 <summary><strong>Click to reveal the full Dagger module</strong></summary>
 
-```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=175-1000,linenos
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=176-1000,linenos
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -469,7 +469,7 @@ Hooray! The build only took `2.6s` now --- the cache has not been invalidated an
 
 Now that we have a Dagger Function which builds a container for a given project, we can easily create downstream steps in our CI pipeline. For example, this is how we can run tests for a project after building the container:
 
-```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-175 181-1000
+```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-176 182-1000
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
@@ -487,7 +487,7 @@ Another one with `pyright`:
 {{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
 ```
 
-Now we can just call these Dagger functions locally or in our CI/CD system (typically one CI/CD step corresponds to one `dagger call`) --- they will work exactly the same! [Dagger Cloud](https://dagger.io/cloud) can also be used to execute builds remotely (and the entire team can benefit from the shared cache). It's also worth mentioning their [integration with Depot](https://depot.dev/blog/dagger-functions-for-depot) --- provider for accelerated builds and caching, which requires zero configuration and can speed up builds even more.
+Now we can just call these Dagger functions locally or in our CI/CD system (typically one CI/CD step corresponds to one `dagger call`) --- they will work exactly the same! [Dagger Cloud](https://dagger.io/cloud) can also be used to execute builds remotely (and the entire team can benefit from the shared cache). It's also worth mentioning their [integration with Depot](https://depot.dev/blog/dagger-functions-for-depot) --- provider for accelerated builds and caching, which requires zero configuration and can speed up builds even more. But the main speedup will probably come from caching of all the downstream steps.
 
 # Conclusion
 
@@ -505,4 +505,5 @@ I encourage you to explore the documentation for these tools to fully understand
 
 ---
 
-Thank you [@nordmtr](https://github.com/nordmtr) for the feedback and suggestions!
+- Thank you [@nordmtr](https://github.com/nordmtr) for the feedback and suggestions!
+- Thank you [@Sessional](https://github.com/Sessional) for suggesting a [fix](https://github.com/danielgafni/website/discussions/29#discussioncomment-12440180) for implicit transitive local dependencies.
