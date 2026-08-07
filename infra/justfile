@@ -1,11 +1,13 @@
+stack := "danielgafni/website/prod"
+
+# Provision the Cloudflare Pages project + DNS with Pulumi.
 deploy-infra:
-    tofu apply
+    pulumi up --stack {{stack}}
 
-lock-www:
-    nix flake update website
+preview-infra:
+    pulumi preview --stack {{stack}}
 
-test-deploy: lock-www
-    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake ".#website" dry-build
-
-deploy: lock-www
-    nixos-rebuild --target-host root@49.13.127.186 -I nixos-config=./configuration.nix --flake ".#website" switch
+# Build the site with Nix and upload it to Cloudflare Pages.
+deploy:
+    nix build ../www --out-link result
+    wrangler pages deploy result --project-name=gafni-dev --branch=master

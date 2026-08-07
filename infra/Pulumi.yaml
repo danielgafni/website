@@ -1,0 +1,6 @@
+name: website
+description: Cloudflare Pages project and DNS for gafni.dev
+runtime:
+  name: python
+  options:
+    toolchain: uv

@@ -2,12 +2,12 @@
 
 ## Development
 
-Nix has to be installed and flakes support enabled.
+Nix and [`devenv`](https://devenv.sh) have to be installed (flakes support enabled).
 
-Entering the development shell (`direnv` and `lorri` can be used to do it automatically):
+Entering the development shell (`direnv` can be used to do it automatically):
 
 ```shell
-nix develop
+devenv shell
 ```
 
 Running the website locally:
@@ -22,11 +22,12 @@ zola serve
 .
 ├── config.toml  # zola config
 ├── content  # actual website content as markdown files
+├── devenv.nix  # dev shell (zola)
+├── devenv.yaml  # devenv inputs
 ├── flake.lock
-├── flake.nix  # nix derivation for website build
+├── flake.nix  # nix derivation for the website build (nix build ./www)
 ├── highlight_themes  # custom syntax highlighting themes
 ├── sass
-├── shell.nix  # nix dev shell for lorri 
 ├── static  # static files
 └── themes  # zola themes
 ```

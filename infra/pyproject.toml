@@ -1,0 +1,9 @@
+[project]
+name = "website-infra"
+version = "0.0.0"
+description = "Cloudflare Pages project and DNS for gafni.dev"
+requires-python = ">=3.11"
+dependencies = [
+    "pulumi>=3.0,<4.0",
+    "pulumi-cloudflare>=6.0,<7.0",
+]

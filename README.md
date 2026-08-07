@@ -3,19 +3,16 @@
 Source code for my [website](https://gafni.dev)
 
 Technologies used:
- - `nix` - dev environment, packaging, deployment. Provides all necessary packages. 
+ - `nix` + [`devenv`](https://devenv.sh) - dev environment, packaging, deployment. Provides all necessary packages. 
  - `zola` - static website generator from markdown
- - `OpenTofu` - IaC for Hetzner & Cloudflare
- - `Hetzner Cloud` - VM hosting
- - `Cloudflare` - caching & proxy
- - `Prometheus` - metrics collection
- - `Grafana` - metrics visualistaion
+ - `Pulumi` (Python) - IaC for the Cloudflare Pages project & DNS
+ - `Cloudflare Pages` - static hosting
 
-The only tool required to build and deploy everything is [Nix](https://nixos.org/download/) (flakes have to be enabled). 
+The only tools required to build and deploy everything are [Nix](https://nixos.org/download/) (flakes have to be enabled) and [`devenv`](https://devenv.sh/getting-started/). 
 
-`nix` installs all the other tools (`terraform`, `zola`, etc.). 
+`devenv` provides the dev shells (run `devenv shell`, or use `direnv` for automatic activation) with all the other tools (`pulumi`, `uv`, `zola`, `wrangler`, etc.). 
 
-`NixOS` is used to define the server contents. The website is served via `nginx`, which is running as a `NixOS` service, as well as `Prometheus` and `Grafana`. `Grafana` can be accessed at [grafana.gafni.dev](https://grafana.gafni.dev).
+The static site is built with Nix (`nix build ./www` produces the `zola build` output) and uploaded to [Cloudflare Pages](https://pages.cloudflare.com/) via `wrangler`. On push to `master`, GitHub Actions builds and deploys automatically.
 
 # File Structure
 
