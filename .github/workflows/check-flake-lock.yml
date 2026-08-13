@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        flake: [www, infra]
+        flake: [www]
     steps:
       - uses: actions/checkout@v4
       - name: Check Nix flake inputs

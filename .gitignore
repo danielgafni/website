@@ -1,10 +1,12 @@
 .idea
-infra/.terraform
-infra/terraform.tfstate
-infra/terraform.tfstate.backup
+infra/.venv
 www/result
 www/public
 www/static/processed_images
 infra/result
 .pre-commit-config.yaml
 **/.direnv
+**/__pycache__
+**/.devenv*
+**/devenv.local.nix
+**/devenv.local.yaml

@@ -1,0 +1,5 @@
+config:
+  website:accountId: 3f09b742c8d0c0b4fefb8b9dc9a1899d
+  website:zoneId: de2eebc4508c9ce22174a4099ae8a9e0
+  cloudflare:apiToken:
+    secure: AAABAGgjsUt6ljKDILBFHwEsMFkDG7UY5KwD08wAQUGuaJNf62C3aTxI0NO2XRfyqInvTBi8hoNHVqSrfP8zs5yrzd9Qs57ZeZyHY+GPZJcOi20Cjg==

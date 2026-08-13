@@ -149,7 +149,7 @@ class MonorepoDagger:
         root_dir: RootDir,
         project_sources_map: dict[str, str],
     ) -> Container:
-        for project, project_source_path in project_sources_map.items():
+        for project_source_path in project_sources_map.values():
             container = container.with_directory(
                 f"/src/{project_source_path}",
                 root_dir.directory(project_source_path),
