@@ -1,0 +1,21 @@
+[project]
+name = "lib-three"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "danielgafni", email = "danielgafni16@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "lib-one",
+    "lib-two",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+lib-one = { workspace = true }
+lib-two = { workspace = true }

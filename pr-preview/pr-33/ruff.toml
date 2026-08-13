@@ -1,0 +1,4 @@
+extend-select = ["I"]
+# Don't touch Markdown: ruff's Python-in-markdown formatting rewrites Zola
+# template shortcodes (e.g. `{{ remote_text() }}`) into invalid nested braces.
+extend-exclude = ["*.md"]
