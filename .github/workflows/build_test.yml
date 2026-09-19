@@ -14,7 +14,8 @@ jobs:
         name: danielgafni
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: Install devenv
-      run: nix profile install nixpkgs#devenv
+      # devenv 2.2.x can fail with invalid store paths: https://github.com/cachix/devenv/issues/3064
+      run: nix profile install github:cachix/devenv/v2.3.1 --accept-flake-config
     - name: Lint (git hooks)
       run: devenv shell -- prek run --all-files
     - name: Build site

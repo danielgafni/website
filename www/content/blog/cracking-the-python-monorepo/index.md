@@ -10,6 +10,8 @@ stylesheets = ["css/custom.css"]
 
 +++
 
+{{ admonition(type="note", text="The approach described in this post was later developed into the [`uv` Dagger module](https://github.com/typesafe-ai/daggerverse/tree/main/uv). See its [documentation](https://daggerverse.docs.typesafe.ai/uv/) for installation and usage.") }}
+
 A monorepo is a single repository that contains multiple projects. It is a popular way to organize codebases with many coupled components, and is also used at very big companies like Google, Facebook, and Twitter.
 
 For a long time, I did not understand the benefits of monorepos. I thought they were used because people could not figure out how to split their codebases into smaller parts.
