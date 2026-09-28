@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 # Hello, the Arabic language has many pronouns and words, and each word indicates a different meaning,
 # unlike the English language, in which, on the other hand, the word can refer to a person and a group.
 # This translation is for individual use, if you are a company or organization, I have put a comment in
@@ -30,6 +33,7 @@ few_results = "تم العثور على $NUMBER نتائج"  # for 3 to 10 searc
 many_results = "تم العثور على $NUMBER نتيجة"  # 11 or more search results.
 
 # Navigation.
+skip_to_content = "الإنتقال إلى المحتوى"
 pinned = "مثبتة"
 jump_to_posts = "الإنتقال إلى التدوينات"
 read_more = "إقرأ المزيد"
@@ -83,6 +87,9 @@ load_comments = "إظهار التعليقات"
 copied = "تم النسخ!"
 copy_code_to_clipboard = "نسخ الشِفرة إلى الحافظة"
 
+# iine appreciation button.
+like_this_post = "أعجبني"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "مُشَغل بواسطة"
 and = "و"
@@ -95,7 +102,7 @@ translation_missing = "أو لم يتم ترجمتها إلى اللغة الت�
 check_url = "تحقق من أن الرابط صحيح أو"
 go_home = "انتقل إلى الصفحة الرئيسية"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "إظهار الإقتباس الأصلي"
 show_translation = "إظهار الترجمة"

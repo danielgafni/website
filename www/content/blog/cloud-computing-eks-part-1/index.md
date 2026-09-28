@@ -4,7 +4,6 @@ date = 2024-05-25
 [taxonomies]
 tags = ["AWS", "EKS", "Kubernetes", "DevOPS", "Terraform"]
 [extra]
-add_src_to_code_block = true
 
 +++
 
@@ -52,10 +51,8 @@ Let's start by creating the EKS cluster:
 <details>
 <summary>Click to reveal code</summary>
 
-{{ add_src_to_code_block(src="terraform/eks/main.tf") }}
-
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/main.tf") }}
+```terraform,name=terraform/eks/main.tf
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/main.tf" />}}
 ```
 
 </details>
@@ -79,10 +76,8 @@ Let's install Karpenter to our cluster and add a default `NodePool`. We will be 
 <details>
 <summary>Click to reveal code</summary>
 
-{{ add_src_to_code_block(src="terraform/eks/karpenter.tf") }}
-
-```terraform,hide_lines=110-200
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf") }}
+```terraform,name=terraform/eks/karpenter.tf,hide_lines=110-200
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf" />}}
 ```
 
 </details>
@@ -112,10 +107,8 @@ Here is how we can setup a GPU-compatible `EC2NodeClass` with Karpenter:
 <details>
 <summary>Click to reveal code</summary>
 
-{{ add_src_to_code_block(src="terraform/eks/karpenter.tf") }}
-
-```terraform,hide_lines=1-109
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf") }}
+```terraform,name=terraform/eks/karpenter.tf,hide_lines=1-109
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/karpenter.tf" />}}
 ```
 
 </details>
@@ -151,10 +144,8 @@ The `requirements` field here is really versatile and can be changed according t
 
 The last component to complete the hyper scaling setup is NodeLocal DNS Cache. It's really important to set it up, otherwise launching more than ~500 pods will result in frequent `Temporary Name Resolution Failure` when accessing AWS services such as `S3` or `RDS`.
 
-{{ add_src_to_code_block(src="terraform/eks/node-local-dns.tf") }}
-
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/node-local-dns.tf") }}
+```terraform,name=terraform/eks/node-local-dns.tf
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/node-local-dns.tf" />}}
 ```
 
 I haven't included supporting Terraforms files (`providers.tf`, `variables.tf` and `outputs.tf`) above since they are self-explanatory.
@@ -180,10 +171,8 @@ Let's start by installing Traefik.
 <details>
 <summary>Click to reveal code</summary>
 
-{{ add_src_to_code_block(src="terraform/eks/traefik.tf") }}
-
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/traefik.tf") }}
+```terraform,name=terraform/eks/traefik.tf
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/traefik.tf" />}}
 ```
 
 </details>
@@ -195,10 +184,8 @@ Notice how the chart has the default dashboard's `IngressRoute` disabled. Instea
 <details>
 <summary>Click to reveal code</summary>
 
-{{ add_src_to_code_block(src="terraform/eks/cert-manager.tf") }}
-
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/cert-manager.tf") }}
+```terraform,name=terraform/eks/cert-manager.tf
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/cert-manager.tf" />}}
 ```
 
 </details>
@@ -210,10 +197,8 @@ Now, we can continue with Traefik Dashboard setup:
 <details>
 <summary>Click to reveal code</summary>
 
-{{ add_src_to_code_block(src="terraform/eks/traefik-dashboard.tf") }}
-
-```terraform
-{{ remote_text(src="blog/cloud-computing-eks-part-1/src/terraform/eks/traefik-dashboard.tf") }}
+```terraform,name=terraform/eks/traefik-dashboard.tf
+{{< remote_text src="blog/cloud-computing-eks-part-1/src/terraform/eks/traefik-dashboard.tf" />}}
 ```
 
 </details>

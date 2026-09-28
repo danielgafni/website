@@ -21,8 +21,7 @@ Some of the implemented resources:
 Some example code:
 
 
-{{ add_src_to_code_block(src="dagster.yaml") }}
-```yaml
+```yaml,name=dagster.yaml
 # default settings for launched Runs
 run_launcher:
   module: dagster_ray
@@ -33,8 +32,7 @@ run_launcher:
 ```
 
 
-{{ add_src_to_code_block(src="definitions.py") }}
-```python
+```python,name=definitions.py
 from dagster import asset, AssetExecutionContext, Definitions
 from dagster_ray import ray_executor, RayIOManager
 

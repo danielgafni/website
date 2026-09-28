@@ -3,12 +3,15 @@ content="default-src 'self'
 {%- if config.extra.allowed_domains -%}
 ;
     {#- Check if a comment system is enabled to allow the necessary domains and directives -#}
-    {%- set utterances_enabled = config.extra.utterances.enabled_for_all_posts or page.extra.utterances -%}
-    {%- set giscus_enabled = config.extra.giscus.enabled_for_all_posts or page.extra.giscus -%}
-    {%- set hyvortalk_enabled = config.extra.hyvortalk.enabled_for_all_posts or page.extra.hyvortalk -%}
-    {%- set isso_enabled = config.extra.isso.enabled_for_all_posts or page.extra.isso -%}
+    {%- set utterances_enabled = config.extra.utterances.enabled_for_all_posts or page?.extra?.utterances -%}
+    {%- set giscus_enabled = config.extra.giscus.enabled_for_all_posts or page?.extra?.giscus -%}
+    {%- set hyvortalk_enabled = config.extra.hyvortalk.enabled_for_all_posts or page?.extra?.hyvortalk -%}
+    {%- set isso_enabled = config.extra.isso.enabled_for_all_posts or page?.extra?.isso -%}
     {%- if page -%}
-        {%- set mermaid_enabled = macros_settings::evaluate_setting_priority(setting="mermaid", page=page, default_global_value=false) == "true" -%}
+        {%- set iine_enabled %}{{< evaluate_setting_priority setting="iine" default_global_value="false" />}}{% endset %}{% set iine_enabled = iine_enabled | trim == "true" -%}
+    {%- endif -%}
+    {%- if page -%}
+        {%- set mermaid_enabled %}{{< evaluate_setting_priority setting="mermaid" default_global_value="false" />}}{% endset %}{% set mermaid_enabled = mermaid_enabled | trim == "true" -%}
     {%- endif -%}
     {%- set serve_local_mermaid = config.extra.serve_local_mermaid | default(value=true) -%}
 
@@ -30,7 +33,7 @@ content="default-src 'self'
                 {%- set connect_src = connect_src ~ " " ~ config.extra.analytics.id ~ ".goatcounter.com/count" -%}
             {%- elif config.extra.analytics.service == "umami" -%}
                 {%- set script_src = script_src ~ " cloud.umami.is" -%}
-                {%- set connect_src = connect_src ~ " *.umami.dev" ~ " cloud.umami.is" -%}
+                {%- set connect_src = connect_src ~ " *.umami.dev *.umami.is" -%}
             {%- elif config.extra.analytics.service == "plausible" -%}
                 {%- set script_src = script_src ~ " plausible.io" -%}
                 {%- set connect_src = connect_src ~ " plausible.io" -%}
@@ -50,8 +53,18 @@ content="default-src 'self'
         {%- set script_src = script_src ~ " " ~ " utteranc.es" -%}
     {%- endif -%}
 
-    {%- if mermaid_enabled and not serve_local_mermaid -%}
+    {%- if (mermaid_enabled and not serve_local_mermaid) or iine_enabled -%}
         {%- set script_src = script_src ~ " " ~ " cdn.jsdelivr.net" -%}
+    {%- endif -%}
+
+    {#- Check if a webmention system is enabled to allow the necessary domains and directives -#}
+    {%- if config.extra.webmentions.enable -%}
+        {%- set connect_src = connect_src ~ " webmention.io" -%}
+    {%- endif -%}
+
+    {#- Check if iine like buttons are enabled to allow the necessary domains -#}
+    {%- if iine_enabled -%}
+        {%- set connect_src = connect_src ~ " vhiweeypifbwacashxjz.supabase.co" -%}
     {%- endif -%}
 
     {#- Append WebSocket for Zola serve mode -#}
@@ -61,19 +74,19 @@ content="default-src 'self'
 
     {%- for domain in config.extra.allowed_domains -%}
         {%- if domain.directive == "connect-src" -%}
-            {%- set configured_connect_src = domain.domains | join(sep=' ') -%}
+            {%- set configured_connect_src = domain.domains | join(sep=' ') | safe -%}
             {%- set_global connect_src = connect_src ~ " " ~ configured_connect_src  -%}
             {%- continue -%}
         {%- endif -%}
 
         {%- if domain.directive == "script-src" -%}
-            {%- set configured_script_src = domain.domains | join(sep=' ') -%}
+            {%- set configured_script_src = domain.domains | join(sep=' ') | safe -%}
             {%- set_global script_src = script_src ~ " " ~ configured_script_src  -%}
             {%- continue -%}
         {%- endif -%}
 
         {#- Handle directives that are not connect-src -#}
-        {{ domain.directive }} {{ domain.domains | join(sep=' ') -}}
+        {{ domain.directive }} {{ domain.domains | join(sep=' ') | safe -}}
 
         {%- if domain.directive == "style-src" -%}
             {%- if utterances_enabled or hyvortalk_enabled or mermaid_enabled %} 'unsafe-inline'

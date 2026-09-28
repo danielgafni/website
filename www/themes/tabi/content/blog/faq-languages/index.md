@@ -1,7 +1,7 @@
 +++
 title = "Lost in Translation? Not with tabi's Multilingual Capabilities"
 date = 2023-09-12
-updated = 2024-03-01
+updated = 2026-09-13
 description = "Master the art of serving a global audience through tabi's built-in multilingual features. Learn how to change the default language, add multilingual support, and contribute your own translations."
 
 [taxonomies]
@@ -29,6 +29,7 @@ tabi supports the following languages:
 - Chinese (Traditional)
 - English
 - Estonian
+- Finnish
 - French
 - German
 - Hindi
@@ -38,6 +39,7 @@ tabi supports the following languages:
 - Odia
 - Persian
 - Portuguese (European)
+- Portuguese (Brazilian)
 - Russian
 - Spanish
 - Ukranian
@@ -107,6 +109,19 @@ So if you create  `i18n/en.toml` in your base directory, tabi will read the stri
 
 Make sure to copy the entire file for that language first, or the theme will fall back to the default English strings.
 
+## How do I customize date formats for different languages?
+
+You can set language-specific date formats in your `config.toml` using the `date_formats` array:
+
+```toml
+date_formats = [
+    { lang = "es", long = "d 'de' MMMM 'de' y", short = "d MMM y" },
+    { lang = "de", long = "d. MMMM y", short = "dd.MM.y", archive = "dd. MMM" },
+]
+```
+
+These are [UTS-35 patterns](https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table), and textual month and weekday names follow the language's locale. This lets each language use its preferred ordering, punctuation, and amount of detail. If no language-specific format is defined, tabi uses the global `long_date_format`, `short_date_format` and `archive_date_format` settings.
+
 ## What happens if a translation is missing or incomplete?
 
 If a string is not found in the language file, tabi will fall back to the default English string.
@@ -134,3 +149,7 @@ If you did, you will need to manually update the translations. You can do this b
 ## Does tabi translate my content?
 
 No. tabi only translates the theme's text strings. You will need to translate your content yourself.
+
+# How to show current language code on the language switcher?
+
+Add `show_selected_language_code_in_language_switcher = true` in your config extras.

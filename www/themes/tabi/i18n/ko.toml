@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 # This has been machine translated.
 # If you would like to help correct errors or improve the translation,
 # please open an issue or submit a pull request.
@@ -27,6 +30,7 @@ one_results = "$NUMBER 결과"  # "1 result"
 many_results = "$NUMBER 결과"  # "3 results"
 
 # Navigation.
+skip_to_content = "콘텐츠로 건너뛰기"
 pinned = "고정됨"
 jump_to_posts = "게시물로 이동"
 read_more = "더 읽기"
@@ -72,6 +76,9 @@ load_comments = "댓글 불러오기"
 copied = "복사됨!"
 copy_code_to_clipboard = "코드를 클립보드에 복사"
 
+# iine appreciation button.
+like_this_post = "이 글이 좋아요"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "제공됨"
 and = "&"
@@ -84,7 +91,7 @@ translation_missing = "또는 아직 해당 언어로 번역되지 않았습니�
 check_url = "URL을 확인하거나"
 go_home = "홈페이지로 돌아가기"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "원문 인용 보기"
 show_translation = "번역 보기"

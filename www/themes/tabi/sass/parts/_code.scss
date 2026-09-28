@@ -14,37 +14,27 @@ code {
         color: inherit;
     }
 
-    table {
-        margin: 0rem;
-        border-collapse: collapse;
-        border-spacing: 0rem;
+    .giallo-l {
+        float: left;
+        clear: left;
         width: 100%;
-        text-align: start;
+        line-height: 1.2;
+    }
 
-        td,
-        th,
-        tr {
-            border: none;
-            padding: 0rem;
-        }
-
-        // Line number col.
-        tbody td:first-child {
-            opacity: 50%;
-            padding-inline-end: 0.8rem;
-            width: 1px;  // Without this, iOS Safari centres short lines.
-            user-select: none;
-            text-align: end;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: inherit;
-        }
+    .giallo-ln {
+        display: inline-block;
+        opacity: 0.5;
+        padding-inline-end: 0.8rem;
+        min-width: 3ch;
+        color: inherit;
+        user-select: none;
+        text-align: end;
     }
 }
 
 a:hover code {
     background-color: inherit;
+    padding-block: 0;
 }
 
 pre {
@@ -58,15 +48,21 @@ pre {
     overflow-x: auto;
     line-height: 1.4;
 
+    // Token colours come from the stylesheet Zola generates for the configured
+    // highlighting theme; only the background follows the site's palette.
+    &.z-code {
+        background-color: var(--codeblock-bg);
+    }
+
     code,
     code td {
         font-size: 0.8rem;  // Fits ~77 characters.
     }
 
-    // Supports both native Zola way of adding src, and old shortcode-based logic.
-    // See: https://github.com/welpo/tabi/pull/489
-    &::after,
-    code .source-path {
+    // Source names can be attached to the pre or code element.
+    code .source-path,
+    &[data-name]::after,
+    &:not([data-name]) code[data-name]::after {
         display: block;
         position: absolute;
         top: 0;
@@ -76,12 +72,16 @@ pre {
         max-width: calc(100% - 14em);
         height: 0.9rem;
         overflow: hidden;
-        content: attr(data-name);
         color: var(--hover-color);
         font-size: 0.65rem;
         text-align: end;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    &[data-name]::after,
+    &:not([data-name]) code[data-name]::after {
+        content: attr(data-name);
     }
 
     code {
@@ -122,6 +122,10 @@ code, pre {
 html[data-code-direction="inherit"] {
     code, pre {
         direction: inherit;
+    }
+    .giallo-l {
+        float: right;
+        clear: right;
     }
 }
 

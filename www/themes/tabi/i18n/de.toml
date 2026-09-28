@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 # This has been machine translated.
 # If you would like to help correct errors or improve the translation,
 # please open an issue or submit a pull request.
@@ -27,6 +30,7 @@ one_results = "$NUMBER Ergebnis"  # "1 result"
 many_results = "$NUMBER Ergebnisse"  # "3 results"
 
 # Navigation.
+skip_to_content = "Zum Inhalt springen"
 pinned = "Angeheftet"
 jump_to_posts = "Zu den Beiträgen springen"
 read_more = "Weiterlesen"
@@ -72,6 +76,9 @@ load_comments = "Kommentare laden"
 copied = "Kopiert!"
 copy_code_to_clipboard = "Code in die Zwischenablage kopieren"
 
+# iine appreciation button.
+like_this_post = "Dieser Beitrag gefällt mir"
+
 # Footer.
 powered_by = "Angetrieben von"
 and = "und"
@@ -84,7 +91,7 @@ translation_missing = "oder wurde noch nicht in deine Sprache übersetzt"
 check_url = "Überprüfe die URL auf Fehler oder"
 go_home = "zurück zur Startseite gehen"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "Originalzitat anzeigen"
 show_translation = "Übersetzung anzeigen"

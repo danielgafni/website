@@ -1,8 +1,22 @@
+@mixin theme-variables($theme) {
+    @if $theme =='light' {
+        --primary-color: #ca35a5;
+    }
+    @else if $theme == 'dark' {
+        --primary-color: #f386a1;
+    }
+}
+
 :root {
-    --primary-color: #7287fd;
+    @include theme-variables('light');
 }
 
 [data-theme='dark'] {
-    --primary-color: #81c8be;
+    @include theme-variables('dark');
 }
 
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+        @include theme-variables('dark');
+    }
+}

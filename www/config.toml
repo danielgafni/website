@@ -27,20 +27,22 @@ ignored_content = [
 [markdown]
 # add markdown heading links
 insert_anchor_links = "left"
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = true
-extra_syntaxes_and_themes = ["highlight_themes", "syntaxes"]
-highlight_theme = "css"
 render_emoji = true
 smart_punctuation = true
+bottom_footnotes = true
+
+[markdown.highlighting]
+style = "class"
+light_theme = "catppuccin-latte"
+dark_theme = "catppuccin-mocha"
+error_on_missing_language = true
 
 [extra]
 author = "danielgafni"
 theme_switcher = true
 default_theme = "dark"
 skin = "catppuccin"
-browser_theme_color = ["#7287fd", "#81c8be"]
+browser_theme_color = ["#ca35a5", "#f386a1"]
 favicon = "favicon.png"
 
 # git integration
@@ -60,10 +62,7 @@ menu = [
 quick_navigation_buttons = true
 toc = true
 show_previous_next_article_links = true
-footnote_backlinks = true
-bottom_footnotes = false
 show_reading_time = true
-add_src_to_code_block = true
 
 copy_button = true
 
@@ -112,5 +111,5 @@ lazy_loading = true
 
 
 [extra.analytics]
-services = "plausible"
+service = "plausible"
 id = "gafni.dev"

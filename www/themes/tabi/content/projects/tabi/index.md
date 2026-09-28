@@ -9,11 +9,12 @@ tags = ["web", "JavaScript"]
 [extra]
 local_image = "projects/tabi/tabi.webp"
 social_media_card = "social_cards/projects_tabi.jpg"
+iine_icon = '🌱'
 +++
 
 [**tabi**](https://github.com/welpo/tabi) is a modern, feature-rich theme for [Zola](https://www.getzola.org/), a fast static site generator.
 
-{{ full_width_image(src="https://cdn.jsdelivr.net/gh/welpo/tabi@main/light_dark_screenshot.png", alt="tabi light and dark mode") }}
+{{< full_width_image src="https://cdn.jsdelivr.net/gh/welpo/tabi@main/light_dark_screenshot.png" alt="tabi light and dark mode" />}}
 
 #### [View on GitHub](https://github.com/welpo/tabi) • [Demo & Documentation](https://welpo.github.io/tabi/) {.centered-text}
 
@@ -27,7 +28,8 @@ social_media_card = "social_cards/projects_tabi.jpg"
 - Perfect Lighthouse score (Performance, Accessibility, Best Practices and SEO).
 - [Comprehensive multi-language support](https://welpo.github.io/tabi/blog/faq-languages/#how-does-tabi-handle-multilingual-support). Add as many languages as you wish.
 - Support for [comments using giscus, utterances, Hyvor Talk, or Isso](https://welpo.github.io/tabi/blog/comments/).
-- Code syntax highlighting with colours based on [Catppuccin](https://github.com/catppuccin/catppuccin) Frappé.
+- [Indieweb](https://indieweb.org/) ready with microformats, [hcard](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#representative-h-card) and [webmentions](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#webmentions) support.
+- [iine like buttons](https://iine.to/) for anonymous appreciation of your content.
 - [Mermaid support](https://welpo.github.io/tabi/blog/shortcodes/#mermaid-diagrams) to create diagrams and charts with text.
 - [Local search](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#search) with an accessible, multi-lingual interface.
 - [Custom Twitter card](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#social-media-cards) and automatic Open Graph tags.
@@ -43,7 +45,7 @@ social_media_card = "social_cards/projects_tabi.jpg"
 - [Custom copyright notice](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#copyright).
 - [Custom canonical URLs](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#canonical-url).
 - [Customizable skins](https://welpo.github.io/tabi/blog/customise-tabi/).
-- [Custom shortcodes](https://welpo.github.io/tabi/blog/shortcodes/).
+- [Custom components](https://welpo.github.io/tabi/blog/shortcodes/).
 - [Social media cards](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#social-media-cards).
 - Responsive design.
 - [Projects page](https://welpo.github.io/tabi/projects/).

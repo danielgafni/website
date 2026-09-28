@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 language_name = "Français"  # Shown in language picker for multi-language sites.
 date_locale = "fr_FR"
 full_stop = "."  # Used at the end of a sentence.
@@ -23,6 +26,7 @@ one_results = "$NUMBER résultat"  # "1 result"
 many_results = "$NUMBER résultats"  # "3 results"
 
 # Navigation.
+skip_to_content = "Passer au contenu"
 pinned = "Épinglé"
 jump_to_posts = "Aller aux articles"
 read_more = "Lire plus"
@@ -68,6 +72,9 @@ load_comments = "Afficher les commentaires"
 copied = "Copié !"
 copy_code_to_clipboard = "Copier le code dans le presse-papier"
 
+# iine appreciation button.
+like_this_post = "J'aime cet article"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "Propulsé par"
 and = "et"
@@ -80,7 +87,7 @@ translation_missing = "ou n'a pas encore été traduite dans votre langue"
 check_url = "Vérifiez que l'URL ne contient pas d'erreur ou"
 go_home = "retournez à la page d'accueil"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "Afficher la citation originale"
 show_translation = "Afficher la traduction"

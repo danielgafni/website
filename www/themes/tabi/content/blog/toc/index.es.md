@@ -1,7 +1,7 @@
 +++
 title = "Tabla de contenido"
 date = 2022-11-01
-updated = 2024-02-16
+updated = 2026-09-12
 description = "Una publicación que muestra la tabla de contenido opcional así como su configuración."
 
 [taxonomies]
@@ -29,7 +29,7 @@ Si prefieres situar la TdC en otro lugar de tu post (por ejemplo, después de un
 <!-- toc -->
 ```
 
-También puedes usar el shortcode `{{/* toc() */}}`, que simplemente insertará ese texto por ti ([idea de Michael Clayton](https://github.com/getzola/zola/issues/584#issuecomment-1546086781)).
+También puedes usar el componente `{% raw %}{{< toc />}}{% endraw %}`, que simplemente insertará ese texto por ti ([idea de Michael Clayton](https://github.com/getzola/zola/issues/584#issuecomment-1546086781)).
 
 Este método renderizará la TdC sin el encabezado "Tabla de contenido". Esto te permite usar un encabezado diferente (o ninguno) para la TdC, o incluso ocultarla de forma predeterminada:
 
@@ -86,7 +86,7 @@ Ten en cuenta a tus lectores al establecer `toc_levels`. Aunque puede ser tentad
 
 Es posible que quieras ocultar ciertos encabezados. Por ejemplo, si tu artículo tiene muchas Figuras o Tablas, éstas podrían saturar la TdC. Puedes ocultar encabezados específicos en la TdC configurando la variable `toc_ignore_pattern` en la sección `[extra]` del front matter de tu post.
 
-Esta variable espera una expresión regular (regex), ya que utiliza el test [matching](https://keats.github.io/tera/docs/#matching) de Tera. El `toc_ignore_pattern` se prueba contra el texto del encabezado. Por ejemplo, para el encabezado `### Lectura adicional`, sólo el texto `Lectura adicional` se usaría para comprobar si concuerda con el patrón.
+Esta variable espera una expresión regular (regex), ya que utiliza el test [matching](https://web.archive.org/web/20260427052217/https://keats.github.io/tera/docs/#matching) de Tera. El `toc_ignore_pattern` se prueba contra el texto del encabezado. Por ejemplo, para el encabezado `### Lectura adicional`, sólo el texto `Lectura adicional` se usaría para comprobar si concuerda con el patrón.
 
 Aquí tienes algunos valores de ejemplo para `toc_ignore_pattern` junto con los encabezados que ocultarían:
 

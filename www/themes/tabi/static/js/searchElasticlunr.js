@@ -2678,15 +2678,37 @@ window.onload = function () {
         clearSearchButton.style.display = 'none';
     }
 
+    results.addEventListener('mouseover', function (event) {
+        if (event.target.closest('div[role="option"]')) {
+            updateSelection(event.target.closest('div[role="option"]'));
+        }
+    });
+
+    results.addEventListener('click', function (event) {
+        const clickedElement = event.target.closest('a');
+        if (clickedElement) {
+            const clickedHref = clickedElement.getAttribute('href');
+            const currentPageUrl = window.location.href;
+
+            // Normalise URLs by removing the text fragment and trailing slash.
+            const normalizeUrl = (url) => url.split('#')[0].replace(/\/$/, '');
+
+            // Check if the clicked link matches the current page.
+            // If using Ctrl+click or Cmd+click, don't close the modal.
+            if (normalizeUrl(clickedHref) === normalizeUrl(currentPageUrl) &&
+                !event.ctrlKey && !event.metaKey) {
+                closeModal();
+            }
+        }
+    });
+
     // Close modal when clicking/tapping outside.
     function handleModalInteraction(event) {
         if (event.target === searchModal) {
             closeModal();
         }
-        event.stopPropagation(); // Prevents tapping through the modal.
     }
     searchModal.addEventListener('click', handleModalInteraction);
-    searchModal.addEventListener('touchend', handleModalInteraction, { passive: true });
 
     // Close modal when pressing escape.
     document.addEventListener('keydown', function (event) {
@@ -2709,9 +2731,13 @@ window.onload = function () {
 
     // The index loads on mouseover/tap.
     // Clicking/tapping the search button opens the modal.
+    // Index is preloaded on `touchstart` so it's ready by the time the synthetic
+    // click fires; the modal itself is opened from `click` so we don't open it
+    // mid-tap (which causes the follow-up synthetic click to land on the newly
+    // visible overlay and immediately close it again).
     searchButton.addEventListener('mouseover', loadSearchIndex);
+    searchButton.addEventListener('touchstart', loadSearchIndex, { passive: true });
     searchButton.addEventListener('click', openSearchModal);
-    searchButton.addEventListener('touchstart', openSearchModal, { passive: true });
 
     let searchIndexPromise = null;
     function loadSearchIndex() {
@@ -3011,30 +3037,6 @@ window.onload = function () {
                 updateSelection(results.firstChild);
             }
 
-            results.addEventListener('mouseover', function (event) {
-                if (event.target.closest('div[role="option"]')) {
-                    updateSelection(event.target.closest('div[role="option"]'));
-                }
-            });
-
-            results.addEventListener('click', function(event) {
-                const clickedElement = event.target.closest('a');
-                if (clickedElement) {
-                    const clickedHref = clickedElement.getAttribute('href');
-                    const currentPageUrl = window.location.href;
-
-                    // Normalise URLs by removing the text fragment and trailing slash.
-                    const normalizeUrl = (url) => url.split('#')[0].replace(/\/$/, '');
-
-                    // Check if the clicked link matches the current page.
-                    // If using Ctrl+click or Cmd+click, don't close the modal.
-                    if (normalizeUrl(clickedHref) === normalizeUrl(currentPageUrl) &&
-                        !event.ctrlKey && !event.metaKey) {
-                        closeModal();
-                    }
-                }
-            });
-
             // Add touch events to the results.
             setupTouchEvents();
         },
@@ -3054,7 +3056,11 @@ window.onload = function () {
         const activeSpan = resultSpans[pluralizationKey];
         if (activeSpan) {
             activeSpan.style.display = 'inline';
-            activeSpan.textContent = activeSpan.textContent.replace(
+            // Cache the original "$NUMBER" template so repeated searches don't replace a stale count.
+            if (activeSpan.dataset.template === undefined) {
+                activeSpan.dataset.template = activeSpan.textContent;
+            }
+            activeSpan.textContent = activeSpan.dataset.template.replace(
                 '$NUMBER',
                 count.toString()
             );
@@ -3157,7 +3163,8 @@ window.onload = function () {
         if (
             ['ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(
                 event.key
-            )
+            ) &&
+            !event.isComposing
         ) {
             event.preventDefault();
             let newIndex = activeDivIndex;
@@ -3188,7 +3195,7 @@ window.onload = function () {
             }
         }
 
-        if (event.key === 'Enter' && activeDiv) {
+        if (event.key === 'Enter' && activeDiv && !event.isComposing) {
             event.preventDefault();
             event.stopImmediatePropagation();
             const anchorTag = activeDiv.querySelector('a');

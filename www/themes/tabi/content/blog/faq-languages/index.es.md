@@ -1,7 +1,7 @@
 +++
 title = "¿Lost in Translation? Explora las capacidades multilingües de tabi"
 date = 2023-09-12
-updated = 2024-08-18
+updated = 2026-09-13
 description = "Descubre cómo tabi te ayuda a conectar con una audiencia global gracias a sus funciones multilingües. Aprende a cambiar el idioma por defecto, añadir más idiomas y aportar tus propias traducciones."
 
 [taxonomies]
@@ -30,6 +30,7 @@ tabi admite los siguientes idiomas:
 - Coreano
 - Español
 - Estonio
+- Finlandés
 - Francés
 - Hindi
 - Inglés
@@ -38,6 +39,7 @@ tabi admite los siguientes idiomas:
 - Odia
 - Persa
 - Portugués (Europeo)
+- Portugués (Brasil)
 - Ruso
 - Ucraniano
 
@@ -106,6 +108,19 @@ Por lo tanto, si creas `i18n/en.toml` en tu directorio base, tabi leerá las cad
 
 Asegúrate de copiar todo el archivo para ese idioma primero, o el tema usará el inglés para las claves faltantes.
 
+## ¿Cómo personalizo los formatos de fecha para diferentes idiomas?
+
+Puedes establecer formatos de fecha específicos por idioma en tu `config.toml` usando la matriz `date_formats`:
+
+```toml
+date_formats = [
+    { lang = "es", long = "d 'de' MMMM 'de' y", short = "d MMM y" },
+    { lang = "de", long = "d. MMMM y", short = "dd.MM.y", archive = "dd. MMM" },
+]
+```
+
+Estos son [patrones UTS-35](https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table), y los nombres textuales de los meses y los días de la semana siguen la configuración regional del idioma. Esto permite que cada idioma utilice el orden, la puntuación y el nivel de detalle que prefiera. Si no se define un formato específico para un idioma, tabi usa la configuración global `long_date_format`, `short_date_format` y `archive_date_format`.
+
 ## ¿Qué pasa si falta una traducción o está incompleta?
 
 Si una cadena no se encuentra en el archivo de idioma, tabi recurrirá a la cadena predeterminada en inglés.
@@ -133,3 +148,7 @@ Si lo hiciste, tendrás que actualizar manualmente las traducciones. Puedes hace
 ## ¿tabi traduce el contenido de mi sitio?
 
 No. tabi sólo traduce el tema. Los posts deberás traducirlos tú mismo.
+
+## ¿Cómo puedo mostrar el código del idioma actual en el conmutador de idioma?
+
+Añade `show_selected_language_code_in_language_switcher = true` en la sección `[extra]` de tu `config.toml`.

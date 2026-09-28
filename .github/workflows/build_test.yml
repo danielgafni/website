@@ -19,14 +19,7 @@ jobs:
     - name: Lint (git hooks)
       run: devenv shell -- prek run --all-files
     - name: Build site
-      run: nix build .
-      working-directory: ./www
-    - name: Check site flake
-      run: nix flake check
-      working-directory: ./www
-    - name: Check infra dev shell
-      run: devenv shell -- true
-      working-directory: ./infra
+      run: devenv shell -- zola --root www build
 
   deploy:
     needs: [build-and-test]
@@ -39,10 +32,11 @@ jobs:
         with:
           name: danielgafni
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix build .
-        working-directory: ./www
+      - name: Install devenv
+        run: nix profile install github:cachix/devenv/v2.3.1 --accept-flake-config
+      - run: devenv shell -- zola --root www build
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy www/result --project-name=gafni-dev --branch=master
+          command: pages deploy www/public --project-name=gafni-dev --branch=master

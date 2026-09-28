@@ -20,7 +20,7 @@ Note that this occured before the diffusion models boom.
 
 Click to reveal recolored version
 
-{{ image_toggler(default_src="https://github.com/danielgafni/repalette/blob/master/screenshots/flowers.jpg?raw=true", toggled_src="https://github.com/danielgafni/repalette/blob/master/screenshots/flowers_recolored.png?raw=true", default_alt="Original", toggled_alt="Recolored") }}
+{{< image_toggler default_src="https://github.com/danielgafni/repalette/blob/master/screenshots/flowers.jpg?raw=true" toggled_src="https://github.com/danielgafni/repalette/blob/master/screenshots/flowers_recolored.png?raw=true" default_alt="Original" toggled_alt="Recolored" />}}
 
 ---
 

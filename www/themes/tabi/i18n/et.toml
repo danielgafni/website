@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 language_name = "Eesti"  # Shown in language picker for multi-language sites.
 date_locale = "et_EE"
 full_stop = "."  # Used at the end of a sentence.
@@ -23,6 +26,7 @@ one_results = "$NUMBER tulemus"  # "1 result"
 many_results = "$NUMBER tulemust"  # "3 results"
 
 # Navigation.
+skip_to_content = "Hüppa sisu juurde"
 pinned = "Kinnitatud"
 jump_to_posts = "Hüppa postitusteni"
 read_more = "Loe edasi"
@@ -68,6 +72,9 @@ load_comments = "Lae kommentaarid"
 copied = "Kopeeritud!"
 copy_code_to_clipboard = "Kopeeri kood lõikelauale"
 
+# iine appreciation button.
+like_this_post = "Mulle meeldib see postitus"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "Toetab"
 and = "ja"
@@ -80,7 +87,7 @@ translation_missing = "või pole seda veel teie keelde tõlgitud"
 check_url = "Kontrollige URL-i vigade suhtes või"
 go_home = "minge tagasi avalehele"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "Näita originaaltsitaati"
 show_translation = "Näita tõlget"

@@ -4,7 +4,7 @@ license = "MIT"
 homepage = "https://github.com/welpo/tabi"
 
 # The minimum version of Zola required
-min_version = "0.17.0"
+min_version = "0.23.6"
 
 # An optional live demo URL
 demo = "https://welpo.github.io/tabi"
@@ -21,13 +21,6 @@ homepage = "https://osc.garden"
 [extra]
 # Check out the documentation (or the comments below) to learn how to customise tabi:
 # https://welpo.github.io/tabi/blog/mastering-tabi-settings/
-
-# Search index format.
-# For Zola 0.17.X users only.
-# This MUST MATCH the setting in [search].index_format.
-# Example: If [search].index_format is "elasticlunr_javascript", set:
-# index_format = "elasticlunr_javascript" here.
-# index_format = ""
 
 # Use sans-serif font everywhere.
 # By default, the serif font is only used in articles.
@@ -55,6 +48,9 @@ skin = ""
 # More details: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
 # browser_theme_color = "#087e96"  # Example of single value.
 # browser_theme_color = ["#ffffff", "#000000"]  # Example of light/dark colours.
+
+# Show current language code on the language switcher
+show_selected_language_code_in_language_switcher = false
 
 # List additional stylesheets to load site-wide.
 # These stylesheets should be located in your site's `static` directory.
@@ -114,6 +110,14 @@ show_date = true
 # "both" - Show both the original date and the last updated date.
 post_listing_date = "date"
 
+# Enable iine like buttons on all posts: https://iine.to/
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+iine = false
+iine_icon = "heart"  # See https://iine.to/#customise
+# Unify like counts across all language versions of the same page.
+# When enabled, likes on /es/blog/hello/ will count towards /blog/hello/ (default language).
+iine_unified_languages = true
+
 # Show "Jump to posts" link next to series' title.
 # By default, the link appears automatically when a series description exceeds 2000 characters.
 # Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
@@ -123,12 +127,6 @@ post_listing_date = "date"
 # It has only effect if the section uses indexes metadata (which is only the case for series as of now).
 # Can be set at section levels, following the hierarchy: section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
 post_listing_index_reversed = false  # Defaults to false.
-
-# DEPRECATED!
-# Use Zola's built-in `bottom_footnotes = true` in the [markdown] section instead. (Available since v0.19.0)
-# Adds backlinks to footnotes (loads ~500 bytes of JavaScripts).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-footnote_backlinks = false
 
 # Enable KaTeX for all posts.
 # Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
@@ -168,12 +166,23 @@ quick_navigation_buttons = false
 # toc = false
 
 # Date format used when listing posts (main page, /blog section, tag posts list…)
-# Default is "6th July 2049" in English and "%d %B %Y" in other languages.
-# long_date_format = "%d %B %Y"
+# Default is "6th July 2049" in English and "dd MMMM y" in other languages.
+# long_date_format = "dd MMMM y"
 
 # Date format used for blog posts.
-# Default is "6th July 2049" in English and "%-d %B %Y" in other languages.
+# Default is "6th Jul 2049" in English and "d MMM y" in other languages.
 short_date_format = ""
+
+# Date format used for the archive page.
+# Default is "06 July" in English and "dd MMM" in other languages.
+# archive_date_format = ""
+
+# Per-language date format overrides. Formats use UTS-35.
+# Examples: Spanish uses "3 de febrero de 2024", German uses "3. Februar 2024".
+# date_formats = [
+#     { lang = "es", long = "d 'de' MMMM 'de' y", short = "d MMM y" },
+#     { lang = "de", long = "d. MMMM y", short = "dd.MM.y", archive = "dd. MMM" },
+# ]
 
 # Custom separator used in title tag and posts metadata (between date, time to read, and tags).
 separator = "•"
@@ -218,8 +227,9 @@ menu = [
     { name = "projects", url = "projects", trailing_slash = true },
 ]
 
-# The RSS icon will be shown if (1) it's enabled and (2) the following variable is set to true.
-# Note for Zola 0.19.X users: when `feed_filenames` has two filenames, only the first one will be linked in the footer.
+# The RSS icon will be shown if (1) it's enabled and (2) the following variable is set.
+# Set to true to use the default "rss" icon, or specify a custom icon name (e.g. "square-rss").
+# The icon must exist in static/social_icons/ (without the .svg extension).
 feed_icon = true
 
 # Show the full post content in the Atom feed.
@@ -267,7 +277,6 @@ encode_plaintext_email = true  # Setting is ignored if email is already encoded.
 # copyright = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR Unless otherwise noted, the content in this website is available under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license."
 
 # For multi-language sites, you can set a different copyright for each language.
-# The old way of setting `translated_copyright = true` and using i18n files is deprecated.
 # If a translation is missing for language, the `copyright` value will be used.
 # copyright_translations.es = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR A menos que se indique lo contrario, el contenido de esta web está disponible bajo la licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
 
@@ -309,7 +318,7 @@ custom_subset = true
 # Unique identifier for tracking.
 # For GoatCounter, this is the code you choose during signup.
 # For Umami, this is the website ID.
-# For Plausible, this is the domain name (e.g. "example.com").
+# For Plausible, this is the random script name without the extension (e.g. "pa-XXXXXX") or the domain name (legacy mode, e.g. "example.com").
 # Note: Leave this field empty if you're self-hosting GoatCounter.
 # id = "yourID"
 
@@ -319,6 +328,9 @@ custom_subset = true
 # For Plausible: Base URL like "https://plausible.example.com"
 # Leave this field empty if you're using the service's default hosting.
 # self_hosted_url = ""
+
+# Optional: For Umami, enable this option to respect users' Do Not Track (DNT) settings. The default is true.
+do_not_track = true
 
 # giscus support for comments. https://giscus.app
 # Setup instructions: https://welpo.github.io/tabi/blog/comments/#setup
@@ -361,7 +373,7 @@ custom_subset = true
 # lazy_loading = true
 
 # Isso support for comments. https://isso-comments.de/
-# You need to self-host the backend first: https://blog.phusion.nl/2018/08/16/isso-simple-self-hosted-commenting-system/
+# You need to self-host the backend first: https://blog.phusion.nl/isso-simple-self-hosted-commenting-system/
 # More info on some settings: https://isso-comments.de/docs/reference/client-config/
 [extra.isso]
 # enabled_for_all_posts = false  # Enables Isso on all posts. It can be enabled on individual posts by setting `isso = true` in the [extra] section of a post's front matter.
@@ -375,3 +387,69 @@ custom_subset = true
 # voting = true
 # page_author_hashes = ""  # hash (or list of hashes) of the author.
 # lazy_loading = true  # Loads when the comments are in the viewport (using the Intersection Observer API).
+
+[extra.webmentions]
+# To disable for a specific section or page, set webmentions = false in that page/section's front matter's [extra] section.
+enable = false
+# Specify the domain registered with webmention.io.
+# domain = ""
+
+# The HTML ID for the object to fill in with the webmention data.
+# Defaults to "webmentions"
+# id = "webmentions"
+
+# data configuration for the webmention.min.js script
+# The base URL to use for this page. Defaults to window.location
+# page_url =
+
+# Additional URLs to check, separated by |s
+# add_urls
+
+# The maximum number of words to render in reply mentions.
+# wordcount = 20
+
+# The maximum number of mentions to retrieve. Defaults to 30.
+# max_webmentions = 30
+
+# By default, Webmentions render using the mf2 'url' element, which plays
+# nicely with webmention bridges (such as brid.gy and telegraph)
+# but allows certain spoofing attacks. If you would like to prevent
+# spoofing, set this to a non-empty string (e.g. "true").
+# prevent_spoofing
+
+# What to order the responses by; defaults to 'published'. See
+# https://github.com/aaronpk/webmention.io#api
+# sort_by
+
+# The order to sort the responses by; defaults to 'up' (i.e. oldest
+# first). See https://github.com/aaronpk/webmention.io#api
+# sort_dir
+
+# If set to a non-empty string (e.g. "true"), will display comment-type responses
+# (replies/mentions/etc.) as being part of the reactions
+# (favorites/bookmarks/etc.) instead of in a separate comment list.
+# comments_are_reactions = "true"
+
+# h-card configuration
+# Will identify you on the indieweb (see https://microformats.org/wiki/h-card)
+[extra.hcard]
+# Enable home page h-card.
+enable = true
+# Add your email to the card if extra.email is set and not encoded.
+# with_mail = true
+# Add your social links ('socials' config) to the card.
+with_social_links = true
+# Homepage url. Defaults to the value of 'base_url'.
+# homepage = "https://myhomepage.net"
+# avatar = "img/profile.webp"
+# Display name, default to the value of 'author'.
+# full_name = "John Doe"
+# Small bio, as shown on social media profiles.
+# biography = "Fond of the indieweb"
+#
+# You can add any property from https://microformats.org/wiki/h-card#Properties
+# Make sure to replace all '-' characters by '_'
+# Examples:
+# p_nickname = "nickname"
+# p_locality = "Bordeaux"
+# p_country_name = "France"

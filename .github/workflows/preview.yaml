@@ -20,13 +20,19 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+        if: github.event.action != 'closed'
+      - uses: cachix/cachix-action@v15
+        if: github.event.action != 'closed'
+        with:
+          name: danielgafni
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Install devenv
+        if: github.event.action != 'closed'
+        run: nix profile install github:cachix/devenv/v2.3.1 --accept-flake-config
       - name: Zola Build
         if: github.event.action != 'closed'
-        uses: shalzz/zola-deploy-action@v0.20.0
-        env:
-          BUILD_DIR: ./www
-          BUILD_ONLY: true
-          BUILD_FLAGS: --drafts --base-url https://danielgafni.github.io/website/pr-preview/pr-${{ github.event.number }}
+        run: devenv shell -- zola --root www build --drafts --base-url https://danielgafni.github.io/website/pr-preview/pr-${{ github.event.number }}
 
       - name: Deploy Preview
         uses: rossjrw/pr-preview-action@v1
