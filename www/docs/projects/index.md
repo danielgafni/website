@@ -8,5 +8,3 @@ hide:
 ---
 
 # Projects
-
-Projects I've built professionally

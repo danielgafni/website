@@ -1,0 +1,15 @@
+# Sidebar order. awesome-nav can't sort by front matter, so keep this in sync
+# with each project's `weight` (lowest first); the cards sort by `weight` itself.
+append_unmatched: true
+nav:
+  - index.md
+  - metaxy.md
+  - dagster-ray.md
+  - dagster-polars.md
+  - sanas-ai-dagster-ray.md
+  - freak.md
+  - zakupki-hack.md
+  - raifhack-siamese-tabnet.md
+  - repalette.md
+  - cardiospike.md
+  - nixos.md

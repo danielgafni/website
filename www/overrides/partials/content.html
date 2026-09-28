@@ -1,0 +1,18 @@
+{#-
+  Copy of the built-in partials/content.html that adds the project links
+  (GitHub repository, YouTube video) to pages that set them in front matter.
+-#}
+{% include "partials/actions.html" %}
+{% if "<h1" not in page.content %}
+  <h1 id="__skip">{{ page.title | d(config.site_name, true)}}</h1>
+{% endif %}
+{{ page.content }}
+{% if page.meta and (page.meta.github_url or page.meta.youtube_url) %}
+  {% set project = page %}
+  <hr>
+  {% include "partials/project-links.html" %}
+{% endif %}
+{% include "partials/tags.html" %}
+{% include "partials/source-file.html" %}
+{% include "partials/feedback.html" %}
+{% include "partials/comments.html" %}
