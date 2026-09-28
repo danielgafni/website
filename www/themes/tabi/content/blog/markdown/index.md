@@ -1,7 +1,7 @@
 +++
 title = "Markdown examples"
 date = 2023-01-31
-updated = 2024-11-23
+updated = 2026-09-12
 description = "This post showcases some examples of Markdown formatting, including a table, code blocks and tags, quotes, tables, and footnotes."
 
 [taxonomies]
@@ -24,7 +24,7 @@ To display the expression **on its own line and centered**, wrap it around `$$` 
 
 For example, `\\[ r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}} \\]` renders: \\[ r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}} \\]
 
-To activate $\KaTeX$ for a post or an entire section, include `katex = true` within the `[extra]` section of the front matter. For exemple:
+Enable $\KaTeX$ by setting `katex = true` in `[extra]`:
 
 ```toml,hl_lines=5-6
 title = "Testing KaTeX"
@@ -34,11 +34,19 @@ date = 2002-11-30
 katex = true
 ```
 
-You may enable it globally as well, by setting `katex = true` in the `[extra]` section of your `config.toml`.
+Works in: page front matter, section `_index.md`, or globally in `config.toml`.
 
 For enhanced performance and security, the $\KaTeX$ JavaScript, CSS, and fonts are hosted locally.
 
 **Note**: After enabling $\KaTeX$, if you want to use \$ without rendering a mathematical expression, escape it with a single backslash: `\$`.
+
+### Chemistry formulas
+
+Chemistry formulas are supported via the [mhchem extension](https://mhchem.github.io/MathJax-mhchem/), which loads automatically when using `\ce{}` or `\pu{}`.
+
+`\ce{}` for chemistry: $\ce{H2O}$, $\ce{CO2 + H2O -> H2CO3}$
+
+`\pu{}` for units: $\pu{25 °C}$, $\pu{1.2 mol/L}$
 
 ## Table
 
@@ -104,6 +112,43 @@ In Rust, you declare a mutable variable with `let mut x = 5;`, whereas in Python
 > "We're all hurtling towards death. Yet here we are, for the moment, alive. Each of us knowing we're going to die. Each of us secretly believing we won't."
 >
 > — Charlie Kaufman, Synecdoche, New York
+
+## GitHub-style alerts
+
+Setting `github_alerts = true` in the `[markdown]` section of your `config.toml` enables [GitHub-style alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts):
+
+```markdown
+> [!NOTE]
+> This is a note!
+>
+> It can span multiple paragraphs.
+
+> [!CAUTION]
+> Pay caution before continuing!
+```
+
+The result looks like:
+
+> [!NOTE]
+> This is a note!
+>
+> It can span multiple paragraphs.
+
+> [!CAUTION]
+> Pay caution before continuing!
+
+The supported alert types are `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, and `CAUTION`.
+
+The labels are translated automatically based on the page's language. To change them (or to add a missing language), override the `--alert-{type}-label` CSS variables in [custom CSS](@/blog/mastering-tabi-settings/index.md#custom-css):
+
+```css
+html:lang(eo) {
+    --alert-note-label: "Noto";
+    --alert-caution-label: "Atentu";
+}
+```
+
+For full control over the title, icon, and colours, see the [admonitions component](@/blog/shortcodes/index.md#admonitions).
 
 ---
 

@@ -1,0 +1,8 @@
+{% component resized_image(path: string, height: number, op: string) %}
+{# resize to 2x the display height (capped at the source) so it stays sharp on HiDPI screens #}
+{% set meta = get_image_metadata(path=path) %}
+{% set target = height * 2 %}
+{% if target > meta.height %}{% set target = meta.height %}{% endif %}
+{% set image = resize_image(path=path, height=target, op=op) %}
+<img src="{{ image.url }}" width="{{ (image.width * height / image.height) | round | int }}" />
+{% endcomponent resized_image %}

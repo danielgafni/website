@@ -1,7 +1,7 @@
 +++
 title = "Table of Contents"
 date = 2022-11-01
-updated = 2024-02-16
+updated = 2026-09-12
 description = "A post showcasing the optional Table of Contents and its options."
 
 [taxonomies]
@@ -28,7 +28,7 @@ If you'd rather show the ToC elsewhere on your post (e.g. after an introduction)
 <!-- toc -->
 ```
 
-You can also use the simple `{{/* toc() */}}` shortcode, which will simply write that string for you, effectively inserting the ToC ([Michael Clayton's idea](https://github.com/getzola/zola/issues/584#issuecomment-1546086781)).
+You can also use the simple `{% raw %}{{< toc />}}{% endraw %}` component, which will simply write that string for you, effectively inserting the ToC ([Michael Clayton's idea](https://github.com/getzola/zola/issues/584#issuecomment-1546086781)).
 
 This method will render the ToC without the "Table of Contents" header. This allows you to use a different (or no) header for the ToC, or hide it like this:
 
@@ -85,7 +85,7 @@ Keep your readers in mind when setting the `toc_levels`. While it can be temptin
 
 You might want to hide certain headers. For example, if your article has many Figures or Tables, they might clutter the ToC. You can hide specific headers in the ToC with the `toc_ignore_pattern` variable.
 
-This variable expects a regular expression (regex), as it's using Tera's [matching](https://keats.github.io/tera/docs/#matching) test. The `toc_ignore_pattern` is tested against the text of the header, excluding the `#` character(s). For example, for the header `### Further reading`, the text `Further reading` would be checked against.
+This variable expects a regular expression (regex), as it's using Tera's [matching](https://web.archive.org/web/20260427052217/https://keats.github.io/tera/docs/#matching) test. The `toc_ignore_pattern` is tested against the text of the header, excluding the `#` character(s). For example, for the header `### Further reading`, the text `Further reading` would be checked against.
 
 Here are some example values for `toc_ignore_pattern` along with the headers they can hide:
 

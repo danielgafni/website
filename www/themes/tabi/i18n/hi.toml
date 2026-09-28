@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 # This has been machine translated.
 # If you would like to help correct errors or improve the translation, please open an issue or submit a pull request.
 language_name = "हिंदी"  # Shown in language picker for multi-language sites.
@@ -25,6 +28,7 @@ one_results = "$NUMBER परिणाम"  # "1 result"
 many_results = "$NUMBER परिणाम"  # "3 results"
 
 # Navigation.
+skip_to_content = "सामग्री पर जाएं"
 pinned = "पिन किया गया"
 jump_to_posts = "पोस्ट पर जाएं"
 read_more = "और पढ़ें"
@@ -70,6 +74,9 @@ load_comments = "कमेंट्स लोड करें"
 copied = "कॉपी किया गया!"
 copy_code_to_clipboard = "कोड क्लिपबोर्ड में कॉपी करें"
 
+# iine appreciation button.
+like_this_post = "मुझे यह पोस्ट पसंद है"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "चालित द्वारा"
 and = "और"
@@ -82,7 +89,7 @@ translation_missing = "या फिर आपकी भाषा में अ�
 check_url = "URL में त्रुटियों की जांच करें या"
 go_home = "मुख्य पृष्ठ पर वापस जाएं"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "मौलिक उद्धरण दिखाएं"
 show_translation = "अनुवाद दिखाएं"

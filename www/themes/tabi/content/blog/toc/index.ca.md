@@ -1,7 +1,7 @@
 +++
 title = "Taula de contingut"
 date = 2022-11-01
-updated = 2024-02-16
+updated = 2026-09-12
 description = "Una publicació que mostra la taula de contingut opcional i la seva configuració."
 
 [taxonomies]
@@ -29,7 +29,7 @@ Si prefereixes col·locar la TdC a un altre lloc (per exemple, després d'una in
 <!-- toc -->
 ```
 
-També pots utilitzar el shortcode `{{/* toc() */}}`, que simplement inserirà aquest text per tu ([idea de Michael Clayton](https://github.com/getzola/zola/issues/584#issuecomment-1546086781)).
+També pots utilitzar el componente `{% raw %}{{< toc />}}{% endraw %}`, que simplement inserirà aquest text per tu ([idea de Michael Clayton](https://github.com/getzola/zola/issues/584#issuecomment-1546086781)).
 
 Aquest mètode renderitzarà la TdC sense el capçalera "Taula de Contingut". Això et permet utilitzar un capçalera diferent (o cap) per la TdC, o fins i tot ocultar-la de forma predeterminada:
 
@@ -86,7 +86,7 @@ Tingues en compte als teus lectors quan establertis `toc_levels`. Encara que pot
 
 És possible que vulguis amagar certes capçaleres. Per exemple, si el teu article té moltes Figures o Taules, aquestes podrien saturar la TdC. Pots ocultar capçaleres específiques a la TdC configurant la variable `toc_ignore_pattern` en la secció `[extra]` del front matter del teu post.
 
-Aquesta variable espera una expressió regular (regex), ja que utilitza el test [matching](https://keats.github.io/tera/docs/#matching) de Tera. El `toc_ignore_pattern` es prova contra el text del capçalera. Per exemple, per a la capçalera `### Lectura addicional`, només el text `Lectura addicional` s'utilitzaria per comprovar si coincideix amb el patró.
+Aquesta variable espera una expressió regular (regex), ja que utilitza el test [matching](https://web.archive.org/web/20260427052217/https://keats.github.io/tera/docs/#matching) de Tera. El `toc_ignore_pattern` es prova contra el text del capçalera. Per exemple, per a la capçalera `### Lectura addicional`, només el text `Lectura addicional` s'utilitzaria per comprovar si coincideix amb el patró.
 
 Aquí tens alguns valors d'exemple per a `toc_ignore_pattern` juntament amb les capçaleres que amagarien:
 

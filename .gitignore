@@ -1,9 +1,7 @@
 .idea
 infra/.venv
-www/result
 www/public
 www/static/processed_images
-infra/result
 .pre-commit-config.yaml
 **/.direnv
 **/__pycache__

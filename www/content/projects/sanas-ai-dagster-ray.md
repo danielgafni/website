@@ -20,5 +20,5 @@ to automatically run the `@asset` body in an auto-scaling `KubeRay` cluster on K
 
 This talk at the Dagster Community Meetup explains the solution and how I've arrived at it in more details.
 
-{{ youtube(id="HPqQSR0BoUQ") }}
+{{< youtube id="HPqQSR0BoUQ" />}}
 

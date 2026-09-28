@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 language_name = "Català"  # Shown in language picker for multi-language sites.
 date_locale = "ca_ES"
 full_stop ="."  # Used at the end of a sentence.
@@ -23,6 +26,7 @@ one_results = "$NUMBER resultat"  # "1 result"
 many_results = "$NUMBER resultats"  # "3 results"
 
 # Navigation.
+skip_to_content = "Saltar al contingut"
 pinned = "Fixada"
 jump_to_posts = "Saltar als articles"
 read_more = "Llegir més"
@@ -68,6 +72,9 @@ load_comments = "Carregar comentaris"
 copied = "Copiat!"
 copy_code_to_clipboard = "Copia el codi al porta-retalls"
 
+# iine appreciation button.
+like_this_post = "M'agrada aquesta publicació"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "Propulsat per"
 and = "i"
@@ -80,7 +87,7 @@ translation_missing = "o encara no s'ha traduït al teu idioma"
 check_url = "Comprova l'URL per detectar errors o"
 go_home = "torna a la pàgina d'inici"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "Mostra la cita original"
 show_translation = "Mostra la traducció"

@@ -9,7 +9,7 @@ max_posts = 4
 projects_path = "projects/_index.md"
 +++
 
-{{ resize_image(path="me.png", height=250, op="fit_height") }}
+{{< resized_image path="me.png" height={250} op="fit_height" />}}
 
 ---
 

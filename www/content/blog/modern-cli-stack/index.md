@@ -12,7 +12,7 @@ This is an export of my old 2022 Medium [article](https://danielgafni.medium.com
 ---
 
 
-This post is about the awesome {{ spoiler(text="Rust", fixed_blur=false) }}-based **cross-platform** CLI ecosystem which I’ve discovered recently. All of them share the same nice properties: they have rich defaults, convenient configuration formats, and are cross-platform. Adopting them made me feel better about my dev workflows :) 
+This post is about the awesome {{< spoiler text="Rust" fixed_blur={false} />}}-based **cross-platform** CLI ecosystem which I’ve discovered recently. All of them share the same nice properties: they have rich defaults, convenient configuration formats, and are cross-platform. Adopting them made me feel better about my dev workflows :) 
 
 My new stack vs the old stack:
 
@@ -68,7 +68,7 @@ By the way, `nushell` is officially supported by `Poetry` since `1.2.0`.
 
 ## Starship
 
-[Starship](https://starship.rs/) is a terminal prompt written in .. yes, in {{ spoiler(text="Rust", fixed_blur=false) }}
+[Starship](https://starship.rs/) is a terminal prompt written in .. yes, in {{< spoiler text="Rust" fixed_blur={false} />}}
 . It makes in very fast (actually, this is not an improvement over `powerlevel10k` since it’s written in C++). Starship has very rich configuration options in a simple `yaml` file. But, just like `nushell` , it doesn't _need_ any configuration initially - all the defaults are already set! It also provides nice ready-to-use config [presets](https://starship.rs/presets/#nerd-font-symbols).
 
 Starship automatically integrates with multiple other tools & technologies. It can display package versions (for example, when in a `Poetry` project), show AWS region, kubernetes context & namespace.. in short, it works with everything. Take a look at the full list of integrations [here](https://starship.rs/config/#prompt).
@@ -129,7 +129,7 @@ Again, you don’t need to configure anything at all to achieve this! In contrar
 
 ## Closing Notes
 
-{{ admonition(type="tip", text="You can find more awesome Rust CLI tools in [this](https://www.reddit.com/r/rust/comments/xgwe4u/your_favourite_rust_cli_utilities_this_year/) Reddit post.") }}
+{{< admonition type="tip" text="You can find more awesome Rust CLI tools in [this](https://www.reddit.com/r/rust/comments/xgwe4u/your_favourite_rust_cli_utilities_this_year/) Reddit post." />}}
 
 
 My [old](https://github.com/danielgafni/dotfiles) and [new](https://github.com/danielgafni/nixos) (warning: nix!) dotfiles repos include some config files which can be used for inspiration. 

@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 # This has been machine translated.
 # If you would like to help correct errors or improve the translation,
 # please open an issue or submit a pull request.
@@ -33,6 +36,7 @@ few_results = "$NUMBER результати"
 many_results = "$NUMBER результатів"
 
 # Navigation.
+skip_to_content = "Перейти до вмісту"
 pinned = "Закріплено"
 jump_to_posts = "Перейти до дописів"
 read_more = "Читати далі"
@@ -81,6 +85,9 @@ load_comments = "Завантажити коментарі"
 copied = "Скопійовано!"
 copy_code_to_clipboard = "Копіювати код у буфер обміну"
 
+# iine appreciation button.
+like_this_post = "Мені подобається ця стаття"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "Під управлінням"
 and = "та"
@@ -93,7 +100,7 @@ translation_missing = "або ще не перекладена на вашу м�
 check_url = "Перевірте URL на помилки або"
 go_home = "поверніться на головну сторінку"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "Показати оригінальну цитату"
 show_translation = "Показати переклад"

@@ -1,7 +1,18 @@
 {pkgs, ...}: {
-  # prek runs the git hooks (a faster drop-in for pre-commit); blacken-docs is
-  # not tied to a specific hook.
-  packages = [pkgs.prek pkgs.blacken-docs];
+  packages = with pkgs; [
+    # prek runs the git hooks (a faster drop-in for pre-commit); blacken-docs is
+    # not tied to a specific hook.
+    prek
+    blacken-docs
+    # zola builds the site in www/.
+    zola
+    # Tooling for provisioning Cloudflare with Pulumi (Python, managed by uv)
+    # and deploying the static site to Cloudflare Pages (wrangler).
+    pulumi-bin
+    uv
+    just
+    wrangler
+  ];
 
   git-hooks = {
     excludes = ["www/themes/tabi"];

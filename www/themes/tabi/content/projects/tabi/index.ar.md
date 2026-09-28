@@ -12,7 +12,7 @@ local_image = "projects/tabi/tabi.webp"
 
 [**تابي**](https://github.com/welpo/tabi) هي سمة عصرية غنية بالمميزات لـ[Zola](https://www.getzola.org/)، منشئ مواقع ثابتة سريع.
 
-{{ full_width_image(src="https://cdn.jsdelivr.net/gh/welpo/tabi@main/light_dark_screenshot.png", alt="تابي في الوضعين الفاتح والداكن") }}
+{{< full_width_image src="https://cdn.jsdelivr.net/gh/welpo/tabi@main/light_dark_screenshot.png" alt="تابي في الوضعين الفاتح والداكن" />}}
 
 #### [عرض على GitHub](https://github.com/welpo/tabi) • [عرض توضيحي وتوثيق](https://welpo.github.io/tabi/) {.centered-text}
 
@@ -23,6 +23,7 @@ local_image = "projects/tabi/tabi.webp"
 - سمتان داكنة وفاتحة، مع التبديل التلقائي حسب إعدادات النظام
 - [دعم التعليقات](https://welpo.github.io/tabi/blog/comments/) باستخدام giscus أو utterances أو Hyvor Talk أو Isso
 - [دعم KaTeX](https://katex.org/) للمعادلات الرياضية
+- [دعم Indieweb](https://indieweb.org/) مع microformats وh-card وwebmentions
 - [دعم Mermaid](https://welpo.github.io/tabi/blog/shortcodes/#mermaid-diagrams) لإنشاء المخططات
 - [بحث محلي](https://welpo.github.io/tabi/blog/mastering-tabi-settings/#search) متعدد اللغات
 - تصميم متجاوب يعمل على جميع الأجهزة

@@ -1,11 +1,3 @@
-{% import "macros/format_date.html" as macros_format_date %}
-{% import "macros/list_posts.html" as macros_list_posts %}
-{% import "macros/page_header.html" as macros_page_header %}
-{% import "macros/rel_attributes.html" as macros_rel_attributes %}
-{% import "macros/settings.html" as macros_settings %}
-{% import "macros/table_of_contents.html" as macros_toc %}
-{% import "macros/translate.html" as macros_translate %}
-{% import "macros/series_page.html" as macros_series_page %}
 
 {# Load the internationalisation data for the current language from
 the .toml files in the user's '/i18n' folder, falling back to the theme's.
@@ -14,26 +6,27 @@ This variable will hold all the text strings for the language #}
 {%- if not language_strings -%}
     {%- set language_strings = load_data(path="themes/tabi/i18n/" ~ lang ~ ".toml", required=false) -%}
 {%- endif -%}
-{% set rtl_languages = ["ar", "arc", "az", "dv", "ff", "he", "ku", "nqo", "fa", "rhg", "syc", "ur"] %}
+{%- if not language_strings -%}{%- set language_strings = {} -%}{%- endif -%}
+{#- Define optional contexts for templates such as 404.html that do not provide them. -#}
+{%- if not page is defined -%}{%- set page = {} -%}{%- endif -%}
+{%- if not section is defined -%}{%- set section = {} -%}{%- endif -%}
+{%- if not term is defined -%}{%- set term = {} -%}{%- endif -%}
+{%- if not taxonomy is defined -%}{%- set taxonomy = {} -%}{%- endif -%}
+{%- if not paginator is defined -%}{%- set paginator = {} -%}{%- endif -%}
 
-{#- Necessary for the hierarchy macro -#}
-{%- if page -%}
-    {%- set current_page = page -%}
-{%- else -%}
-    {%- set current_page = ""-%}
-{%- endif -%}
-
+{%- set force_codeblock_ltr_value %}{{< evaluate_setting_priority setting="force_codeblock_ltr" default_global_value="true" />}}{% endset -%}
 <!DOCTYPE html>
 <html lang="{{ lang }}" {% if config.extra.default_theme -%}
     data-theme="{{config.extra.default_theme}}"
-{%- endif -%}{% if macros_settings::evaluate_setting_priority(setting="force_codeblock_ltr", page=current_page, default_global_value=true) == "false" -%}
+{%- endif -%}{% if force_codeblock_ltr_value | trim == "false" -%}
     data-code-direction="inherit"{% endif %}>
 
 {% include "partials/header.html" %}
 
-<body{% if lang in rtl_languages %} dir="rtl"{% endif %}{% if config.extra.override_serif_with_sans %} class="use-sans-serif"{% endif %}>
+<body dir="{{ text_direction(lang=lang) }}"{% if config.extra.override_serif_with_sans %} class="use-sans-serif"{% endif %}>
+    <a href="#main-content" id="skip-link">{{< translate key="skip_to_content" default="Skip to content" />}}</a>
     {% include "partials/nav.html" %}
-    <div class="content">
+    <div class="content" id="main-content">
 
         {# Post page is the default #}
         {% block main_content %}
@@ -41,6 +34,9 @@ This variable will hold all the text strings for the language #}
         {% endblock main_content %}
     </div>
     {% include "partials/footer.html" %}
+
+    {# Users can optionally provide this template to add content to the body element. #}
+    {% include "tabi/extend_body.html" %}
 </body>
 
 </html>

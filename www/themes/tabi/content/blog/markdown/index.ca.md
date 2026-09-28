@@ -1,7 +1,7 @@
 +++
 title = "Exemples de Markdown"
 date = 2023-01-31
-updated = 2024-11-23
+updated = 2026-09-12
 description = "Aquesta publicació mostra alguns exemples de format en Markdown, incloent-hi una taula, blocs de codi i etiquetes, citacions, taules i notes a peu de pàgina."
 
 [taxonomies]
@@ -24,7 +24,7 @@ Per mostrar l'expressió **en una línia pròpia i centrada**, embolcalla-la amb
 
 Per exemple, `\\[ r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}} \\]` es renderitzarà com: \\[ r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}} \\]
 
-Per activar $\KaTeX$ en una publicació o secció sencera, inclou `katex = true` dins de la secció `[extra]` de les metadades. Per exemple:
+Activa $\KaTeX$ afegint `katex = true` a `[extra]`:
 
 ```toml,hl_lines=5-6
 title = "Provant KaTeX"
@@ -34,11 +34,19 @@ date = 2002-11-30
 katex = true
 ```
 
-Per activar-lo globalment, afeigeix `katex = true` a la secció `[extra]` del teu `config.toml`.
+Funciona a: metadades de pàgina, `_index.md` de secció, o globalment a `config.toml`.
 
 Per obtenir un millor rendiment i seguretat, els fitxers JavaScript, CSS i les tipografies de $\KaTeX$ s'allotgen localment.
 
 **Nota**: Després d'activar $\KaTeX$, si vols utilitzar el caràcter \$ sense renderitzar-lo com a expressió matemàtica, escapa'l amb una barra inversa: `\$`.
+
+### Fórmules químiques
+
+Les fórmules químiques estan suportades mitjançant l'[extensió mhchem](https://mhchem.github.io/MathJax-mhchem/), que es carrega automàticament en utilitzar `\ce{}` o `\pu{}`.
+
+`\ce{}` per química: $\ce{H2O}$, $\ce{CO2 + H2O -> H2CO3}$
+
+`\pu{}` per unitats: $\pu{25 °C}$, $\pu{1.2 mol/L}$
 
 ## Taula
 
@@ -104,6 +112,43 @@ A Rust, declares una variable mutable amb `let mut x = 5;`, mentre que a Python,
 > «La vida, perquè sigui vida, s'ha de viure a poc a poc…»
 >
 > — Mercè Rodoreda, La plaça del Diamant
+
+## Alertes estil GitHub
+
+Configurar `github_alerts = true` a la secció `[markdown]` del teu `config.toml` activa les [alertes estil GitHub](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts):
+
+```markdown
+> [!NOTE]
+> Això és una nota!
+>
+> Pot ocupar diversos paràgrafs.
+
+> [!CAUTION]
+> Ves amb compte abans de continuar!
+```
+
+El resultat és:
+
+> [!NOTE]
+> Això és una nota!
+>
+> Pot ocupar diversos paràgrafs.
+
+> [!CAUTION]
+> Ves amb compte abans de continuar!
+
+Els tipus d'alerta disponibles són `NOTE`, `TIP`, `IMPORTANT`, `WARNING` i `CAUTION`.
+
+Les etiquetes es tradueixen automàticament segons l'idioma de la pàgina. Per canviar-les (o afegir un idioma que falti), sobreescriu les variables CSS `--alert-{tipus}-label` amb [CSS personalitzat](@/blog/mastering-tabi-settings/index.ca.md#estils-css-personalitzats):
+
+```css
+html:lang(eo) {
+    --alert-note-label: "Noto";
+    --alert-caution-label: "Atentu";
+}
+```
+
+Per tenir control total sobre el títol, la icona i els colors, consulta el [component d'advertències](@/blog/shortcodes/index.ca.md#advertencies).
 
 ---
 

@@ -10,7 +10,7 @@ stylesheets = ["css/custom.css"]
 
 +++
 
-{{ admonition(type="note", text="The approach described in this post was later developed into the [`uv` Dagger module](https://github.com/typesafe-ai/daggerverse/tree/main/uv). See its [documentation](https://daggerverse.docs.typesafe.ai/uv/) for installation and usage.") }}
+{{< admonition type="note" text="The approach described in this post was later developed into the [`uv` Dagger module](https://github.com/typesafe-ai/daggerverse/tree/main/uv). See its [documentation](https://daggerverse.docs.typesafe.ai/uv/) for installation and usage." />}}
 
 A monorepo is a single repository that contains multiple projects. It is a popular way to organize codebases with many coupled components, and is also used at very big companies like Google, Facebook, and Twitter.
 
@@ -26,13 +26,13 @@ Dagster's monorepo wasn't perfect either. Some of the drawbacks were:
 
 These problems were mostly due to technical debt
 
-{{ aside(position="right", text="I started migrating Dagster's monorepo to `uv` but at the time got [blocked](https://github.com/dagster-io/dagster/pull/23814#issuecomment-2364694200) by  conflicting development dependencies for different test suites, which was not supported by `uv` at that time (but is now).") }}
+{{< aside position="right" text="I started migrating Dagster's monorepo to `uv` but at the time got [blocked](https://github.com/dagster-io/dagster/pull/23814#issuecomment-2364694200) by  conflicting development dependencies for different test suites, which was not supported by `uv` at that time (but is now)." />}}
 
 This post focuses on a very specific use case --- `uv` Python monorepos. Until very recently, Python monorepos were quite hard to set up and maintain, with problems like the ones I mentioned above being quite common.
 
 However, nowadays we have a bunch of excellent tooling available with great out-of-the-box monorepo support.
 
-{{ admonition(type="warning", text="`uv` shouldn’t need any introduction. In 2024, `uv` took the Python ecosystem by storm, and it’s now the go-to tool for Python development. Using anything else (except perhaps [Pixi](https://pixi.sh/latest/) which can manage Conda dependencies and uses Rust crates from `uv` to handle Python wheels) doesn't make much sense anymore. Learn move about `uv` [here](https://docs.astral.sh/uv/).") }}
+{{< admonition type="warning" text="`uv` shouldn’t need any introduction. In 2024, `uv` took the Python ecosystem by storm, and it’s now the go-to tool for Python development. Using anything else (except perhaps [Pixi](https://pixi.sh/latest/) which can manage Conda dependencies and uses Rust crates from `uv` to handle Python wheels) doesn't make much sense anymore. Learn move about `uv` [here](https://docs.astral.sh/uv/)." />}}
 
 ## The dream of the monorepo
 
@@ -58,7 +58,7 @@ And it's really not with the right tooling.
 
 Contrary to what you might think, Python packaging is not a nightmare anymore. It used to be, but with the introduction of [PEP 517](https://peps.python.org/pep-0517/) and [PEP 518](https://peps.python.org/pep-0518/), and the rise of `uv`, it's actually in pretty good shape --- I rarely have to pull out my hair when working with Python packaging nowadays.
 
-{{ aside(position="right", text="I remember sweating hard before running `poetry lock` which I knew would run for an hour or two with my shitty internet connection because these juicy PyTorch wheels just had to be downloaded and hashed for every combination of Python and OS. Good times!") }}
+{{< aside position="right" text="I remember sweating hard before running `poetry lock` which I knew would run for an hour or two with my shitty internet connection because these juicy PyTorch wheels just had to be downloaded and hashed for every combination of Python and OS. Good times!" />}}
 
 
 The PEPs and their adoption were important to standardize the way Python packages are built and distributed. Because the overwhelming majority of Python packages now provide correct distribution metadata (like hashes of the package contents), it's much easier for advanced and optimized package managers like `uv` to do their job really well. Some machine learning dependencies --- and [specifically PyTorch](https://github.com/pytorch/pytorch/issues/76557) --- used to sabotage the Python packaging ecosystem, but even PyTorch now (mostly) provides the hashes with the various wheels they build for all these CUDA versions.
@@ -109,7 +109,7 @@ After this section, you should see something like this (non-essential files are 
 
 Projects recognized by `uv` as workspace members share the same `uv.lock` file, environment, can be added as dependencies to each other, and can be managed with `uv` commands.
 
-{{ admonition(type="tip", text="I like to edit the root `pyproject.toml` and set `workspace.members` to `['projects/*']` so that all the packages in the `projects` directory are recognized as workspace members.") }}
+{{< admonition type="tip" text="I like to edit the root `pyproject.toml` and set `workspace.members` to `['projects/*']` so that all the packages in the `projects` directory are recognized as workspace members." />}}
 
 To demonstrate how one project can be added as a dependency to another, let's add `lib-one` as a dependency to `lib-two`:
 
@@ -138,19 +138,19 @@ For simplicity, all the subprojects will share the same `Dockerfile`. Behold!
 <summary><strong>Click to reveal the Dockerfile</strong></summary>
 
 ```dockerfile,name=Dockerfile
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/Dockerfile") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/Dockerfile" />}}
 ```
 
 </details>
 
-{{ admonition(type="note", text="The resulting image will contain a subset of the monorepo dependencies needed for the specific project due to the `--package` flag.") }}
+{{< admonition type="note" text="The resulting image will contain a subset of the monorepo dependencies needed for the specific project due to the `--package` flag." />}}
 
 That's a lot of Docker magic! Let's break it down:
 - The `deps-prod` stage installs only runtime dependencies. This is useful for building a more lightweight image for deployment.
 - The `deps-dev` stage installs development dependencies. This is useful for building an image for QA checks or running tests.
 - The `final` stage installs the package itself. Only at this point the source code is copied into the image. The last `uv sync` invocation doesn't install any third-party dependencies, only the dependencies from our monorepo (`uv` workspace). Noticed the `--no-install-workspace` flag spammed all over the place? It's quite important as it configures `uv sync` to ignore the missing source code and install only the dependencies.
 
-{{ admonition(type="info", text="The `--mount=type=cache,target=/root/.cache/uv` flag tells Docker to mount the cache directory to the build container. This way, the cache is persisted between builds and doesn't inflate the image itself.") }}
+{{< admonition type="info" text="The `--mount=type=cache,target=/root/.cache/uv` flag tells Docker to mount the cache directory to the build container. This way, the cache is persisted between builds and doesn't inflate the image itself." />}}
 
 What a great Dockerfile! It's so efficient that it's almost a crime. Or is it not? Can you spot the problem?
 
@@ -190,7 +190,7 @@ Pick your poison.
 
 Remember our goal: to avoid unnecessary rebuilds of the final image and granularly include only the source code of the packages that are actually needed. What if we could programmatically define the Dockerfile? What if we could define the build process in Python? What if there is already a place in our project where the local dependencies graph is defined precisely?
 
-Think about it for a moment. I will give you a hint: it's {{ spoiler(text="the `uv.lock` file.", fixed_blur=false) }} I'm sorry this wasn't a hint but a direct answer, but let's move on.
+Think about it for a moment. I will give you a hint: it's {{< spoiler text="the `uv.lock` file." fixed_blur={false} />}} I'm sorry this wasn't a hint but a direct answer, but let's move on.
 
 # A thousand daggers
 
@@ -232,7 +232,7 @@ The plan:
 
 Docker can't cover steps 2, and 3. But Dagger can! Let's write a `Dagger` function to do this.
 
-{{ admonition(type="note", text="The words `container` and `image` are used interchangeably in this post. Technically, a container is a running instance of an image, but Dagger defines the `Container` type, so I will use the word `container` to refer to images most of the time.") }}
+{{< admonition type="note" text="The words `container` and `image` are used interchangeably in this post. Technically, a container is a running instance of an image, but Dagger defines the `Container` type, so I will use the word `container` to refer to images most of the time." />}}
 
 We will start by creating a new `Dagger` module sitting in a separate package in our monorepo. This way we keep it independent and reusable.
 
@@ -304,7 +304,7 @@ First, we will do a bunch of imports and define some useful types:
 <!-- blacken-docs:off -->
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=43-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 ---
@@ -318,7 +318,7 @@ dagger call build-project
 from the command line. The `build_project` function will build the Docker image for a given project and will **only contain the dependencies and source code required for that project**. This function will call other high-level methods of the class to achieve this.
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-44 82-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 The `debug_sleep` argument will be useful later.
@@ -328,31 +328,31 @@ The `debug_sleep` argument will be useful later.
 Let's implement the `container_with_third_party_dependencies` method first. That's easy, we just need to use the existing `Dockerfile` and specify the `deps-dev` target stage. Note how we don't need **any files** except `pyproject.toml` and `uv.lock` to build the Docker image for a given project. This is possible thanks to `uv` workspaces.
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-82 114-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
-{{ admonition(type="note", text="We also create a dummy `README.md` file because `Hatch` --- the default build system in `uv` projects --- requires it to be present.") }}
+{{< admonition type="note" text="We also create a dummy `README.md` file because `Hatch` --- the default build system in `uv` projects --- requires it to be present." />}}
 
 ---
 
 The `project_sources_map` dictionary is the precious information we need to enable granular copying of the source code. Here is the implementation of the `get_project_sources_map` method which retrieves it:
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-114 145-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 This function will parse the `uv.lock` file and return a dictionary where the keys are the project names and the values are the paths to the source code.
 
-{{ admonition(type="info", text="Most of the Dagger operations are lazy. The operations which trigger materializations are `async` and therefore must be explicitly awaited. This is why we use `await` to fetch the `uv.lock` file contents. It's a very elegant way to express blocking operations, because once part of the code becomes `async` (blocking), all the code that calls it must also be `async` (blocking). Smart!") }}
+{{< admonition type="info" text="Most of the Dagger operations are lazy. The operations which trigger materializations are `async` and therefore must be explicitly awaited. This is why we use `await` to fetch the `uv.lock` file contents. It's a very elegant way to express blocking operations, because once part of the code becomes `async` (blocking), all the code that calls it must also be `async` (blocking). Smart!" />}}
 
-{{ admonition(type="note", text="For extra cache efficiency this can be replaced by creating empty directories and files and delaying the source code copying to after the last `uv sync` command, but we will keep it simple for the sake of this blog post. Also, the current approach is already good enough.") }}
+{{< admonition type="note" text="For extra cache efficiency this can be replaced by creating empty directories and files and delaying the source code copying to after the last `uv sync` command, but we will keep it simple for the sake of this blog post. Also, the current approach is already good enough." />}}
 
 ---
 
 Our source code is still not copied into the image. Let's implement the `copy_source_code` method which will granularly copy the source code of a given project and its dependencies into the image. This is why we are here!
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-145 159-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 ---
@@ -360,7 +360,7 @@ Our source code is still not copied into the image. Let's implement the `copy_so
 Now the only thing left is to install the local dependencies in editable mode:
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-159 176-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 ---
@@ -371,7 +371,7 @@ All together:
 <summary><strong>Click to reveal the full Dagger module</strong></summary>
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=176-1000,linenos
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 </details>
@@ -465,14 +465,14 @@ dagger call build-project --root-dir . --project lib-one --debug-sleep=5
 
 Hooray! The build only took `2.6s` now --- the cache has not been invalidated and the build stage has been skipped!
 
-{{ admonition(type="info", text="The build is not fully cached because the `--root-dir` argument points at the entire repo (which did change). But it doesn't matter because the **final** image is cached and the build stage is skipped.") }}
+{{< admonition type="info" text="The build is not fully cached because the `--root-dir` argument points at the entire repo (which did change). But it doesn't matter because the **final** image is cached and the build stage is skipped." />}}
 
 ## Growing the pipeline
 
 Now that we have a Dagger Function which builds a container for a given project, we can easily create downstream steps in our CI pipeline. For example, this is how we can run tests for a project after building the container:
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-176 182-1000
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 Running the tests becomes:
@@ -486,7 +486,7 @@ Note how we can do it in one function call. Any upstream steps (like building th
 Another one with `pyright`:
 
 ```python,name=.dagger/src/monorepo_dagger/main.py,hide_lines=1-181
-{{ remote_text(src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py") }}
+{{< remote_text src="blog/cracking-the-python-monorepo/uv-dagger-dream/.dagger/src/monorepo_dagger/main.py" />}}
 ```
 
 Now we can just call these Dagger functions locally or in our CI/CD system (typically one CI/CD step corresponds to one `dagger call`) --- they will work exactly the same! [Dagger Cloud](https://dagger.io/cloud) can also be used to execute builds remotely (and the entire team can benefit from the shared cache). It's also worth mentioning their [integration with Depot](https://depot.dev/blog/dagger-functions-for-depot) --- provider for accelerated builds and caching, which requires zero configuration and can speed up builds even more. But the main speedup will probably come from caching of all the downstream steps.

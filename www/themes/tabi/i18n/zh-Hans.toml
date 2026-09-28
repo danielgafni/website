@@ -1,3 +1,6 @@
+# NOTE: The labels for GitHub-style alerts are defined in sass/parts/_admonitions.scss.
+# Please keep both in sync when adding or updating a language.
+
 language_name = "简体中文"  # Shown in language picker for multi-language sites.
 date_locale = "zh_CN"
 full_stop = "。"  # Used at the end of a sentence.
@@ -23,6 +26,7 @@ one_results = "$NUMBER 个结果"
 many_results = "$NUMBER 个结果"
 
 # Navigation.
+skip_to_content = "跳到内容"
 pinned = "置顶"
 jump_to_posts = "跳转到文章"
 read_more = "阅读全文"
@@ -68,6 +72,9 @@ load_comments = "载入留言"
 copied = "已复制!"  # Machine translated.
 copy_code_to_clipboard = "复制代码到剪贴板"  # Machine translated.
 
+# iine appreciation button.
+like_this_post = "喜欢这篇文章"
+
 # Footer: Powered by Zola and tabi.
 powered_by = "网站基于"
 and = "和"
@@ -80,7 +87,7 @@ translation_missing = "或尚未翻译成您的语言"
 check_url = "请检查网址是否有误或"
 go_home = "返回首页"
 
-# For multilingual quote shortcode.
+# For the multilingual quote component.
 # https://welpo.github.io/tabi/blog/shortcodes/#multilingual-quotes
 show_original_quote = "显示原文"
 show_translation = "显示译文"

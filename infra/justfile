@@ -7,7 +7,7 @@ deploy-infra:
 preview-infra:
     pulumi preview --stack {{stack}}
 
-# Build the site with Nix and upload it to Cloudflare Pages.
+# Build the site with zola and upload it to Cloudflare Pages.
 deploy:
-    nix build ../www --out-link result
-    wrangler pages deploy result --project-name=gafni-dev --branch=master
+    zola --root ../www build
+    wrangler pages deploy ../www/public --project-name=gafni-dev --branch=master

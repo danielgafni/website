@@ -8,6 +8,7 @@
 @use 'parts/_header-anchor.scss';
 @use 'parts/_header.scss';
 @use 'parts/_home-banner.scss';
+@use 'parts/_iine.scss';
 @use 'parts/_image-hover.scss';
 @use 'parts/_image-toggler.scss';
 @use 'parts/_image.scss';
@@ -18,10 +19,10 @@
 @use 'parts/_quick_navigation_buttons.scss';
 @use 'parts/_search.scss';
 @use 'parts/_spoiler.scss';
-@use 'parts/_syntax_theme.scss';
 @use 'parts/_table.scss';
 @use 'parts/_tags.scss';
 @use 'parts/_theme-switch.scss';
+@use 'parts/_webmention.scss';
 @use 'parts/_zola-error.scss';
 
 @font-face {
@@ -196,7 +197,7 @@ article {
 }
 
 .section-title {
-    display: block;
+    display: flex;
     margin: 0;
     margin-top: -0.15em;
     color: var(--text-color-high-contrast);

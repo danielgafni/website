@@ -6,7 +6,6 @@ draft = true
 [taxonomies]
 tags = ["AWS", "EKS", "Kubernetes", "DevOPS", "Terraform", "Dagster", "ArgoCD"]
 [extra]
-add_src_to_code_block = true
 
 +++
 
