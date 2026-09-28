@@ -1,0 +1,19 @@
+/* typesafe.ai pink accent */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #ca35a5;
+  --md-primary-fg-color--light: #d45bb6;
+  --md-primary-fg-color--dark: #a52a86;
+  --md-accent-fg-color: #ca35a5;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #f386a1;
+  --md-primary-fg-color--light: #f7a9bc;
+  --md-primary-fg-color--dark: #d45bb6;
+  --md-accent-fg-color: #f386a1;
+}
+
+/* centered intro on the home page */
+.md-typeset .home-intro {
+  text-align: center;
+}
