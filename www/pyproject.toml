@@ -1,0 +1,10 @@
+[project]
+name = "website"
+version = "0.0.0"
+description = "Static site for gafni.dev, built with Zensical"
+requires-python = ">=3.11"
+dependencies = [
+    "pillow>=12.3.0",
+    "pyyaml>=6.0.3",
+    "zensical>=0.0.65",
+]

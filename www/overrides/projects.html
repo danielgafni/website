@@ -1,0 +1,10 @@
+{#- Projects section index: lists the section's pages as cards, ordered by `weight` -#}
+{% extends "main.html" %}
+{% block content %}
+  {{ super() }}
+  {% set section = page.ancestors | last %}
+  {% set projects = section.children | rejectattr("is_index") | sort(attribute="meta.weight") %}
+  <div class="md-typeset">
+    {% include "partials/project-cards.html" %}
+  </div>
+{% endblock %}

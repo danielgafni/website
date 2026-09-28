@@ -4,19 +4,28 @@
     # not tied to a specific hook.
     prek
     blacken-docs
-    # zola builds the site in www/.
-    zola
-    # Tooling for provisioning Cloudflare with Pulumi (Python, managed by uv)
-    # and deploying the static site to Cloudflare Pages (wrangler).
+    # Tooling for provisioning Cloudflare with Pulumi and deploying the static
+    # site to Cloudflare Pages (wrangler).
     pulumi-bin
-    uv
     just
     wrangler
   ];
 
-  git-hooks = {
-    excludes = ["www/themes/tabi"];
+  # Python packages (zensical for www/, pulumi for infra/) come from PyPI via
+  # the uv workspace in pyproject.toml.
+  languages.python = {
+    enable = true;
+    venv.enable = true;
+    uv = {
+      enable = true;
+      sync = {
+        enable = true;
+        allPackages = true;
+      };
+    };
+  };
 
+  git-hooks = {
     hooks = {
       alejandra.enable = true;
 
@@ -40,7 +49,7 @@
         enable = true;
         name = "tofu-fmt";
         entry = "${pkgs.opentofu}/bin/tofu fmt";
-        files = "^www/content/.*.(tf|hcl)$";
+        files = "^www/snippets/.*.(tf|hcl)$";
         language = "system";
       };
     };
