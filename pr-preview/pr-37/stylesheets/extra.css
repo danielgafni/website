@@ -17,3 +17,40 @@
 .md-typeset .home-intro {
   text-align: center;
 }
+
+/* Maple Mono for code (not on Google Fonts, so self-hosted) */
+@font-face {
+  font-family: "Maple Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-BoldItalic.woff2") format("woff2");
+}
+
+:root {
+  --md-code-font: "Maple Mono";
+}
