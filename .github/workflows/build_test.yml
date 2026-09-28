@@ -4,10 +4,10 @@ on:
   push:
   workflow_dispatch:
 jobs:
-  build-and-test:
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - uses: DeterminateSystems/nix-installer-action@main
     - uses: cachix/cachix-action@v15
       with:
@@ -18,27 +18,49 @@ jobs:
       run: nix profile install github:cachix/devenv/v2.3.1 --accept-flake-config
     - name: Lint (git hooks)
       run: devenv shell -- prek run --all-files
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - uses: astral-sh/setup-uv@v10.2.0
+      with:
+        enable-cache: true
+    - name: Generate social cards
+      run: uv run --locked python scripts/social_cards.py
+      working-directory: ./www
     - name: Build site
-      run: devenv shell -- zola --root www build
+      run: uv run --locked zensical build --strict
+      working-directory: ./www
+    - uses: actions/upload-artifact@v7
+      with:
+        name: site
+        path: www/site
 
   deploy:
-    needs: [build-and-test]
+    needs: [lint, build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     environment:
       name: cloudflare-pages
       url: https://gafni.dev
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: cachix/cachix-action@v15
+      - uses: actions/download-artifact@v8
         with:
-          name: danielgafni
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - name: Install devenv
-        run: nix profile install github:cachix/devenv/v2.3.1 --accept-flake-config
-      - run: devenv shell -- zola --root www build
-      - run: devenv shell -- wrangler pages deploy www/public --project-name=gafni-dev --branch=master
+          name: site
+          path: site
+      - uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 3f09b742c8d0c0b4fefb8b9dc9a1899d
+          command: pages deploy site --project-name=gafni-dev --branch=master
+      - name: Purge Cloudflare cache
+        # gafni.dev is proxied through the zone, so drop its edge cache (only that host) after each deploy
+        run: >-
+          curl -fsS -X POST
+          https://api.cloudflare.com/client/v4/zones/de2eebc4508c9ce22174a4099ae8a9e0/purge_cache
+          -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+          -H "Content-Type: application/json"
+          --data '{"hosts":["gafni.dev"]}'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: 3f09b742c8d0c0b4fefb8b9dc9a1899d

@@ -7,7 +7,7 @@ deploy-infra:
 preview-infra:
     pulumi preview --stack {{stack}}
 
-# Build the site with zola and upload it to Cloudflare Pages.
+# Build the site with Zensical and upload it to Cloudflare Pages.
 deploy:
-    zola --root ../www build
-    wrangler pages deploy ../www/public --project-name=gafni-dev --branch=master
+    cd ../www && zensical build --clean
+    wrangler pages deploy ../www/site --project-name=gafni-dev --branch=master

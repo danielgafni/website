@@ -1,0 +1,36 @@
+{#-
+  Project cards. Pass `projects`: a list of nav pages whose front matter has
+    title        card heading, links to the page
+    description  card text
+    github_url   optional; adds the repository link and its live star count
+                 (filled in client-side by javascripts/github-stars.js)
+    youtube_url  optional; adds a link to the video
+-#}
+<div class="grid cards">
+  <ul>
+    {% for project in projects %}
+      <li>
+        <p><a href="{{ project.url | url }}"><strong>{{ project.title }}</strong></a></p>
+        <hr>
+        <p>{{ project.meta.description }}</p>
+        {% if project.meta.github_url %}
+          {% set repo = project.meta.github_url | replace("https://github.com/", "") %}
+          <p>
+            <span class="twemoji">{% include ".icons/fontawesome/brands/github.svg" %}</span>
+            <a href="{{ project.meta.github_url }}" title="{{ repo }} on GitHub">{{ repo }}</a>
+            <span data-github-stars="{{ repo }}" hidden>
+              <span class="twemoji">{% include ".icons/octicons/star-16.svg" %}</span>
+              <span></span>
+            </span>
+          </p>
+        {% endif %}
+        {% if project.meta.youtube_url %}
+          <p>
+            <span class="twemoji">{% include ".icons/fontawesome/brands/youtube.svg" %}</span>
+            <a href="{{ project.meta.youtube_url }}">Watch on YouTube</a>
+          </p>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

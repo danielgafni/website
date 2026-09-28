@@ -1,0 +1,56 @@
+/* typesafe.ai pink accent */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #ca35a5;
+  --md-primary-fg-color--light: #d45bb6;
+  --md-primary-fg-color--dark: #a52a86;
+  --md-accent-fg-color: #ca35a5;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #f386a1;
+  --md-primary-fg-color--light: #f7a9bc;
+  --md-primary-fg-color--dark: #d45bb6;
+  --md-accent-fg-color: #f386a1;
+}
+
+/* centered intro on the home page */
+.md-typeset .home-intro {
+  text-align: center;
+}
+
+/* Maple Mono for code (not on Google Fonts, so self-hosted) */
+@font-face {
+  font-family: "Maple Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Maple Mono";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/MapleMono-BoldItalic.woff2") format("woff2");
+}
+
+:root {
+  --md-code-font: "Maple Mono";
+}

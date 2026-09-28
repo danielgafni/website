@@ -1,3 +1,0 @@
-[submodule "scripts/release"]
-	path = scripts/release
-	url = https://github.com/welpo/release.git

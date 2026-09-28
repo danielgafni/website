@@ -1,0 +1,117 @@
+[project]
+site_name = "~/danielgafni"
+site_url = "https://gafni.dev/"
+site_author = "Daniel Gafni"
+site_description = "Daniel Gafni's personal website: blog posts and projects"
+repo_url = "https://github.com/danielgafni/website"
+repo_name = "danielgafni/website"
+edit_uri = "blob/master/www/docs/"
+copyright = "UNLICENSED Daniel Gafni • The contents of this website are free to use"
+extra_css = ["stylesheets/extra.css"]
+extra_javascript = ["javascripts/github-stars.js"]
+
+[project.theme]
+custom_dir = "overrides"
+language = "en"
+favicon = "assets/images/favicon.png"
+logo = "assets/images/me.png"
+font.text = "Cabin"
+icon.repo = "fontawesome/brands/github"
+features = [
+  "content.action.view",
+  "content.code.copy",
+  "content.footnote.tooltips",
+  "content.tabs.link",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+  "toc.integrate",
+]
+
+# dark by default, with a toggle to light
+[[project.theme.palette]]
+scheme = "slate"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+scheme = "default"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/danielgafni"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/gitlab"
+link = "https://gitlab.com/danielgafni"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/linkedin"
+link = "https://www.linkedin.com/in/danielgafni/"
+
+[[project.extra.social]]
+icon = "fontawesome/solid/rss"
+link = "/feed_rss_created.xml"
+
+[project.extra.analytics]
+provider = "plausible"
+property = "gafni.dev"
+
+[project.extra.giscus]
+repo = "danielgafni/website"
+repo_id = "R_kgDOLfTdug"
+category = "Announcements"
+category_id = "DIC_kwDOLfTdus4CePI8"
+
+# The blog lives at the site root; posts keep their /blog/<slug>/ URLs.
+[project.plugins.blog]
+blog_dir = "."
+post_url_format = "blog/{slug}"
+pagination_per_page = 5
+
+[project.plugins.tags]
+
+[project.plugins.rss]
+match_path = "posts/.*"
+date_from_meta.as_creation = "date.created"
+
+[project.plugins.meta]
+
+[project.plugins.awesome-nav]
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+toc.permalink = true
+pymdownx.betterem = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.magiclink = {}
+pymdownx.smartsymbols = {}
+# code embedded in posts lives outside docs/ so it isn't published as pages
+pymdownx.snippets.base_path = ["snippets"]
+pymdownx.snippets.check_paths = true
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true

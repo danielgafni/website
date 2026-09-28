@@ -1,6 +1,6 @@
 """Cloudflare Pages project and DNS for gafni.dev.
 
-The static site is built with zola and uploaded via `wrangler pages deploy`
+The static site is built with Zensical and uploaded via `wrangler pages deploy`
 (see the justfile), so the Pages project is a direct-upload project with no
 build config or git source.
 """

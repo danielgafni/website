@@ -1,0 +1,4 @@
+extend-select = ["I"]
+# Don't touch Markdown: ruff's Python-in-markdown formatting rewrites snippet
+# directives (e.g. `--8<-- "file.py"`) inside code blocks into invalid code.
+extend-exclude = ["*.md"]
