@@ -1,5 +1,0 @@
-# Cloudflare Pages redirects for URLs from the previous (Zola) site
-/blog/ / 301
-/archive/ / 301
-/atom.xml /feed_rss_created.xml 301
-/tags/:tag/ /tags/ 301
